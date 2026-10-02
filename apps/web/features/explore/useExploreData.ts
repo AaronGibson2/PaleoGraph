@@ -1,28 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { api, occurrenceQuery } from "../../lib/api/client";
-import type { AgeRange, MapResponse, OccurrenceDetail, TimeConfiguration, Viewport } from "../../lib/api/types";
+import type { AgeRange, OccurrenceDetail, TimeConfiguration, Viewport } from "../../lib/api/types";
+import { initialWindow, occurrenceWindow } from "./occurrenceWindow";
 
 type LoadState<T> = { key: string; data?: T; error?: string };
 const message = (error: unknown) => error instanceof Error ? error.message : "Data could not be loaded.";
 
-export function useOccurrences(viewport: Viewport, age: AgeRange, retry: number): LoadState<MapResponse> & { loading: boolean } {
-  const query = occurrenceQuery(viewport, age);
-  const key = `${query}:${retry}`;
-  const [result, setResult] = useState<LoadState<MapResponse>>({ key: "" });
+export function useOccurrences(viewport: Viewport, age: AgeRange, retry: number) {
+  const { west, south, east, north } = viewport;
+  const { older_ma, younger_ma } = age;
+  const [state, dispatch] = useReducer(occurrenceWindow, { viewport, age, retry }, initialWindow);
   useEffect(() => {
+    dispatch({ type: "intent", intent: { viewport: { west, south, east, north }, age: { older_ma, younger_ma }, retry } });
+  }, [west, south, east, north, older_ma, younger_ma, retry]);
+  useEffect(() => {
+    const request = state.request;
+    if (!request) return;
     const controller = new AbortController();
-    const timer = setTimeout(() => {
-      api.occurrences(query, controller.signal).then(
-        data => { if (!controller.signal.aborted) setResult({ key, data }); },
-        error => { if (!controller.signal.aborted) setResult({ key, error: message(error) }); },
-      );
+    const timer = setTimeout(async () => {
+      try {
+        let bounds = request.bounds;
+        let data = await api.occurrences(occurrenceQuery(bounds, request.age), controller.signal);
+        // A capped buffer is not complete coverage. Re-query the actual view so
+        // offscreen records cannot crowd visible records out of the result cap.
+        if (data.truncated && !controller.signal.aborted) {
+          bounds = request.viewport;
+          data = await api.occurrences(occurrenceQuery(bounds, request.age), controller.signal);
+        }
+        if (!controller.signal.aborted) dispatch({ type: "success", id: request.id, bounds, data });
+      } catch (error) {
+        if (!controller.signal.aborted) dispatch({ type: "failure", id: request.id, error: message(error) });
+      }
     }, 180);
     return () => { clearTimeout(timer); controller.abort(); };
-  }, [query, key]);
-  // Old viewport/time results are never presented as matching the new query.
-  return result.key === key ? { ...result, loading: false } : { key, loading: true };
+  }, [state.request]);
+  return { data: state.display, mapItems: state.loaded?.data.items, error: state.error, loading: state.request !== null };
 }
 
 export function useOccurrence(id: string | null, retry: number): LoadState<OccurrenceDetail> & { loading: boolean } {
@@ -33,11 +47,11 @@ export function useOccurrence(id: string | null, retry: number): LoadState<Occur
     const controller = new AbortController();
     api.occurrence(id, controller.signal).then(
       data => { if (!controller.signal.aborted) setResult({ key, data }); },
-      error => { if (!controller.signal.aborted) setResult({ key, error: message(error) }); },
+        error => { if (!controller.signal.aborted) setResult(previous => ({ key, data: previous.key.startsWith(`${id}:`) ? previous.data : undefined, error: message(error) })); },
     );
     return () => controller.abort();
   }, [id, key]);
-  return result.key === key ? { ...result, loading: false } : { key, loading: id !== null };
+  return result.key === key ? { ...result, loading: false } : { key, data: result.key.startsWith(`${id}:`) ? result.data : undefined, loading: id !== null };
 }
 
 export function useTimeConfiguration(retry: number) {

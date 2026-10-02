@@ -22,10 +22,11 @@ export function OccurrenceInspector({ selected, data, error, outsideResults, onC
       <p className="inspection-age">{ageLabel(data)}</p>
       {data.evidence.some(record => record.is_synthetic) && <p className="demo-note">Synthetic demo assertion. This is not evidence of a real fossil occurrence.</p>}
       {outsideResults && <p className="uncertainty-label">Selected record is outside the current map results.</p>}
+      <p className="inspection-source">{data.evidence.length ? `Source: ${data.evidence.map(record => record.dataset_title).join(" · ")}` : "Source evidence unavailable"}</p>
       <dl className="scientific-facts">
         <div><dt>Locality</dt><dd>{data.locality_name ?? "Not recorded"}</dd></div>
         <div><dt>Collection context</dt><dd>{data.collection_event_name}</dd></div>
-        <div><dt>Age bounds</dt><dd>Older: {data.older_ma ?? "unknown"}{data.older_ma !== null && " Ma"}<br />Younger: {data.younger_ma ?? "unknown"}{data.younger_ma !== null && " Ma"}</dd></div>
+        {(data.older_ma === null || data.younger_ma === null) && <div><dt>Age bounds</dt><dd>Older: {data.older_ma ?? "unknown"}{data.older_ma !== null && " Ma"}<br />Younger: {data.younger_ma ?? "unknown"}{data.younger_ma !== null && " Ma"}</dd></div>}
         <div><dt>Stratigraphy</dt><dd>{data.stratigraphy ?? "Not recorded"}</dd></div>
         <div><dt>Location</dt><dd>{data.location_is_withheld ? "Coordinates withheld" : data.latitude === null || data.longitude === null ? "Coordinates unknown" : `${data.latitude.toFixed(3)}°, ${data.longitude.toFixed(3)}°`}
           {data.location_is_generalized && <span className="fact-note">Generalized position</span>}

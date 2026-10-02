@@ -8,7 +8,7 @@
     "build": "node scripts/prepare-map-worker.mjs && next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0",
-    "test": "node --experimental-strip-types --test features/explore/state.test.ts",
+    "test": "node --experimental-strip-types --test features/explore/*.test.ts",
     "test:e2e": "playwright test",
     "typecheck": "next typegen && tsc --noEmit"
   },

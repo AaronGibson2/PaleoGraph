@@ -22,10 +22,23 @@ One GeoJSON source feeds circle layers; there is no DOM marker per assertion.
 Co-located points offer assertion choices without falsifying positions. Selected
 records remain inspectable outside filters with an explicit notice.
 
-Map/age changes replace URL history; selection/close/reset push entries. Popstate
-restores state. Center/zoom, age bounds, and selected UUID are shareable; hover and
-loading are local. Move-end publishes the actual viewport. Requests debounce 180ms
-and abort stale fetches; changed query keys hide outdated results.
+Settled map movements replace URL history; committed time ranges and selection/
+close/reset push entries. Popstate restores state. Timeline handles preview locally,
+committing on release or after a 250ms keyboard pause (also on blur). Intermediate
+drag positions do not write URLs or request data.
+
+Move-end publishes the actual viewport. The occurrence-window reducer requests a
+25% buffer on each edge, limited to world bounds, and reuses complete coverage until
+the visible view enters its outer 5% margin. Longitude containment supports wrapped
+antimeridian windows. Buffered points stay in the map source; the results list is
+projected to the actual viewport. A truncated buffer triggers an exact-viewport
+request so offscreen records cannot crowd out visible records at the API cap.
+
+Requests debounce 180ms. Abort cleanup and monotonically increasing request IDs
+prevent obsolete responses from replacing newer intent. Successful markers and list
+rows remain during loading/errors, with an explicit last-loaded indicator. The
+inspector stays open. GeoJSON updates add/remove/change only differing feature IDs;
+selection changes only the selection layer filter. No geographic movement is animated.
 
 The semantic results list supports keyboard selection. Inspection takes focus;
 Escape closes it and restores the result/heading. Mobile rearranges the workspace.

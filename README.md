@@ -45,6 +45,20 @@ center, zoom, ages, and selected UUID; browser back/forward restores selection.
 The textual results support keyboard access; Escape closes inspection and restores
 focus. The homepage and `/api/v1/health` remain available.
 
+The time control uses one linear track, older on the left and present on the right.
+Drag either handle to set a custom range, or choose a numeric demo preset below it.
+The highlighted band and adjacent handle labels show the selected interval. Tab
+between handles; Left/Up adds 0.01 Ma and Right/Down subtracts 0.01 Ma. Hold Shift
+for 0.1 Ma steps; Page Up/Down changes by 1 Ma. Home/End moves to the permitted
+minimum/maximum. Handles cannot cross. All ages clears the filter, including for
+unknown ages. Demo presets are not a formal geological timescale.
+
+Handle movement previews immediately; release commits one shareable range. Keyboard
+changes commit after a short pause or when focus leaves the handle. Small map pans
+reuse a buffered geographic window. While a new query loads, existing points and
+rows remain visible with a restrained last-loaded/updating indicator. Back/Forward
+restores committed time ranges and selection. See [continuity notes](docs/explore-continuity.md).
+
 API documentation: http://localhost:8000/docs. Health is process liveness; the
 `app.db` command above actually connects to PostGIS.
 

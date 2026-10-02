@@ -5,6 +5,8 @@ export default defineConfig({
   testDir: "tests/e2e",
   fullyParallel: false,
   workers: 1,
+  // The first real database connection can consume the API's 5s connect budget.
+  expect: { timeout: 10000 },
   use: {
     baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",
     browserName: "chromium",
