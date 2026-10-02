@@ -26,10 +26,21 @@ seed-demo:
 reset-demo:
 	uv run --project apps/api python -m app.seed_demo --reset
 
+.PHONY: ingest-ufvp-sample ingest-ufvp-florida ingest-ufvp-fixture
+ingest-ufvp-fixture:
+	uv run --project apps/api python scripts/prepare_ufvp_fixture.py
+	uv run --project apps/api python -m app.ingestion.import_ufvp --archive data/raw/ufvp-offline-fixture.zip --limit 8
+
+ingest-ufvp-sample:
+	uv run --project apps/api python -m app.ingestion.import_ufvp --limit 1000
+
+ingest-ufvp-florida:
+	uv run --project apps/api python -m app.ingestion.import_ufvp --full-florida
+
 lint:
 	pnpm lint
-	uv run --project apps/api ruff check apps/api scripts/test_db.py
-	uv run --project apps/api ruff format --check apps/api scripts/test_db.py
+	uv run --project apps/api ruff check apps/api scripts
+	uv run --project apps/api ruff format --check apps/api scripts
 
 typecheck:
 	pnpm typecheck

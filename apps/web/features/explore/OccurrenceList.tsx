@@ -8,7 +8,7 @@ export function OccurrenceList({ items, selected, onSelect }: Props) {
     {items.map(item => <li key={item.id}>
       <button id={`result-${item.id}`} aria-pressed={selected === item.id} onClick={() => onSelect(item.id)}>
         <span className={`record-dot${item.older_ma === null || item.younger_ma === null ? " unknown" : ""}`} aria-hidden="true" />
-        <span className="record-copy"><em>{item.scientific_name}</em><span>{item.locality_name}</span><span className="record-age">{ageLabel(item)}</span>
+        <span className="record-copy">{item.catalog_label && <span className="catalog-label">{item.catalog_label}</span>}<em>{item.scientific_name}</em><span>{item.locality_name}</span><span className="record-age">{!item.is_synthetic && item.source_age_label && (item.older_ma === null || item.younger_ma === null) ? `${item.source_age_label} · source label` : ageLabel(item)}</span>
           {item.location_is_generalized && <span className="uncertainty-label">Approximate location</span>}
         </span>{selected === item.id && <span className="record-selected">Selected</span>}
       </button>

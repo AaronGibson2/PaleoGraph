@@ -56,3 +56,14 @@ test("an error retains successful data and an explicit retry creates a new reque
   assert(retry.request);
   assert.equal(retry.error, undefined);
 });
+
+
+test("museum/demo switches never retain or reuse another dataset window", () => {
+  const intent = { viewport: {west:-88,south:24,east:-79,north:32}, age: {older_ma:null,younger_ma:null}, retry:0 };
+  const first = initialWindow(intent);
+  const loaded = occurrenceWindow(first, {type:"success",id:first.request!.id,bounds:first.request!.bounds,data:{items:[],returned:0,truncated:false,limit:200}});
+  const changed = occurrenceWindow(loaded, {type:"intent",intent:{...intent,age:{...intent.age,data_mode:"demo"}}});
+  assert.equal(changed.loaded, undefined);
+  assert.equal(changed.display, undefined);
+  assert.ok(changed.request);
+});

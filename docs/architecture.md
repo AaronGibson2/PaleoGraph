@@ -1,4 +1,4 @@
-# Phase 2 architecture
+# Architecture through Phase 3
 
 One monorepo, two applications, one PostgreSQL/PostGIS system of record. The browser
 calls a versioned FastAPI API through one typed client. Occurrences come from the
@@ -13,12 +13,13 @@ database; React contains no occurrence fixtures.
 | apps/api/app/explore | Pydantic contracts, SQL queries, versioned routes |
 | apps/api/app/models.py | Canonical/provenance entities and evidence links |
 | apps/api/app/seed_demo.py | Transactional deterministic synthetic fixtures |
+| apps/api/app/ingestion | Explicit official UFVP acquisition, normalization and batched persistence |
 | apps/api/migrations | Alembic-owned extension and scientific schema |
 | scripts/test_db.py | Disposable Compose migration/integration workflow |
 
 The homepage/layout and health route remain intact. Explore parses its initial URL
 on the server, then mounts the workspace. MapLibre loads without server rendering.
-One GeoJSON source feeds circle layers; there is no DOM marker per assertion.
+One GeoJSON source feeds symbol/halo layers; there is no DOM marker per assertion.
 Co-located points offer assertion choices without falsifying positions. Selected
 records remain inspectable outside filters with an explicit notice.
 
@@ -46,8 +47,10 @@ CSS tokens, editorial typography, and reduced-motion rules support the atlas vis
 direction without a component framework.
 
 Next loads the root .env, matching API/Compose. Only NEXT_PUBLIC settings are exposed
-to the browser. Map style is configurable; OpenFreeMap is a development example with
-attribution. Blank style uses a neutral canvas. Errors preserve textual access.
+to the browser. The configurable default is project-owned `/styles/paleograph.json`,
+using OpenFreeMap/OpenMapTiles/OSM with required attribution. Blank style uses a neutral
+canvas. Errors preserve textual access. [Visual identity](visual-identity.md) records
+tokens, marker meanings and provider terms.
 The installed MapLibre worker AND shared module are copied into ignored public
 assets before dev/build. This follows [MapLibre's Next.js guidance](https://maplibre.org/maplibre-gl-js/docs/)
 and prevents a missing relative worker import in Turbopack output.
@@ -64,9 +67,19 @@ CI retains its PostGIS service and migration checks, adding frontend state tests
 Playwright checks currently run locally. Lockfiles pin resolved dependencies.
 No deployment is configured.
 
-No scientific provider is contacted. Basemap traffic is cartographic infrastructure,
-not scientific ingestion. Real adapters, specimens, formal timescales, reconciliation,
-graph/search, accounts, and production infrastructure are outside Phase 2.
+Explore never contacts a scientific provider. Explicit ingestion acquires one official
+UFVP archive after metadata/license verification, pins its version, retains hashed raw
+bytes, streams a normalized boundary and upserts canonical/evidence batches. The CLI
+holds a PostgreSQL advisory lock on a dedicated connection across batch commits.
+Runs retain failures and scope; only completed full Florida snapshots deactivate unseen
+records. Source-record revisions retain previous raw values. No queues or new services
+were needed. Tests use eight attributed offline source rows.
+
+Explore defaults to museum mode, with an explicit synthetic demo switch. Changing mode
+clears the previous mode's display; other time/viewport changes retain the approved
+continuity behavior. UFVP text ages remain unknown numerically. Basemap traffic is
+cartographic infrastructure, not a second scientific source. Formal timescales,
+reconciliation, graph/search, accounts and deployment remain outside this phase.
 
 References: [OpenFreeMap](https://openfreemap.org/quick_start/),
 [GeoAlchemy migrations](https://geoalchemy-2.readthedocs.io/en/stable/alembic.html),

@@ -2,11 +2,11 @@
 
 :root {
   color-scheme: light;
-  --surface: #f6f3ec;
-  --text: #242a27;
-  --text-muted: #535b55;
-  --accent: #285641;
-  --border: #cccfc5;
+  --surface: #f1ead9;
+  --text: #26392f;
+  --text-muted: #58604f;
+  --accent: #27483d;
+  --border: #c3b79e;
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
@@ -33,7 +33,7 @@ a { color: var(--accent); text-underline-offset: 0.25em; }
 a:hover { text-decoration: underline; }
 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: var(--radius); }
 .site-header { max-width: 72rem; margin-inline: auto; padding: var(--space-3) var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-.wordmark { color: var(--text); font-weight: 700; letter-spacing: -0.025em; text-decoration: none; }
+.wordmark { color: var(--text); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 400; letter-spacing: -0.025em; text-decoration: none; }
 .page-section { max-width: 72rem; margin-inline: auto; padding: var(--space-5) var(--space-4); }
 .eyebrow { color: var(--text-muted); font-size: var(--text-label); letter-spacing: 0.09em; text-transform: uppercase; }
 h1 { font-family: var(--font-heading); font-weight: 400; font-size: var(--text-heading); line-height: 1.12; letter-spacing: -0.025em; margin-block: var(--space-3); }

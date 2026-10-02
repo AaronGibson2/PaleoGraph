@@ -4,7 +4,7 @@ import { DEFAULT_VIEW, normalizeViewport, parseExploreState, serializeExploreSta
 import { occurrenceQuery } from "../../lib/api/client.ts";
 
 test("shareable state round-trips including selection and age zero", () => {
-  const state = { ...DEFAULT_VIEW, selected: "de000000-0000-4000-8000-000600000001", older_ma: 2, younger_ma: 0 };
+  const state = { ...DEFAULT_VIEW, data_mode: "museum" as const, selected: "de000000-0000-4000-8000-000600000001", older_ma: 2, younger_ma: 0 };
   assert.deepEqual(parseExploreState(new URLSearchParams(serializeExploreState(state))), state);
 });
 

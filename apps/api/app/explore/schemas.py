@@ -14,6 +14,7 @@ class ExploreQuery(BaseModel):
     older_ma: float | None = Field(default=None, ge=0, le=10000)
     younger_ma: float | None = Field(default=None, ge=0, le=10000)
     limit: int = Field(default=200, ge=1, le=1000)
+    data_mode: Literal["museum", "demo"] = "museum"
 
     @model_validator(mode="after")
     def ordered_bounds(self) -> Self:
@@ -37,6 +38,8 @@ class MapOccurrence(BaseModel):
     younger_ma: float | None
     location_is_generalized: bool
     is_synthetic: bool
+    catalog_label: str | None = None
+    source_age_label: str | None = None
 
 
 class MapResponse(BaseModel):
@@ -66,6 +69,19 @@ class Evidence(BaseModel):
     data_generalizations: str | None
 
 
+class SpecimenDetail(BaseModel):
+    id: UUID
+    institution: str | None
+    institution_code: str | None
+    collection_code: str | None
+    catalog_number: str | None
+    occurrence_identifier: str | None
+    material_entity_identifier: str | None
+    other_identifiers: dict[str, object] | None
+    preparations: str | None
+    individual_count: str | None
+
+
 class OccurrenceDetail(BaseModel):
     id: UUID
     taxon_id: UUID
@@ -88,6 +104,21 @@ class OccurrenceDetail(BaseModel):
     location_is_withheld: bool
     notes: str | None
     evidence: list[Evidence]
+    specimen: SpecimenDetail | None = None
+    source_values: dict[str, str] = Field(default_factory=dict)
+
+
+class DatasetStatus(BaseModel):
+    title: str
+    dataset_url: str
+    license: str | None
+    version: str | None
+    current_records: int
+    mapped_records: int
+    latest_scope: str | None
+    latest_status: str | None
+    numeric_age_records: int
+    creator: str | None
 
 
 class TimeWindow(BaseModel):

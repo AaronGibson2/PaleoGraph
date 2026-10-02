@@ -1,6 +1,8 @@
-# Phase 2 canonical and provenance model
+# Canonical and provenance model through Phase 3
 
 Alembic `0002_explore_schema` implements eight entities and four evidence link tables.
+`0003_ufvp_specimens` adds narrowly scoped museum material and revision entities;
+see [ADR 0010](adr/0010-ufvp-material-and-snapshots.md).
 
 ```mermaid
 erDiagram
@@ -15,11 +17,17 @@ erDiagram
     Locality o|--o{ CollectionEvent : locates
     CollectionEvent ||--o{ Occurrence : contextualizes
     Taxon ||--o{ Occurrence : identifies
+    Institution ||--o{ Collection : houses
+    Collection o|--o{ Specimen : catalogs
+    Specimen o|--o{ Occurrence : material
+    SourceRecord }o--o{ Specimen : supports
+    SourceRecord ||--o{ SourceRecordRevision : retains
+    IngestionRun ||--o{ SourceRecordRevision : observes
 ```
 
 ## Identity and meaning
 
-Entities use application-generated UUIDv4 IDs and timezone-aware created/updated
+Entities use application-generated UUIDs and timezone-aware created/updated
 timestamps. Fixture UUIDs have fixed v4 bits; ordinary inserts use `uuid4()`.
 ORM updates maintain `updated_at`; direct SQL writers must do so too. Public
 identity is the UUID. Names and optional future slugs are not permanent identity.
@@ -29,6 +37,21 @@ assertion, not a specimen. CollectionEvent owns source-specific age, stratigraph
 and context and may reference a Locality. Locality represents a geographic place
 and owns coordinates. Taxon names are navigation concepts, not a universal authority;
 matching names do not trigger merging.
+
+Specimen represents cataloged physical material, including catalog lots containing
+multiple pieces. Institution and Collection describe custody; no global registry
+is asserted. Occurrence.specimen_id is nullable to preserve nonmaterial assertions.
+Specimen preserves original institution/collection/catalog codes, occurrenceID,
+materialEntityID when supplied, other source identifiers, preparations and the
+source individualCount string. Catalog triplets are deliberately not unique.
+`specimen_evidence` uses real foreign keys and a composite primary key.
+
+The UFVP adapter hashes dataset-scoped source IDs into deterministic UUIDs with v4
+layout. These are opaque adapter identities, not random v4 IDs or globally
+authoritative specimen identifiers. Catalog edits preserve identity; source core
+ID changes create distinct assertions. Taxa group exact source classifications
+including qualifiers; localities group exact source geographic metadata including
+locationID. No fuzzy or cross-source matching occurs.
 
 `taxon_evidence`, `locality_evidence`, `collection_event_evidence`, and
 `occurrence_evidence` provide many-to-many mappings with composite primary keys and
@@ -50,11 +73,20 @@ source URL/modification time, basis of record, license/rights/access metadata,
 withholding/generalization notes, ingestion time, first/last seen, and current flag.
 A composite foreign key prevents linking a record to another dataset's run.
 
-The seed represents two fixed completed synthetic snapshots. Actual import lifecycle,
-revision history, snapshot completeness, and reconciliation are not implemented.
-Before real imports, define immutable raw retention and source-record revision/run
-relationships. Failed or partial runs must never deactivate unseen records. Missing
-licenses remain missing, never inferred. Explore does not expose raw payloads.
+The seed represents two fixed completed synthetic snapshots. Real UFVP runs also
+record accepted counts, importer version, scope and snapshot JSONB (verified metadata,
+archive URL, SHA-256, retained path and retrieval time). Archives are content addressed
+and retained outside git. SourceRecordRevision stores each distinct row hash/raw JSONB
+once with its first observing run. The importer never overwrites a revision; the
+database does not install an immutable-row trigger. Reobservations update current
+run/last_seen without duplicating material or revisions.
+
+Only a successful complete Florida run deactivates unseen source records. Samples,
+partial and failed runs do not; no canonical object is hard deleted. Current evidence
+links follow the latest interpretation, while prior values remain in revisions/raw
+archives. Detail reports the record's observing run version rather than the dataset's
+newer current version. Raw payloads are not exposed by Explore; selected safe source
+text fields are exposed separately from canonical interpretation.
 
 ## Geological age
 
@@ -80,6 +112,8 @@ backend results without independent age filtering.
 `/api/v1/time-intervals` serves `demo-windows-v1`: four numeric windows from 12–0 Ma.
 These are explicitly not named formal periods. A versioned authoritative timescale
 can replace the configuration later without scattering definitions through the UI.
+UFVP supplies geological labels, not numeric Ma. Its era/period/epoch/zone/group/
+formation/member strings are retained without conversion; numeric bounds stay NULL.
 
 ## Geography and queries
 
@@ -101,6 +135,9 @@ full count. B-tree indexes on event.locality_id and occurrence.collection_event_
 support spatial joins; primary/unique indexes cover identity/evidence access.
 Detail eager loading takes two statements, not one query per evidence record.
 Measure scale before adding age indexes, server clustering, or pagination.
+Museum mode excludes synthetic evidence; explicit demo mode uses it. The map joins
+the optional specimen to display catalog identifiers. Coordinates normalize only
+from accepted WGS84 aliases; unsupported/unknown datums remain unmapped, never guessed.
 
 ## Migration and deferred choices
 
@@ -110,7 +147,8 @@ PostGIS is intentionally retained. Connections use `search_path=public` to keep
 Tiger/topology schemas outside application autogeneration. Alembic ignores the
 PostGIS-owned spatial_ref_sys and explicitly renders GeoAlchemy types.
 
-EntityIdentifier, Specimen, merge redirects, field-level assertions, canonical
-conflict preferences, source-specific quarantine, and real ingestion are deferred.
-Before Phase 3 select the Florida dataset, rights/sensitivity policy, source identity,
-complete-snapshot semantics, and evidence-based reversible reconciliation rules.
+0003 is additive and downgrades museum entities before the older schema. Existing
+0001 and 0002 remain unchanged. Downgrades belong only in disposable validation.
+EntityIdentifier registries, merge redirects, field-level assertions, canonical
+conflict preferences and cross-source reconciliation remain deferred. See
+[UFVP ingestion](ufvp-ingestion.md) for normalization and lifecycle rules.

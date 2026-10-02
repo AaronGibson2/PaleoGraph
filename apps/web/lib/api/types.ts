@@ -1,4 +1,4 @@
-export type AgeRange = { older_ma: number | null; younger_ma: number | null };
+export type AgeRange = { older_ma: number | null; younger_ma: number | null; data_mode?: "museum" | "demo" };
 export type Viewport = { west: number; south: number; east: number; north: number };
 
 export type MapOccurrence = AgeRange & {
@@ -9,6 +9,8 @@ export type MapOccurrence = AgeRange & {
   latitude: number;
   location_is_generalized: boolean;
   is_synthetic: boolean;
+  catalog_label?: string | null;
+  source_age_label?: string | null;
 };
 
 export type MapResponse = {
@@ -58,6 +60,21 @@ export type OccurrenceDetail = AgeRange & {
   location_is_withheld: boolean;
   notes: string | null;
   evidence: Evidence[];
+  specimen?: {
+    id: string; institution: string | null; institution_code: string | null;
+    collection_code: string | null; catalog_number: string | null;
+    occurrence_identifier: string | null; material_entity_identifier: string | null;
+    other_identifiers: Record<string, unknown> | null; preparations: string | null;
+    individual_count: string | null;
+  } | null;
+  source_values?: Record<string, string>;
+};
+
+export type DatasetStatus = {
+  title: string; dataset_url: string; license: string | null; version: string | null;
+  current_records: number; mapped_records: number; numeric_age_records: number;
+  latest_scope: string | null; latest_status: string | null;
+  creator: string | null;
 };
 
 export type TimeConfiguration = {

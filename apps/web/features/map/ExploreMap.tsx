@@ -9,7 +9,7 @@ import { addOccurrenceLayers, updateOccurrences } from "./layers";
 
 // Both worker modules are copied from the locked dependency before dev/build.
 setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
-const styleUrl = process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? "";
+const styleUrl = process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? "/styles/paleograph.json";
 
 type Props = {
   view: ExploreState;
@@ -69,7 +69,7 @@ export default function ExploreMap(props: Props) {
         // Co-located assertions remain individually selectable, without fake point jitter.
         const choices = document.createElement("div");
         const heading = document.createElement("strong");
-        heading.textContent = "Assertions at this place";
+        heading.textContent = "Loaded assertions at this place";
         choices.append(heading);
         const popup = new Popup({ offset: 14 });
         for (const feature of features) {
@@ -77,7 +77,7 @@ export default function ExploreMap(props: Props) {
           if (typeof id !== "string") continue;
           const button = document.createElement("button");
           button.className = "map-choice";
-          button.textContent = String(feature.properties.name);
+          button.textContent = [feature.properties.catalog, feature.properties.name].filter(Boolean).join(" / ");
           button.onclick = () => { latest.current.onSelect(id); popup.remove(); };
           choices.append(button);
         }
@@ -86,7 +86,7 @@ export default function ExploreMap(props: Props) {
       map.on("mousemove", "occurrence-points", event => {
         map.getCanvas().style.cursor = "pointer";
         const count = event.features?.length ?? 0;
-        const label = count > 1 ? `${count} assertions at this place · click to choose` : `${event.features?.[0]?.properties.name ?? "Occurrence"} · click to inspect`;
+        const label = count > 1 ? `${count} loaded assertions at this place · click to choose` : `${event.features?.[0]?.properties.name ?? "Occurrence"} · click to inspect`;
         hover.setLngLat(event.lngLat).setText(label).addTo(map);
       });
       map.on("mouseleave", "occurrence-points", () => { map.getCanvas().style.cursor = ""; hover.remove(); });

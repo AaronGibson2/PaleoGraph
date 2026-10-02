@@ -3,8 +3,24 @@ from uuid import UUID
 from sqlalchemy import ColumnElement, and_, func, or_, select
 from sqlalchemy.orm import Session, joinedload, selectinload
 
-from app.explore.schemas import Evidence, ExploreQuery, MapOccurrence, MapResponse, OccurrenceDetail
-from app.models import CollectionEvent, Locality, Occurrence, SourceDataset, SourceRecord, Taxon
+from app.explore.schemas import (
+    Evidence,
+    ExploreQuery,
+    MapOccurrence,
+    MapResponse,
+    OccurrenceDetail,
+    SpecimenDetail,
+)
+from app.models import (
+    Collection,
+    CollectionEvent,
+    Locality,
+    Occurrence,
+    SourceDataset,
+    SourceRecord,
+    Specimen,
+    Taxon,
+)
 
 
 def age_overlap(older_ma: float, younger_ma: float) -> ColumnElement[bool]:
@@ -41,14 +57,20 @@ def map_occurrences(session: Session, query: ExploreQuery) -> MapResponse:
             CollectionEvent.younger_ma,
             Locality.location_is_generalized,
             synthetic.label("is_synthetic"),
+            func.concat_ws(" · ", Specimen.collection_code, Specimen.catalog_number).label(
+                "catalog_label"
+            ),
+            CollectionEvent.early_interval_name.label("source_age_label"),
         )
         .join(Occurrence.taxon)
         .join(Occurrence.collection_event)
         .join(CollectionEvent.locality)
+        .outerjoin(Occurrence.specimen)
         .where(
             viewport_filter(query),
             Locality.location_is_withheld.is_(False),
             Occurrence.source_records.any(SourceRecord.is_current),
+            synthetic if query.data_mode == "demo" else ~synthetic,
         )
         .order_by(Occurrence.id)
         .limit(query.limit + 1)
@@ -70,10 +92,14 @@ def occurrence_detail(session: Session, occurrence_id: UUID) -> OccurrenceDetail
         .where(Occurrence.id == occurrence_id)
         .options(
             joinedload(Occurrence.taxon),
+            joinedload(Occurrence.specimen)
+            .joinedload(Specimen.collection)
+            .joinedload(Collection.institution),
             joinedload(Occurrence.collection_event).joinedload(CollectionEvent.locality),
             selectinload(Occurrence.source_records)
             .joinedload(SourceRecord.dataset)
             .joinedload(SourceDataset.source),
+            selectinload(Occurrence.source_records).joinedload(SourceRecord.run),
         )
     ).first()
     if row is None:
@@ -82,6 +108,37 @@ def occurrence_detail(session: Session, occurrence_id: UUID) -> OccurrenceDetail
     event = occurrence.collection_event
     locality = event.locality
     withheld = locality.location_is_withheld if locality else False
+    specimen = occurrence.specimen
+    source_values = {}
+    if specimen and occurrence.source_records:
+        raw = occurrence.source_records[0].raw_payload or {}
+        # Explicit safe public fields, never return a raw row or withheld original coordinates.
+        source_values = {
+            key: str(raw[key])
+            for key in (
+                "scientificName",
+                "identificationQualifier",
+                "basisOfRecord",
+                "eventDate",
+                "recordedBy",
+                "locationID",
+                "country",
+                "stateProvince",
+                "county",
+                "locality",
+                "geodeticDatum",
+                "coordinateUncertaintyInMeters",
+                "earliestEraOrLowestErathem",
+                "earliestPeriodOrLowestSystem",
+                "earliestEpochOrLowestSeries",
+                "lowestBiostratigraphicZone",
+                "group",
+                "formation",
+                "member",
+                "modified",
+            )
+            if raw.get(key)
+        }
     return OccurrenceDetail(
         id=occurrence.id,
         taxon_id=occurrence.taxon_id,
@@ -103,6 +160,21 @@ def occurrence_detail(session: Session, occurrence_id: UUID) -> OccurrenceDetail
         location_is_generalized=locality.location_is_generalized if locality else False,
         location_is_withheld=withheld,
         notes=occurrence.notes,
+        specimen=SpecimenDetail(
+            id=specimen.id,
+            institution=specimen.collection.institution.name if specimen.collection else None,
+            institution_code=specimen.institution_code,
+            collection_code=specimen.collection_code,
+            catalog_number=specimen.catalog_number,
+            occurrence_identifier=specimen.occurrence_identifier,
+            material_entity_identifier=specimen.material_entity_identifier,
+            other_identifiers=specimen.other_identifiers,
+            preparations=specimen.preparations,
+            individual_count=specimen.individual_count,
+        )
+        if specimen
+        else None,
+        source_values=source_values,
         evidence=[
             Evidence(
                 source_record_id=record.source_record_id,
@@ -115,7 +187,7 @@ def occurrence_detail(session: Session, occurrence_id: UUID) -> OccurrenceDetail
                 citation=record.dataset.citation,
                 license=record.license or record.dataset.license,
                 rights_holder=record.rights_holder or record.dataset.rights_holder,
-                dataset_version=record.dataset.version,
+                dataset_version=record.run.source_version or record.dataset.version,
                 ingestion_run_id=record.ingestion_run_id,
                 ingested_at=record.ingested_at,
                 is_current=record.is_current,

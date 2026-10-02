@@ -1,4 +1,4 @@
-"""Canonical concepts and their source evidence; no specimen model in Phase 2."""
+"""Canonical concepts and their independently retained source evidence."""
 
 from datetime import datetime
 from decimal import Decimal
@@ -60,6 +60,12 @@ occurrence_evidence = Table(
     Column("occurrence_id", ForeignKey("occurrence.id"), primary_key=True),
     Column("source_record_id", ForeignKey("source_record.id"), primary_key=True),
 )
+specimen_evidence = Table(
+    "specimen_evidence",
+    Base.metadata,
+    Column("specimen_id", ForeignKey("specimen.id"), primary_key=True),
+    Column("source_record_id", ForeignKey("source_record.id"), primary_key=True),
+)
 
 
 class Source(Identity, Base):
@@ -98,6 +104,7 @@ class IngestionRun(Identity, Base):
             "AND records_skipped >= 0 AND records_failed >= 0",
             name="counts",
         ),
+        CheckConstraint("records_accepted >= 0", name="accepted_count"),
     )
     source_dataset_id: Mapped[UUID] = mapped_column(ForeignKey("source_dataset.id"))
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
@@ -110,6 +117,10 @@ class IngestionRun(Identity, Base):
     records_failed: Mapped[int] = mapped_column(server_default="0")
     source_version: Mapped[str | None] = mapped_column(Text)
     error_summary: Mapped[str | None] = mapped_column(Text)
+    records_accepted: Mapped[int] = mapped_column(server_default="0")
+    importer_version: Mapped[str | None] = mapped_column(Text)
+    snapshot: Mapped[dict[str, object] | None] = mapped_column(JSONB)
+    scope: Mapped[str | None] = mapped_column(Text)
 
 
 class SourceRecord(Identity, Base):
@@ -141,6 +152,48 @@ class SourceRecord(Identity, Base):
     last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     is_current: Mapped[bool] = mapped_column(Boolean, server_default="true")
     dataset: Mapped[SourceDataset] = relationship()
+    run: Mapped[IngestionRun] = relationship(viewonly=True)
+
+
+class SourceRecordRevision(Base):
+    """Immutable changed content; unchanged observations are tracked by the run snapshot."""
+
+    __tablename__ = "source_record_revision"
+    source_record_id: Mapped[UUID] = mapped_column(ForeignKey("source_record.id"), primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    ingestion_run_id: Mapped[UUID] = mapped_column(ForeignKey("ingestion_run.id"))
+    raw_payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class Institution(Identity, Base):
+    __tablename__ = "institution"
+    name: Mapped[str] = mapped_column(Text)
+    code: Mapped[str | None] = mapped_column(Text)
+    website: Mapped[str | None] = mapped_column(Text)
+
+
+class Collection(Identity, Base):
+    __tablename__ = "collection"
+    institution_id: Mapped[UUID] = mapped_column(ForeignKey("institution.id"))
+    code: Mapped[str] = mapped_column(Text)
+    name: Mapped[str | None] = mapped_column(Text)
+    institution: Mapped[Institution] = relationship()
+
+
+class Specimen(Identity, Base):
+    __tablename__ = "specimen"
+    collection_id: Mapped[UUID | None] = mapped_column(ForeignKey("collection.id"))
+    institution_code: Mapped[str | None] = mapped_column(Text)
+    collection_code: Mapped[str | None] = mapped_column(Text)
+    catalog_number: Mapped[str | None] = mapped_column(Text)
+    occurrence_identifier: Mapped[str | None] = mapped_column(Text)
+    material_entity_identifier: Mapped[str | None] = mapped_column(Text)
+    other_identifiers: Mapped[dict[str, object] | None] = mapped_column(JSONB)
+    preparations: Mapped[str | None] = mapped_column(Text)
+    individual_count: Mapped[str | None] = mapped_column(Text)
+    collection: Mapped[Collection | None] = relationship()
+    source_records: Mapped[list[SourceRecord]] = relationship(secondary=specimen_evidence)
 
 
 class Taxon(Identity, Base):
@@ -210,6 +263,8 @@ class Occurrence(Identity, Base):
     taxon_id: Mapped[UUID] = mapped_column(ForeignKey("taxon.id"))
     collection_event_id: Mapped[UUID] = mapped_column(ForeignKey("collection_event.id"), index=True)
     notes: Mapped[str | None] = mapped_column(Text)
+    specimen_id: Mapped[UUID | None] = mapped_column(ForeignKey("specimen.id"), index=True)
+    specimen: Mapped[Specimen | None] = relationship()
     taxon: Mapped[Taxon] = relationship()
     collection_event: Mapped[CollectionEvent] = relationship()
     source_records: Mapped[list[SourceRecord]] = relationship(secondary=occurrence_evidence)

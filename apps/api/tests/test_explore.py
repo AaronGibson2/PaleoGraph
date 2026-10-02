@@ -101,14 +101,16 @@ def test_seed_idempotency_and_reset(seeded: Session) -> None:
 
 @pytest.mark.integration
 def test_bbox_and_unknown_ages(seeded: Session) -> None:
-    all_ages = map_occurrences(seeded, ExploreQuery(**WORLD))
+    all_ages = map_occurrences(seeded, ExploreQuery(**WORLD, data_mode="demo"))
     assert all_ages.returned == 36  # Two missing-location examples (four assertions).
     assert any(item.older_ma is None or item.younger_ma is None for item in all_ages.items)
-    filtered = map_occurrences(seeded, ExploreQuery(**WORLD, older_ma=2, younger_ma=1))
+    filtered = map_occurrences(
+        seeded, ExploreQuery(**WORLD, data_mode="demo", older_ma=2, younger_ma=1)
+    )
     assert 0 < filtered.returned < all_ages.returned
     assert all(item.older_ma is not None and item.younger_ma is not None for item in filtered.items)
     assert map_occurrences(seeded, ExploreQuery(west=0, east=1, south=0, north=1)).returned == 0
-    limited = map_occurrences(seeded, ExploreQuery(**WORLD, limit=2))
+    limited = map_occurrences(seeded, ExploreQuery(**WORLD, data_mode="demo", limit=2))
     assert limited.returned == 2 and limited.truncated
 
 
@@ -121,7 +123,9 @@ def test_antimeridian_and_boundary_points(seeded: Session) -> None:
             ),
             {"lon": lon, "id": demo_id(4, i)},
         )
-    response = map_occurrences(seeded, ExploreQuery(west=170, east=-170, south=-1, north=1))
+    response = map_occurrences(
+        seeded, ExploreQuery(data_mode="demo", west=170, east=-170, south=-1, north=1)
+    )
     assert response.returned == 8
     assert {item.longitude for item in response.items} == {175, -175, 170, -170}
 
@@ -190,7 +194,7 @@ def test_api_contract(seeded: Session) -> None:
 
     app.dependency_overrides[get_session] = override
     with TestClient(app) as client:
-        response = client.get("/api/v1/map/occurrences", params=WORLD)
+        response = client.get("/api/v1/map/occurrences", params={**WORLD, "data_mode": "demo"})
         assert response.status_code == 200
         body = response.json()
         assert body["returned"] == 36 and body["truncated"] is False

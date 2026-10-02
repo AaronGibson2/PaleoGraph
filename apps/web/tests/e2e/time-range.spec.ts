@@ -1,13 +1,14 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
+  await page.route("**/styles/paleograph.json", route => route.fulfill({ json: { version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#94b5af" } }] } }));
   await page.route("https://tiles.openfreemap.org/**", route => route.fulfill({
     json: { version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#dfe7e3" } }] },
   }));
 });
 
 test("shared timeline keyboard direction, constraints, presets, URL and all ages", async ({ page }) => {
-  await page.goto("/explore");
+  await page.goto("/explore?data_mode=demo");
   const older = page.getByRole("slider", { name: "Older age bound" });
   const younger = page.getByRole("slider", { name: "Younger age bound" });
   await page.getByRole("button", { name: "5–2 Ma", exact: true }).click();
@@ -42,7 +43,7 @@ test("shared timeline keyboard direction, constraints, presets, URL and all ages
 });
 
 test("both handles drag on the same track and send custom ranges to the API", async ({ page }) => {
-  await page.goto("/explore?older_ma=8&younger_ma=2");
+  await page.goto("/explore?data_mode=demo&older_ma=8&younger_ma=2");
   const older = page.getByRole("slider", { name: "Older age bound" });
   const younger = page.getByRole("slider", { name: "Younger age bound" });
   await older.scrollIntoViewIfNeeded();
@@ -50,6 +51,7 @@ test("both handles drag on the same track and send custom ranges to the API", as
   expect(track).not.toBeNull();
   if (!track) throw new Error("Missing timeline");
   for (const [handle, delta, expected] of [[older, track.width / 12, "7"], [younger, -track.width / 12, "3"]] as const) {
+    await handle.scrollIntoViewIfNeeded();
     const box = await handle.boundingBox();
     if (!box) throw new Error("Missing range handle");
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
@@ -69,7 +71,7 @@ test("both handles drag on the same track and send custom ranges to the API", as
 test("narrow intervals keep both handles accessible on mobile with reduced motion", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/explore");
+  await page.goto("/explore?data_mode=demo");
   await page.getByRole("button", { name: "0.1–0 Ma", exact: true }).click();
   const older = page.getByRole("slider", { name: "Older age bound" });
   const younger = page.getByRole("slider", { name: "Younger age bound" });

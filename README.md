@@ -1,12 +1,18 @@
 # PaleoGraph
 
 A paleobiology atlas connecting occurrence assertions across time, geography,
-taxonomy, and source collections. Phase 2 implements `/explore` end to end:
+taxonomy, and source collections. Phase 3 implements `/explore` end to end:
 Next.js → typed API client → FastAPI → SQLAlchemy → PostgreSQL/PostGIS.
 
-**All 40 seeded occurrences are synthetic development examples.** Taxon, age,
-and place associations are invented, not scientific evidence. No external
-scientific data has been downloaded or integrated.
+Explore defaults to **real Florida Museum UFVP catalog assertions**, imported into
+local PostgreSQL/PostGIS. The source is **CC BY-NC 4.0**; retain creator, museum,
+dataset/version and license attribution. This phase is for noncommercial use.
+See [source verification](docs/ufvp-source-research.md) and
+[ingestion rules](docs/ufvp-ingestion.md).
+
+The 40 seeded examples remain separate at `/explore?data_mode=demo`. Their taxon,
+age and place associations are invented, visibly labeled synthetic, and never
+included in the default museum view.
 
 ## Local setup
 
@@ -26,6 +32,7 @@ docker compose up -d --wait db
 uv run --project apps/api alembic -c apps/api/alembic.ini upgrade head
 uv run --project apps/api python -m app.db
 uv run --project apps/api python -m app.seed_demo
+uv run --project apps/api python -m app.ingestion.import_ufvp --limit 1000
 ```
 
 Start each application in its own terminal:
@@ -44,6 +51,32 @@ popup. Inspection includes collection context and source evidence. The URL retai
 center, zoom, ages, and selected UUID; browser back/forward restores selection.
 The textual results support keyboard access; Escape closes inspection and restores
 focus. The homepage and `/api/v1/health` remain available.
+
+**UFVP does not supply numeric Ma bounds.** Its geological text is retained;
+numeric ages remain NULL. Use **All ages** for museum records. A numeric range
+currently excludes them rather than inventing dates. This is an explicit source
+limitation, not a formal geological timescale conversion.
+
+For an offline, eight-record museum fixture, run:
+
+```sh
+uv run --project apps/api python scripts/prepare_ufvp_fixture.py
+uv run --project apps/api python -m app.ingestion.import_ufvp --archive data/raw/ufvp-offline-fixture.zip --limit 8
+```
+
+For the complete Florida scope, run the following against the **complete official
+archive**, never a subset fixture. Only a successful full import marks unseen
+source records inactive; it never hard deletes canonical objects.
+
+```sh
+uv run --project apps/api python -m app.ingestion.import_ufvp --full-florida
+```
+
+Equivalent Make targets: `ingest-ufvp-fixture`, `ingest-ufvp-sample`, and
+`ingest-ufvp-florida`. `--version 1.182` pins the verified snapshot;
+`--archive PATH --limit N` reuses retained bytes without networking. Samples select
+the first accepted Florida records in archive order and are not statistically
+representative. Current imports are visible in the source strip.
 
 The time control uses one linear track, older on the left and present on the right.
 Drag either handle to set a custom range, or choose a numeric demo preset below it.
@@ -71,14 +104,15 @@ JSON array of exact origins (default `["http://localhost:3000"]`).
 | Setting | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_API_BASE_URL` | Browser API prefix; default `http://localhost:8000/api/v1` |
-| `NEXT_PUBLIC_MAP_STYLE_URL` | MapLibre style URL; example: `https://tiles.openfreemap.org/styles/positron` |
+| `NEXT_PUBLIC_MAP_STYLE_URL` | MapLibre style URL; default `/styles/paleograph.json` |
 | `TEST_DATABASE_URL` | Explicit opt-in to tests against a migrated disposable database |
 
 `NEXT_PUBLIC_*` values are public and embedded at build time. Restart development
 or rebuild production after changes. Blank style configuration provides a neutral
 canvas and notice. Basemap tiles require network access and retain provider
-attribution. OpenFreeMap is a development example; choose provider/terms before
-public release. No permanent production basemap choice has been made.
+attribution. The project-owned style uses OpenFreeMap/OpenMapTiles/OSM cartography.
+See [visual identity and provider terms](docs/visual-identity.md). Provider continuity
+and production suitability remain a release decision; no deployment is configured.
 
 ## Schema and seed
 
@@ -86,6 +120,10 @@ New migration `0002_explore_schema` adds Source, SourceDataset, IngestionRun,
 SourceRecord, Taxon, Locality, CollectionEvent, Occurrence, and four evidence link
 tables. Existing `0001_enable_postgis` is unchanged. Only Alembic owns schema
 changes. See the [data model](docs/data-model.md) for relationships and constraints.
+
+Phase 3 adds `0003_ufvp_specimens`: Institution, Collection, Specimen, typed specimen
+evidence, retained source-record revisions, and ingestion scope/snapshot metadata.
+Run `upgrade head` before importing. Existing migrations and demo IDs are preserved.
 
 `make seed-demo` (or the seed command above) creates two synthetic sources/datasets,
 two fixed ingestion snapshots, six taxa, 20 localities, 40 contexts, 40 assertions,
@@ -111,10 +149,16 @@ not overwrite fixture edits; use reset intentionally to restore original example
 | `GET /api/v1/map/occurrences` | Minimal items plus `returned`, `limit`, `truncated` |
 | `GET /api/v1/occurrences/{uuid}` | Scientific/contextual detail and source/dataset evidence |
 | `GET /api/v1/time-intervals` | Versioned numeric demo windows, not a formal timescale |
+| `GET /api/v1/datasets/ufvp` | Local current/mapped/numeric-age counts, latest scope/status and source credit |
 
 Map queries require `west`, `south`, `east`, `north`. Optional `older_ma` and
 `younger_ma` must be supplied together (0–10000 Ma, older ≥ younger). `limit`
 defaults to 200, maximum 1000. Example:
+
+`data_mode` defaults to `museum` and excludes synthetic evidence. Use `demo`
+explicitly for development examples. Capped responses state `truncated: true`;
+co-located assertions can remain capped even after zooming. No aggregate count or
+server cluster is inferred from loaded records.
 
 ```text
 http://localhost:8000/api/v1/map/occurrences?west=-88&south=24&east=-79&north=32&older_ma=2&younger_ma=0.1
@@ -134,21 +178,22 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
-uv run --project apps/api ruff check apps/api scripts/test_db.py
-uv run --project apps/api ruff format --check apps/api scripts/test_db.py
+uv run --project apps/api ruff check apps/api scripts
+uv run --project apps/api ruff format --check apps/api scripts
 uv run --project apps/api mypy --config-file apps/api/pyproject.toml apps/api/app
 uv run --project apps/api pytest apps/api/tests
 uv run --project apps/api python scripts/test_db.py
 ```
 
-Ordinary pytest uses an unreachable database URL; 23 integration cases skip unless
+Ordinary pytest uses an unreachable database URL; integration cases are deselected unless
 `TEST_DATABASE_URL` is supplied. **Prefer `make test-db`** (last command above): a
 separate `paleograph-test` Compose project on port 55432 uses ephemeral storage,
 runs upgrade/repeat/downgrade/re-upgrade/drift checks and integration tests, then
 removes that project. It never uses the normal development database. Do not point
 manual integration runs at valuable data.
 
-For browser checks, migrate/seed and run both servers first:
+For browser checks, migrate, seed demo, import the eight-record offline museum
+fixture above, and run both servers first:
 
 ```sh
 pnpm --filter @paleograph/web exec playwright install chromium
@@ -162,14 +207,17 @@ tests against its disposable PostGIS service with a migration round trip.
 Remote CI execution is not claimed.
 
 Make shortcuts: `db-up`, `db-down`, `migrate`, `verify-db`, `seed-demo`, `reset-demo`,
-`dev-api`, `dev-web`, `test`, `test-db`, `lint`, `typecheck`, `build`.
+`ingest-ufvp-fixture`, `ingest-ufvp-sample`, `ingest-ufvp-florida`, `dev-api`,
+`dev-web`, `test`, `test-db`, `lint`, `typecheck`, `build`.
 
 ## Boundaries and next work
 
-Occurrences are assertions, not physical specimens. Localities and collection
-contexts are separate. PaleoGraph is not a universal taxonomic authority. No
-specimen/identifier registry, real ingestion, reconciliation, field-level evidence,
-search, graph, accounts, AI, or deployment is included.
+Occurrences are assertions and link separately to cataloged physical material.
+A UFVP catalog entry can contain several pieces; Specimen does not assert exactly
+one organism. Localities and collection contexts remain separate. PaleoGraph is
+not a universal taxonomic or specimen authority. Cross-source reconciliation,
+field-level conflict resolution, search infrastructure, graph, accounts, AI and
+deployment remain outside this phase.
 
 Explore caps results without pagination/server clustering. Controls default to 0–12 Ma
 and extend for larger URL age ranges. Generalization rings indicate status, not a
@@ -178,7 +226,8 @@ absent from the spatial list. Production scale, a formal timescale, and broad
 cross-browser/accessibility audits remain future work. On WebGL failure the default
 Florida list remains available.
 
-Recommended Phase 3: choose one bounded Florida vertebrate source dataset and
-agree on licensing, identifiers, sensitivity, snapshot lifecycle, and conflict
-rules; implement one auditable raw → normalized → canonical adapter. No human
-decision blocks this synthetic slice. Stop here until that phase is authorized.
+Recommended Phase 4: improve discovery and completeness for co-located museum
+assertions, with measured full-Florida performance and accessible pagination.
+Any geological text-to-age mapping requires a separately approved, authoritative,
+versioned policy. Commercial use requires compatible permission from the rights
+holder. No decision blocks this noncommercial Phase 3 slice.

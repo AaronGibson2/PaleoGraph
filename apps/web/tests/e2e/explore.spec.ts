@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
+  await page.route("**/styles/paleograph.json", route => route.fulfill({ json: { version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#94b5af" } }] } }));
   // External basemap availability must not determine application test results.
   // The real MapLibre worker, WebGL layers, API and database still run.
   await page.route("https://tiles.openfreemap.org/**", route => route.fulfill({
@@ -11,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 test("database occurrences, inspection, time filtering, and URL restoration", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
-  await page.goto("/explore");
+  await page.goto("/explore?data_mode=demo");
   const results = page.locator(".occurrence-list button");
   await expect(results.first()).toBeVisible();
   const initialCount = await results.count();
@@ -39,7 +40,7 @@ test("database occurrences, inspection, time filtering, and URL restoration", as
 });
 
 test("empty view and recoverable API failure", async ({ page }) => {
-  await page.goto("/explore?lat=0&lng=0&zoom=7");
+  await page.goto("/explore?data_mode=demo&lat=0&lng=0&zoom=7");
   await expect(page.getByText("No occurrences in this view and age range.", { exact: false })).toBeVisible();
   await page.route("**/api/v1/map/occurrences?**", route => route.fulfill({ status: 503, json: { error: { code: "DATABASE_UNAVAILABLE", message: "Occurrence data is temporarily unavailable." } } }));
   await page.getByRole("button", { name: "Return to Florida" }).click();
@@ -52,7 +53,7 @@ test("empty view and recoverable API failure", async ({ page }) => {
 
 test("mobile keyboard inspection and focus restoration", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/explore");
+  await page.goto("/explore?data_mode=demo");
   const first = page.locator(".occurrence-list button").first();
   await expect(first).toBeVisible();
   await first.focus();
@@ -65,11 +66,11 @@ test("mobile keyboard inspection and focus restoration", async ({ page }) => {
 });
 
 test("map markers expose co-located assertions and browser history restores selection", async ({ page, request }) => {
-  const response = await request.get("http://localhost:8000/api/v1/map/occurrences?west=-88&south=24&east=-79&north=32");
+  const response = await request.get("http://localhost:8000/api/v1/map/occurrences?data_mode=demo&west=-88&south=24&east=-79&north=32");
   expect(response.ok()).toBe(true);
   const { items } = await response.json();
   const point = items[0];
-  await page.goto(`/explore?lat=${point.latitude}&lng=${point.longitude}&zoom=9`);
+  await page.goto(`/explore?data_mode=demo&lat=${point.latitude}&lng=${point.longitude}&zoom=9`);
   await expect(page.locator(".occurrence-list button").first()).toBeVisible();
   const canvas = page.locator(".maplibregl-canvas");
   // The API point is at the map center; retry while the real worker paints GeoJSON.

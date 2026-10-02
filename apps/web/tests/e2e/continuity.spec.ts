@@ -17,6 +17,7 @@ async function pan(page: Page, fraction: number) {
 }
 
 test.beforeEach(async ({ page }) => {
+  await page.route("**/styles/paleograph.json", route => route.fulfill({ json: { version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#94b5af" } }] } }));
   await page.route("https://tiles.openfreemap.org/**", route => route.fulfill({
     json: { version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#dfe7e3" } }] },
   }));
@@ -25,7 +26,7 @@ test.beforeEach(async ({ page }) => {
 test("small pans reuse the buffer; rapid larger pans retain rows and reject late results", async ({ page }) => {
   const requests: string[] = [];
   page.on("request", request => { if (request.url().includes("/map/occurrences?")) requests.push(request.url()); });
-  await page.goto("/explore");
+  await page.goto("/explore?data_mode=demo");
   await expect(page.locator(".occurrence-list button").first()).toBeVisible();
   await expect(page.locator(".result-count")).not.toContainText("Updating");
   await page.waitForTimeout(400);
@@ -79,7 +80,7 @@ test("small pans reuse the buffer; rapid larger pans retain rows and reject late
 test("a long drag previews immediately, commits once, and preserves rows until completion", async ({ page }) => {
   const requests: string[] = [];
   page.on("request", request => { if (request.url().includes("/map/occurrences?")) requests.push(request.url()); });
-  await page.goto("/explore?older_ma=8&younger_ma=2");
+  await page.goto("/explore?data_mode=demo&older_ma=8&younger_ma=2");
   await expect(page.locator(".occurrence-list button").first()).toBeVisible();
   await expect(page.locator(".result-count")).not.toContainText("Updating");
   await page.waitForTimeout(300);
@@ -126,7 +127,7 @@ test("a long drag previews immediately, commits once, and preserves rows until c
 });
 
 test("failed background queries keep usable rows, and rapid key presses settle once", async ({ page }) => {
-  await page.goto("/explore?older_ma=8&younger_ma=2");
+  await page.goto("/explore?data_mode=demo&older_ma=8&younger_ma=2");
   await expect(page.locator(".occurrence-list button").first()).toBeVisible();
   await expect(page.locator(".result-count")).not.toContainText("Updating");
   const ids = await page.locator(".occurrence-list button").evaluateAll(rows => rows.map(row => row.id));

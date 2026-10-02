@@ -1,4 +1,4 @@
-import type { AgeRange, MapResponse, OccurrenceDetail, TimeConfiguration, Viewport } from "./types.ts";
+import type { AgeRange, DatasetStatus, MapResponse, OccurrenceDetail, TimeConfiguration, Viewport } from "./types.ts";
 
 const baseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 
@@ -28,6 +28,7 @@ export function occurrenceQuery(viewport: Viewport, age: AgeRange): string {
     params.set("younger_ma", String(age.younger_ma));
   }
   params.set("limit", "200");
+  params.set("data_mode", age.data_mode ?? "museum");
   return params.toString();
 }
 
@@ -35,4 +36,5 @@ export const api = {
   occurrences: (query: string, signal?: AbortSignal) => request<MapResponse>(`/map/occurrences?${query}`, signal),
   occurrence: (id: string, signal?: AbortSignal) => request<OccurrenceDetail>(`/occurrences/${encodeURIComponent(id)}`, signal),
   timeConfiguration: (signal?: AbortSignal) => request<TimeConfiguration>("/time-intervals", signal),
+  datasetStatus: (signal?: AbortSignal) => request<DatasetStatus>("/datasets/ufvp", signal),
 };

@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import { api, occurrenceQuery } from "../../lib/api/client";
-import type { AgeRange, OccurrenceDetail, TimeConfiguration, Viewport } from "../../lib/api/types";
+import type { AgeRange, DatasetStatus, OccurrenceDetail, TimeConfiguration, Viewport } from "../../lib/api/types";
 import { initialWindow, occurrenceWindow } from "./occurrenceWindow";
 
 type LoadState<T> = { key: string; data?: T; error?: string };
@@ -10,11 +10,11 @@ const message = (error: unknown) => error instanceof Error ? error.message : "Da
 
 export function useOccurrences(viewport: Viewport, age: AgeRange, retry: number) {
   const { west, south, east, north } = viewport;
-  const { older_ma, younger_ma } = age;
+  const { older_ma, younger_ma, data_mode } = age;
   const [state, dispatch] = useReducer(occurrenceWindow, { viewport, age, retry }, initialWindow);
   useEffect(() => {
-    dispatch({ type: "intent", intent: { viewport: { west, south, east, north }, age: { older_ma, younger_ma }, retry } });
-  }, [west, south, east, north, older_ma, younger_ma, retry]);
+    dispatch({ type: "intent", intent: { viewport: { west, south, east, north }, age: { older_ma, younger_ma, data_mode }, retry } });
+  }, [west, south, east, north, older_ma, younger_ma, data_mode, retry]);
   useEffect(() => {
     const request = state.request;
     if (!request) return;
@@ -37,6 +37,19 @@ export function useOccurrences(viewport: Viewport, age: AgeRange, retry: number)
     return () => { clearTimeout(timer); controller.abort(); };
   }, [state.request]);
   return { data: state.display, mapItems: state.loaded?.data.items, error: state.error, loading: state.request !== null };
+}
+
+export function useDatasetStatus(retry: number) {
+  const [result, setResult] = useState<LoadState<DatasetStatus>>({ key: "" });
+  useEffect(() => {
+    const controller = new AbortController();
+    api.datasetStatus(controller.signal).then(
+      data => { if (!controller.signal.aborted) setResult({ key: String(retry), data }); },
+      error => { if (!controller.signal.aborted) setResult({ key: String(retry), error: message(error) }); },
+    );
+    return () => controller.abort();
+  }, [retry]);
+  return result;
 }
 
 export function useOccurrence(id: string | null, retry: number): LoadState<OccurrenceDetail> & { loading: boolean } {

@@ -22,6 +22,7 @@ export function parseExploreState(params: URLSearchParams): ExploreState {
     older_ma: hasAge ? older : null,
     younger_ma: hasAge ? younger : null,
     selected: selected && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(selected) ? selected : null,
+    data_mode: params.get("data_mode") === "demo" ? "demo" : "museum",
   };
 }
 
@@ -30,6 +31,8 @@ export function serializeExploreState(state: ExploreState, current = new URLSear
   params.set("lat", state.lat.toFixed(5));
   params.set("lng", state.lng.toFixed(5));
   params.set("zoom", state.zoom.toFixed(2));
+  if (state.data_mode === "demo") params.set("data_mode", "demo");
+  else params.delete("data_mode");
   for (const key of ["older_ma", "younger_ma", "selected"] as const) {
     if (state[key] === null) params.delete(key);
     else params.set(key, String(state[key]));
