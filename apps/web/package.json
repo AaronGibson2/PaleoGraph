@@ -1,0 +1,32 @@
+{
+  "name": "@paleograph/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/prepare-map-worker.mjs && next dev",
+    "build": "node scripts/prepare-map-worker.mjs && next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings 0",
+    "test": "node --experimental-strip-types --test features/explore/state.test.ts",
+    "test:e2e": "playwright test",
+    "typecheck": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.11.2",
+    "next": "16.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/postcss": "^4.2.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.3.8",
+    "tailwindcss": "^4.2.0",
+    "typescript": "^5.9.0"
+  }
+}

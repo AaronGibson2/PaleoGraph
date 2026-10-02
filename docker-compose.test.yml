@@ -1,0 +1,17 @@
+# A separate Compose project with ephemeral storage; never the development volume.
+services:
+  db:
+    image: postgis/postgis:17-3.5
+    environment:
+      POSTGRES_DB: paleograph_test
+      POSTGRES_USER: paleograph_test
+      POSTGRES_PASSWORD: paleograph_test
+    ports:
+      - "127.0.0.1:55432:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paleograph_test -d paleograph_test"]
+      interval: 2s
+      timeout: 5s
+      retries: 20

@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --surface: #f6f3ec;
+  --text: #242a27;
+  --text-muted: #535b55;
+  --accent: #285641;
+  --border: #cccfc5;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 4rem;
+  --radius: 0.25rem;
+  --text-body: 1.125rem;
+  --text-label: 0.875rem;
+  --text-heading: clamp(2.25rem, 5vw, 3.75rem);
+  --font-body: Arial, Helvetica, sans-serif;
+  --font-heading: Georgia, "Times New Roman", serif;
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-ink: var(--text);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-body);
+}
+
+body { margin: 0; background: var(--surface); color: var(--text); font-family: var(--font-body); font-size: var(--text-body); line-height: 1.65; }
+a { color: var(--accent); text-underline-offset: 0.25em; }
+a:hover { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: var(--radius); }
+.site-header { max-width: 72rem; margin-inline: auto; padding: var(--space-3) var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+.wordmark { color: var(--text); font-weight: 700; letter-spacing: -0.025em; text-decoration: none; }
+.page-section { max-width: 72rem; margin-inline: auto; padding: var(--space-5) var(--space-4); }
+.eyebrow { color: var(--text-muted); font-size: var(--text-label); letter-spacing: 0.09em; text-transform: uppercase; }
+h1 { font-family: var(--font-heading); font-weight: 400; font-size: var(--text-heading); line-height: 1.12; letter-spacing: -0.025em; margin-block: var(--space-3); }
+p { max-width: 38rem; margin-block: var(--space-3); }
+.text-link { display: inline-block; margin-top: var(--space-2); }
+.skip-link { position: absolute; left: var(--space-2); top: var(--space-2); padding: var(--space-1) var(--space-2); background: var(--surface); transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); }
