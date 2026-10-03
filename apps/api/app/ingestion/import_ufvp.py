@@ -436,15 +436,21 @@ def ingest(
                 flush()
         flush()
         run.status = "partial" if run.records_failed else "completed"
-        if limit is None and run.status == "completed":
-            session.execute(
-                update(SourceRecord)
-                .where(
-                    SourceRecord.source_dataset_id == CANONICAL_DATASET_ID,
-                    SourceRecord.ingestion_run_id != run.id,
+        # Import success also publishes a coherent search/context projection. Local import
+        # avoids a module cycle: the projection uses this adapter's fixed dataset identity.
+        from app.discovery.index import rebuild
+
+        with session.begin_nested():
+            if limit is None and run.status == "completed":
+                session.execute(
+                    update(SourceRecord)
+                    .where(
+                        SourceRecord.source_dataset_id == CANONICAL_DATASET_ID,
+                        SourceRecord.ingestion_run_id != run.id,
+                    )
+                    .values(is_current=False, updated_at=now)
                 )
-                .values(is_current=False, updated_at=now)
-            )
+            rebuild(session)
     except Exception as error:
         # Savepoint rollback leaves completed batches intact; no unseen record deactivation.
         run.status = "failed"

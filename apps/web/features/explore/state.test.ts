@@ -4,7 +4,7 @@ import { DEFAULT_VIEW, normalizeViewport, parseExploreState, serializeExploreSta
 import { occurrenceQuery } from "../../lib/api/client.ts";
 
 test("shareable state round-trips including selection and age zero", () => {
-  const state = { ...DEFAULT_VIEW, data_mode: "museum" as const, selected: "de000000-0000-4000-8000-000600000001", older_ma: 2, younger_ma: 0 };
+  const state = { ...DEFAULT_VIEW, selected: "de000000-0000-4000-8000-000600000001", older_ma: 2, younger_ma: 0 };
   assert.deepEqual(parseExploreState(new URLSearchParams(serializeExploreState(state))), state);
 });
 
@@ -39,4 +39,19 @@ test("API query sends bounds unchanged and omits inactive age filters", () => {
   assert.equal(all.has("older_ma"), false);
   const bounded = new URLSearchParams(occurrenceQuery(viewport, { older_ma: 2, younger_ma: 0 }));
   assert.equal(bounded.get("younger_ma"), "0");
+});
+
+test("scientific context and calibrated decimal bounds survive URL restoration", () => {
+  const state = parseExploreState(new URLSearchParams("older_ma=11.63&younger_ma=5.333&interval_id=ics:2026-06:LateMiocene&time_focus=ics:2026-06:Miocene&surface=relationships&selected_kind=taxon&selected=de000000-0000-4000-8000-000600000001&taxon_id=de000000-0000-4000-8000-000600000001&at_lon=-82.19&at_lat=29.36&q=UF%2FTRO+1"));
+  assert.deepEqual(parseExploreState(new URLSearchParams(serializeExploreState(state))), state);
+  assert.equal(state.younger_ma, 5.333);
+  assert.equal(state.surface, "relationships");
+});
+
+test("invalid exact-place coordinates and legacy public demo mode are removed", () => {
+  const state = parseExploreState(new URLSearchParams("at_lon=999&at_lat=29.36&data_mode=demo"));
+  const params = new URLSearchParams(serializeExploreState(state, new URLSearchParams("data_mode=demo")));
+  assert.equal(params.has("at_lon"), false);
+  assert.equal(params.has("at_lat"), false);
+  assert.equal(params.has("data_mode"), false);
 });

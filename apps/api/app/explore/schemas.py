@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Literal, Self
+from typing import Self
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -14,7 +14,6 @@ class ExploreQuery(BaseModel):
     older_ma: float | None = Field(default=None, ge=0, le=10000)
     younger_ma: float | None = Field(default=None, ge=0, le=10000)
     limit: int = Field(default=200, ge=1, le=1000)
-    data_mode: Literal["museum", "demo"] = "museum"
 
     @model_validator(mode="after")
     def ordered_bounds(self) -> Self:
@@ -119,16 +118,3 @@ class DatasetStatus(BaseModel):
     latest_status: str | None
     numeric_age_records: int
     creator: str | None
-
-
-class TimeWindow(BaseModel):
-    label: str
-    older_ma: float
-    younger_ma: float
-
-
-class TimeConfiguration(BaseModel):
-    version: str
-    kind: Literal["demo_windows"] = "demo_windows"
-    max_ma: float
-    windows: list[TimeWindow]

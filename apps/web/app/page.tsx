@@ -2,11 +2,9 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <section className="page-section">
-      <p className="eyebrow">A paleobiology atlas</p>
-      <h1>The fossil record,<br />in context.</h1>
-      <p>PaleoGraph is taking shape as a place to explore fossils through time, geography, and the collections that preserve them.</p>
-      <Link className="text-link" href="/explore">Explore PaleoGraph <span aria-hidden="true">→</span></Link>
-    </section>
+    <div className="home-atlas"><section className="home-hero">
+      <div className="home-copy"><p className="eyebrow">Museum material / Deep time / Connected evidence</p><h1>A record.<br />A place.<br /><em>A deeper story.</em></h1><p>Follow fossil material through the collections that preserve it, the places it came from and the geological context recorded with it.</p><Link className="home-enter" href="/explore">Enter the Florida atlas <span aria-hidden="true">↗</span></Link><p className="home-source">FIRST COLLECTION / University of Florida Vertebrate Paleontology</p></div>
+      <div className="home-instrument" aria-label="Museum material connects to classification, locality, collection and geological context"><div className="home-orbit" /><div className="home-core"><small>PHYSICAL MATERIAL</small><strong>In context.</strong><span>Evidence you can follow</span></div><span className="home-node node-taxon">01 / Identification<br /><strong>Taxa & classification</strong></span><span className="home-node node-locality">02 / Geography<br /><strong>Published localities</strong></span><span className="home-node node-time">03 / Interpretation<br /><strong>Geological time</strong></span><span className="home-node node-collection">04 / Custodianship<br /><strong>Museum collections</strong></span><div className="home-depth"><i /><i /><i /><i /><i /><i /><i /><i /><span>OLDER ← &nbsp; DEEP TIME &nbsp; → PRESENT</span></div></div>
+    </section><section className="home-principles"><div><span>01</span><h2>Start with the material.</h2><p>Catalog assertions can contain many pieces. Explore them individually, even where thousands share one published position.</p></div><div><span>02</span><h2>Keep evidence visible.</h2><p>Museum assertions, dataset attribution and PaleoGraph interpretations remain distinct. Uncertainty travels with the record.</p></div><div><span>03</span><h2>Follow a scientific noun.</h2><p>Move from a taxon to a locality, from a locality to material and from a specimen to its source-supported relationships.</p></div></section><footer className="home-credit">UFVP museum data · CC BY-NC 4.0. Geological reference · ICS v2026/06 · CC BY 4.0. Present-day geography; source-supported Florida material.</footer></div>
   );
 }

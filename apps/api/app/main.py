@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import Settings
 from app.db import create_db_engine
+from app.discovery.routes import router as discovery_router
 from app.errors import register_errors
 from app.explore.routes import router as explore_router
 from app.health import router
@@ -34,6 +35,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     application.include_router(router, prefix="/api/v1")
     application.include_router(explore_router, prefix="/api/v1")
+    application.include_router(discovery_router, prefix="/api/v1")
     return application
 
 

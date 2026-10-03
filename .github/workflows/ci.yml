@@ -38,6 +38,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
+          --shm-size=1g
           --health-cmd "pg_isready -U paleograph -d paleograph"
           --health-interval 5s
           --health-timeout 5s
@@ -61,3 +62,20 @@ jobs:
           uv run --project apps/api alembic -c apps/api/alembic.ini check
       - run: uv run --project apps/api python -m app.db
       - run: uv run --project apps/api pytest apps/api/tests
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+      - run: npm install --global pnpm@10.34.6
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @paleograph/web exec playwright install --with-deps chromium
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          version: "0.12.21"
+          python-version: "3.12"
+      - run: uv sync --project apps/api --locked
+      - run: uv run --project apps/api python scripts/test_browser.py

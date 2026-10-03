@@ -2,6 +2,7 @@
 services:
   db:
     image: postgis/postgis:17-3.5
+    shm_size: 1gb
     environment:
       POSTGRES_DB: paleograph_test
       POSTGRES_USER: paleograph_test

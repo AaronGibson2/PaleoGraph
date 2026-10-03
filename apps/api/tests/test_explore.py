@@ -4,6 +4,7 @@ from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
+from fixtures.synthetic import demo_id, seed_demo
 from pydantic import ValidationError
 from sqlalchemy import event, func, select, text
 from sqlalchemy.exc import IntegrityError
@@ -14,7 +15,6 @@ from app.explore.queries import age_overlap, map_occurrences, occurrence_detail
 from app.explore.schemas import ExploreQuery
 from app.main import create_app
 from app.models import CollectionEvent, Occurrence, SourceDataset, SourceRecord, Taxon
-from app.seed_demo import demo_id, seed_demo
 
 WORLD = {"west": -180, "south": -90, "east": 180, "north": 90}
 
@@ -44,13 +44,14 @@ def test_validation_and_time_metadata_without_database() -> None:
         assert response.status_code == 422
         assert response.json()["error"]["code"] == "INVALID_REQUEST"
         config = client.get("/api/v1/time-intervals").json()
-        assert config["kind"] == "demo_windows"
-        assert config["version"] == "demo-windows-v1"
+        assert config["kind"] == "international_chronostratigraphic_chart"
+        assert config["version"] == "2026-06"
 
 
 @pytest.fixture
 def seeded(db_session: Session) -> Session:
     seed_demo(db_session)
+    db_session.execute(text("UPDATE source_dataset SET is_synthetic = false"))
     return db_session
 
 
@@ -87,6 +88,7 @@ def test_inclusive_overlap(
 
 @pytest.mark.integration
 def test_seed_idempotency_and_reset(seeded: Session) -> None:
+    seeded.execute(text("UPDATE source_dataset SET is_synthetic = true"))
     seed_demo(seeded)
     assert seeded.scalar(select(func.count()).select_from(Occurrence)) == 40
     assert seeded.scalar(select(func.count()).select_from(SourceRecord)) == 40
@@ -101,16 +103,14 @@ def test_seed_idempotency_and_reset(seeded: Session) -> None:
 
 @pytest.mark.integration
 def test_bbox_and_unknown_ages(seeded: Session) -> None:
-    all_ages = map_occurrences(seeded, ExploreQuery(**WORLD, data_mode="demo"))
+    all_ages = map_occurrences(seeded, ExploreQuery(**WORLD))
     assert all_ages.returned == 36  # Two missing-location examples (four assertions).
     assert any(item.older_ma is None or item.younger_ma is None for item in all_ages.items)
-    filtered = map_occurrences(
-        seeded, ExploreQuery(**WORLD, data_mode="demo", older_ma=2, younger_ma=1)
-    )
+    filtered = map_occurrences(seeded, ExploreQuery(**WORLD, older_ma=2, younger_ma=1))
     assert 0 < filtered.returned < all_ages.returned
     assert all(item.older_ma is not None and item.younger_ma is not None for item in filtered.items)
     assert map_occurrences(seeded, ExploreQuery(west=0, east=1, south=0, north=1)).returned == 0
-    limited = map_occurrences(seeded, ExploreQuery(**WORLD, data_mode="demo", limit=2))
+    limited = map_occurrences(seeded, ExploreQuery(**WORLD, limit=2))
     assert limited.returned == 2 and limited.truncated
 
 
@@ -123,9 +123,7 @@ def test_antimeridian_and_boundary_points(seeded: Session) -> None:
             ),
             {"lon": lon, "id": demo_id(4, i)},
         )
-    response = map_occurrences(
-        seeded, ExploreQuery(data_mode="demo", west=170, east=-170, south=-1, north=1)
-    )
+    response = map_occurrences(seeded, ExploreQuery(west=170, east=-170, south=-1, north=1))
     assert response.returned == 8
     assert {item.longitude for item in response.items} == {175, -175, 170, -170}
 
@@ -176,7 +174,7 @@ def test_detail_provenance_and_constant_queries(seeded: Session) -> None:
     finally:
         event.remove(seeded.bind, "before_cursor_execute", record_query)
     assert len(statements) == 2
-    assert detail is not None and detail.evidence[0].is_synthetic
+    assert detail is not None and not detail.evidence[0].is_synthetic
     assert detail.evidence[0].dataset_id == demo_id(2, 0)
     assert detail.evidence[0].ingestion_run_id == demo_id(8, 0)
     assert "raw_payload" not in detail.model_dump()
@@ -194,12 +192,12 @@ def test_api_contract(seeded: Session) -> None:
 
     app.dependency_overrides[get_session] = override
     with TestClient(app) as client:
-        response = client.get("/api/v1/map/occurrences", params={**WORLD, "data_mode": "demo"})
+        response = client.get("/api/v1/map/occurrences", params=WORLD)
         assert response.status_code == 200
         body = response.json()
         assert body["returned"] == 36 and body["truncated"] is False
         item = body["items"][0]
-        assert isinstance(item["latitude"], float) and item["is_synthetic"]
+        assert isinstance(item["latitude"], float) and not item["is_synthetic"]
         detail = client.get(f"/api/v1/occurrences/{item['id']}")
         assert detail.status_code == 200
         assert detail.json()["evidence"][0]["source_record_id"].startswith("DEMO-")

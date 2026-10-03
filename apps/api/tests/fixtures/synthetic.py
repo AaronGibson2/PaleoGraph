@@ -1,6 +1,5 @@
 """Synthetic development fixtures only. No source downloads or scientific claims."""
 
-import argparse
 import hashlib
 import json
 from datetime import UTC, datetime
@@ -12,8 +11,7 @@ from sqlalchemy import delete, select, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from app.config import Settings
-from app.db import Base, create_db_engine
+from app.db import Base
 from app.models import (
     CollectionEvent,
     IngestionRun,
@@ -214,24 +212,3 @@ def seed_demo(session: Session, *, reset: bool = False) -> None:
                 .values({key: entity_id, "source_record_id": demo_id(7, i)})
                 .on_conflict_do_nothing()
             )
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--reset", action="store_true", help="Replace only reserved synthetic fixtures"
-    )
-    args = parser.parse_args()
-    engine = create_db_engine(Settings())
-    try:
-        with Session(engine) as session, session.begin():
-            seed_demo(session, reset=args.reset)
-        print(
-            "Synthetic demo ready: 40 occurrences, 20 localities, 40 collection contexts, 6 taxa."
-        )
-    finally:
-        engine.dispose()
-
-
-if __name__ == "__main__":
-    main()

@@ -4,12 +4,12 @@ import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } fr
 import type { AgeRange, TimeConfiguration } from "../../lib/api/types";
 import { ageLabel } from "../explore/state";
 
-type Props = { age: AgeRange; configuration: TimeConfiguration; onChange: (age: AgeRange) => void };
+type Props = { age: AgeRange; configuration: TimeConfiguration; focus?: string; onFocus: (id: string) => void; onChange: (age: AgeRange, interval?: string) => void };
 type Boundary = "older_ma" | "younger_ma";
 type Drag = { pointer: number; x: number; value: number; maximum: number; width: number };
-const format = (value: number) => value.toLocaleString("en-US", { maximumFractionDigits: 2 });
+const format = (value: number) => value.toLocaleString("en-US", { maximumFractionDigits: 4 });
 
-export function TimeControl({ age: committed, configuration, onChange }: Props) {
+export function TimeControl({ age: committed, configuration, focus, onFocus, onChange }: Props) {
   const track = useRef<HTMLDivElement>(null);
   const drag = useRef<Drag | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -30,24 +30,31 @@ export function TimeControl({ age: committed, configuration, onChange }: Props) 
     setDraft(null);
     if (next) onChange(next);
   };
-  const choose = (next: AgeRange) => {
+  const choose = (next: AgeRange, interval?: string) => {
     if (timer.current) clearTimeout(timer.current);
     pending.current = null;
     setDraft(null);
-    onChange(next);
+    onChange(next, interval);
   };
-  // Keep an extended URL range's scale steady while either handle moves.
-  const [scaleMaximum, setScaleMaximum] = useState(Math.max(configuration.max_ma, age.older_ma ?? 0));
-  const maximum = Math.max(scaleMaximum, configuration.max_ma, age.older_ma ?? 0);
+  const focused = configuration.units.find(unit => unit.id === focus) ?? configuration.units.find(unit => unit.name === "Cenozoic")!;
+  const maximum = Math.max(focused.older_ma, committed.older_ma ?? 0);
+  const minimum = Math.min(focused.younger_ma, committed.younger_ma ?? focused.younger_ma);
+  const span = maximum - minimum;
   const allAges = age.older_ma === null;
   const older = age.older_ma ?? maximum;
-  const younger = age.younger_ma ?? 0;
-  const position = (value: number) => (1 - value / maximum) * 100;
+  const younger = age.younger_ma ?? minimum;
+  const position = (value: number) => Math.max(0, Math.min(100, (maximum - value) / span * 100));
+  const children = configuration.units.filter(unit => unit.parent === focused.id && unit.rank !== "Subepoch").sort((a, b) => b.older_ma - a.older_ma);
+  const presets = configuration.units.filter(unit => unit.parent === focused.id && unit.rank === "Subepoch");
+  const ancestry = [];
+  let ancestor = focused;
+  while (ancestor) { ancestry.unshift(ancestor); ancestor = configuration.units.find(unit => unit.id === ancestor.parent)!; }
   const change = (boundary: Boundary, value: number, keyboard = false) => {
-    const rounded = Math.round(value * 100) / 100;
+    const step = span < 0.1 ? 0.0001 : span < 5 ? 0.001 : 0.01;
+    const rounded = Number((Math.round(value / step) * step).toFixed(4));
     const next = boundary === "older_ma"
-      ? { older_ma: Math.max(younger, Math.min(maximum, rounded)), younger_ma: younger }
-      : { older_ma: older, younger_ma: Math.max(0, Math.min(older, rounded)) };
+      ? { older_ma: Math.max(Math.max(minimum, Math.min(maximum, younger)), Math.min(maximum, rounded)), younger_ma: Math.max(minimum, Math.min(maximum, younger)) }
+      : { older_ma: Math.max(minimum, Math.min(maximum, older)), younger_ma: Math.max(minimum, Math.min(Math.min(maximum, older), rounded)) };
     pending.current = next;
     setDraft({ base: ageKey, age: next });
     if (timer.current) clearTimeout(timer.current);
@@ -59,8 +66,7 @@ export function TimeControl({ age: committed, configuration, onChange }: Props) 
     event.currentTarget.focus({ preventScroll: true });
     event.currentTarget.setPointerCapture(event.pointerId);
     if (timer.current) clearTimeout(timer.current);
-    setScaleMaximum(maximum);
-    drag.current = { pointer: event.pointerId, x: event.clientX, value, maximum, width: track.current.getBoundingClientRect().width };
+    drag.current = { pointer: event.pointerId, x: event.clientX, value: Math.max(minimum, Math.min(maximum, value)), maximum: span, width: track.current.getBoundingClientRect().width };
   };
   const move = (event: PointerEvent<HTMLButtonElement>, boundary: Boundary) => {
     const active = drag.current;
@@ -68,32 +74,32 @@ export function TimeControl({ age: committed, configuration, onChange }: Props) 
     change(boundary, active.value - (event.clientX - active.x) / active.width * active.maximum);
   };
   const keyboard = (event: KeyboardEvent<HTMLButtonElement>, boundary: Boundary, value: number) => {
-    const step = event.shiftKey ? 0.1 : 0.01;
+    const step = (span < 0.1 ? 0.0001 : span < 5 ? 0.001 : 0.01) * (event.shiftKey ? 10 : 1);
     const values: Record<string, number> = {
       ArrowLeft: value + step, ArrowRight: value - step,
       ArrowUp: value + step, ArrowDown: value - step,
-      PageUp: value + 1, PageDown: value - 1,
-      Home: boundary === "older_ma" ? younger : 0,
+      PageUp: value + span / 10, PageDown: value - span / 10,
+      Home: boundary === "older_ma" ? Math.max(minimum, younger) : minimum,
       End: boundary === "older_ma" ? maximum : older,
     };
     if (!(event.key in values)) return;
     event.preventDefault();
-    setScaleMaximum(maximum);
     change(boundary, values[event.key], true);
   };
   return <section className="time-control" aria-labelledby="time-heading">
     <div className="time-title">
       <div><p className="eyebrow">Selected time</p><h2 id="time-heading">{allAges ? "All ages" : ageLabel(age)}</h2></div>
-      <p className="time-explanation">{draft ? "Previewing range · map updates when you finish." : allAges ? "Every mapped assertion, including unknown ages." : "Map shows overlapping known ages. Unknown and partial ages excluded."}</p>
-      <button className="quiet-button" aria-pressed={allAges} onClick={() => { setScaleMaximum(configuration.max_ma); choose({ older_ma: null, younger_ma: null }); }}>All ages</button>
+      <p className="time-explanation">{draft ? "Previewing range · map updates when you finish." : allAges ? "All current material, including unresolved ages." : "Map shows overlapping known ages. Unresolved source ages excluded. Reference ranges are interpretations."}</p>
+      <button className="quiet-button" aria-pressed={allAges} onClick={() => { choose({ older_ma: null, younger_ma: null }); }}>All ages</button>
     </div>
+    <nav className="time-ancestry" aria-label="Timescale depth"><button onClick={() => onFocus("ics:2026-06:Phanerozoic")}>Deep time</button>{ancestry.map(unit => <button key={unit.id} aria-current={unit.id === focused.id ? "location" : undefined} onClick={() => onFocus(unit.id)}>{unit.name} <small>{unit.rank}</small></button>)}</nav>
     <div className="time-direction"><span>← Older</span><span>Millions of years before present</span><span>Present →</span></div>
     <div className="time-instrument" data-all-ages={allAges}>
       <div className="time-track" ref={track}>
         <div className="time-strata" aria-hidden="true">
-          {configuration.windows.map((window, index) => <span key={window.label} className={`time-stratum time-window-${index}`} style={{ left: `${position(window.older_ma)}%`, width: `${(window.older_ma - window.younger_ma) / maximum * 100}%` }} />)}
+          {children.map(unit => <span key={unit.id} className="time-stratum" style={{ left: `${position(unit.older_ma)}%`, width: `${(unit.older_ma - unit.younger_ma) / span * 100}%`, background: unit.color }} />)}
         </div>
-        <div className="time-selection" aria-hidden="true" style={{ left: `${position(older)}%`, width: `${(older - younger) / maximum * 100}%` }} />
+        <div className="time-selection" aria-hidden="true" style={{ left: `${position(older)}%`, width: `${(Math.min(maximum, older) - Math.max(minimum, younger)) / span * 100}%` }} />
         {(["older_ma", "younger_ma"] as const).map(boundary => {
           const value = boundary === "older_ma" ? older : younger;
           const x = position(value);
@@ -101,9 +107,9 @@ export function TimeControl({ age: committed, configuration, onChange }: Props) 
             className={`time-handle ${boundary === "older_ma" ? "time-handle-older" : "time-handle-younger"}`}
             style={{ left: `${x}%` }} data-edge={x < 12 ? "start" : x > 88 ? "end" : "middle"}
             aria-label={boundary === "older_ma" ? "Older age bound" : "Younger age bound"}
-            aria-orientation="horizontal" aria-valuenow={value}
-            aria-valuemin={boundary === "older_ma" ? younger : 0}
-            aria-valuemax={boundary === "older_ma" ? maximum : older}
+            aria-orientation="horizontal" aria-valuenow={Math.max(minimum, Math.min(maximum, value))}
+            aria-valuemin={boundary === "older_ma" ? younger : minimum}
+            aria-valuemax={boundary === "older_ma" ? maximum : Math.min(maximum, Math.max(minimum, older))}
             aria-valuetext={`${format(value)} million years before present${allAges ? "; all ages currently included" : ""}`}
             aria-describedby="time-help"
             onPointerDown={event => start(event, value)} onPointerMove={event => move(event, boundary)}
@@ -115,14 +121,13 @@ export function TimeControl({ age: committed, configuration, onChange }: Props) 
           </button>;
         })}
       </div>
-      <div className="time-windows" aria-label="Demo age window presets">
-        {configuration.windows.map((window, index) => <button key={window.label} className={`time-window time-window-${index}`}
-          aria-pressed={age.older_ma === window.older_ma && age.younger_ma === window.younger_ma}
-          onClick={() => { setScaleMaximum(configuration.max_ma); choose({ older_ma: window.older_ma, younger_ma: window.younger_ma }); }}
-        >{window.label}</button>)}
+      <div className="time-windows" aria-label={`${focused.name} interval selections`}>
+        {[...children, ...presets].map(unit => <div key={unit.id} className="interval-choice" style={{ "--interval-color": unit.color } as React.CSSProperties}>
+          <button className="time-window" aria-pressed={age.older_ma === unit.older_ma && age.younger_ma === unit.younger_ma} onClick={() => choose({ older_ma: unit.older_ma, younger_ma: unit.younger_ma }, unit.id)}><strong>{unit.name}</strong><small>{format(unit.older_ma)}–{format(unit.younger_ma)} Ma</small></button>
+          {configuration.units.some(child => child.parent === unit.id) && <button className="interval-dive" aria-label={`Explore subdivisions of ${unit.name}`} onClick={() => onFocus(unit.id)}>↓</button>}
+        </div>)}
       </div>
     </div>
-    <p className="time-footnote">Numeric demo windows · not a formal geological timescale</p>
-    <p id="time-help" className="time-help">Drag either boundary. Arrow keys adjust by 0.01 Ma; Shift by 0.1 Ma. Left is older, right is younger. Page keys adjust by 1 Ma; Home/End move to the allowed limits.</p>
+    <div className="time-bottom"><p className="time-footnote"><a href={configuration.source_url} target="_blank" rel="noopener noreferrer" title={configuration.attribution}>ICS v{configuration.version.replace("-", "/")}</a> / CGMW · © ICS 2026 · <a href={configuration.license_url}>CC BY 4.0</a> · PaleoGraph adaptation with two PDF-supported corrections; no endorsement. Reference calibration, not measured specimen ages.</p><p id="time-help" className="time-help">Drag boundaries. Arrows adjust the range; Shift ×10. Left is older. Page keys step 10%; Home/End reach limits.</p></div>
   </section>;
 }

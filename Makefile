@@ -19,13 +19,6 @@ test:
 test-db:
 	uv run --project apps/api python scripts/test_db.py
 
-.PHONY: seed-demo reset-demo
-seed-demo:
-	uv run --project apps/api python -m app.seed_demo
-
-reset-demo:
-	uv run --project apps/api python -m app.seed_demo --reset
-
 .PHONY: ingest-ufvp-sample ingest-ufvp-florida ingest-ufvp-fixture
 ingest-ufvp-fixture:
 	uv run --project apps/api python scripts/prepare_ufvp_fixture.py

@@ -9,6 +9,7 @@ from sqlalchemy import (
     Boolean,
     CheckConstraint,
     Column,
+    Computed,
     DateTime,
     Float,
     ForeignKey,
@@ -21,7 +22,7 @@ from sqlalchemy import (
     UniqueConstraint,
     func,
 )
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -200,6 +201,8 @@ class Taxon(Identity, Base):
     __tablename__ = "taxon"
     scientific_name: Mapped[str] = mapped_column(Text)
     rank: Mapped[str | None] = mapped_column(String(50))
+    source_dataset_id: Mapped[UUID | None] = mapped_column(ForeignKey("source_dataset.id"))
+    parent_taxon_id: Mapped[UUID | None] = mapped_column(ForeignKey("taxon.id"), index=True)
     source_records: Mapped[list[SourceRecord]] = relationship(secondary=taxon_evidence)
 
 
@@ -268,3 +271,131 @@ class Occurrence(Identity, Base):
     taxon: Mapped[Taxon] = relationship()
     collection_event: Mapped[CollectionEvent] = relationship()
     source_records: Mapped[list[SourceRecord]] = relationship(secondary=occurrence_evidence)
+
+
+class GeologicalInterval(Base):
+    """Pinned reference calibration, never an observed specimen age."""
+
+    __tablename__ = "geological_interval"
+    __table_args__ = (CheckConstraint("older_ma >= younger_ma AND younger_ma >= 0", name="bounds"),)
+    id: Mapped[str] = mapped_column(Text, primary_key=True)
+    version: Mapped[str] = mapped_column(Text)
+    name: Mapped[str] = mapped_column(Text)
+    rank: Mapped[str] = mapped_column(Text)
+    parent_id: Mapped[str | None] = mapped_column(ForeignKey("geological_interval.id"))
+    older_ma: Mapped[Decimal] = mapped_column(Numeric())
+    younger_ma: Mapped[Decimal] = mapped_column(Numeric())
+    color: Mapped[str] = mapped_column(String(7))
+    reference: Mapped[dict[str, object]] = mapped_column(JSONB)
+
+
+class AgeInterpretation(Base):
+    """Immutable interpretation of one retained source content revision."""
+
+    __tablename__ = "age_interpretation"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+        CheckConstraint("status IN ('mapped', 'ambiguous', 'unmapped', 'absent')", name="status"),
+        CheckConstraint("older_ma >= younger_ma AND younger_ma >= 0", name="bounds"),
+        CheckConstraint(
+            "(status = 'mapped' AND interval_id IS NOT NULL AND older_ma IS NOT NULL "
+            "AND younger_ma IS NOT NULL) OR (status <> 'mapped' AND interval_id IS NULL "
+            "AND older_ma IS NULL AND younger_ma IS NULL)",
+            name="mapping",
+        ),
+    )
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    policy_version: Mapped[str] = mapped_column(Text, primary_key=True)
+    interval_id: Mapped[str | None] = mapped_column(ForeignKey("geological_interval.id"))
+    source_field: Mapped[str | None] = mapped_column(Text)
+    source_label: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(Text)
+    rule: Mapped[str] = mapped_column(Text)
+    older_ma: Mapped[Decimal | None] = mapped_column(Numeric())
+    younger_ma: Mapped[Decimal | None] = mapped_column(Numeric())
+    interpreted_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class TaxonPath(Base):
+    __tablename__ = "taxon_path"
+    taxon_id: Mapped[UUID] = mapped_column(ForeignKey("taxon.id"), primary_key=True)
+    ancestor_id: Mapped[UUID] = mapped_column(ForeignKey("taxon.id"), primary_key=True, index=True)
+
+
+class ContextTerm(Base):
+    """An exact source assertion, not an inferred geological relationship."""
+
+    __tablename__ = "context_term"
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    source_dataset_id: Mapped[UUID] = mapped_column(ForeignKey("source_dataset.id"))
+    field: Mapped[str] = mapped_column(Text)
+    namespace: Mapped[str] = mapped_column(Text)
+    label: Mapped[str] = mapped_column(Text)
+    search_text: Mapped[str] = mapped_column(Text)
+    __table_args__ = (
+        Index(
+            "ix_context_term_search",
+            "search_text",
+            postgresql_using="gin",
+            postgresql_ops={"search_text": "gin_trgm_ops"},
+        ),
+    )
+
+
+class CatalogEntry(Base):
+    """Rebuildable public discovery projection with actual canonical foreign keys."""
+
+    __tablename__ = "catalog_entry"
+    occurrence_id: Mapped[UUID] = mapped_column(ForeignKey("occurrence.id"), primary_key=True)
+    specimen_id: Mapped[UUID] = mapped_column(ForeignKey("specimen.id"), index=True)
+    taxon_id: Mapped[UUID] = mapped_column(ForeignKey("taxon.id"), index=True)
+    locality_id: Mapped[UUID | None] = mapped_column(ForeignKey("locality.id"), index=True)
+    collection_id: Mapped[UUID | None] = mapped_column(ForeignKey("collection.id"), index=True)
+    institution_id: Mapped[UUID | None] = mapped_column(ForeignKey("institution.id"), index=True)
+    source_record_id: Mapped[UUID] = mapped_column(ForeignKey("source_record.id"), unique=True)
+    content_hash: Mapped[str] = mapped_column(String(64))
+    policy_version: Mapped[str] = mapped_column(Text)
+    label: Mapped[str] = mapped_column(Text)
+    scientific_name: Mapped[str] = mapped_column(Text)
+    search_text: Mapped[str] = mapped_column(Text)
+    search_vector: Mapped[object] = mapped_column(
+        TSVECTOR, Computed("to_tsvector('simple'::regconfig, search_text)", persisted=True)
+    )
+    older_ma: Mapped[Decimal | None] = mapped_column(Numeric())
+    younger_ma: Mapped[Decimal | None] = mapped_column(Numeric())
+    age_basis: Mapped[str] = mapped_column(Text)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash", "policy_version"],
+            [
+                "age_interpretation.source_record_id",
+                "age_interpretation.content_hash",
+                "age_interpretation.policy_version",
+            ],
+        ),
+        Index("ix_catalog_entry_search_vector", "search_vector", postgresql_using="gin"),
+        Index(
+            "ix_catalog_entry_search_text",
+            "search_text",
+            postgresql_using="gin",
+            postgresql_ops={"search_text": "gin_trgm_ops"},
+        ),
+        Index("ix_catalog_entry_label", "label", postgresql_ops={"label": "text_pattern_ops"}),
+        Index("ix_catalog_entry_age", "older_ma", "younger_ma"),
+    )
+
+
+class CatalogTerm(Base):
+    __tablename__ = "catalog_term"
+    occurrence_id: Mapped[UUID] = mapped_column(
+        ForeignKey("catalog_entry.occurrence_id"), primary_key=True
+    )
+    term_id: Mapped[UUID] = mapped_column(
+        ForeignKey("context_term.id"), primary_key=True, index=True
+    )

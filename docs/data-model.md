@@ -1,4 +1,4 @@
-# Canonical and provenance model through Phase 3
+# Canonical, provenance and discovery model through Phase 3.5
 
 Alembic `0002_explore_schema` implements eight entities and four evidence link tables.
 `0003_ufvp_specimens` adds narrowly scoped museum material and revision entities;
@@ -73,7 +73,7 @@ source URL/modification time, basis of record, license/rights/access metadata,
 withholding/generalization notes, ingestion time, first/last seen, and current flag.
 A composite foreign key prevents linking a record to another dataset's run.
 
-The seed represents two fixed completed synthetic snapshots. Real UFVP runs also
+Isolated automated fixtures represent synthetic snapshots. Real UFVP runs
 record accepted counts, importer version, scope and snapshot JSONB (verified metadata,
 archive URL, SHA-256, retained path and retrieval time). Archives are content addressed
 and retained outside git. SourceRecordRevision stores each distinct row hash/raw JSONB
@@ -90,7 +90,7 @@ text fields are exposed separately from canonical interpretation.
 
 ## Geological age
 
-Only CollectionEvent owns normalized `older_ma` and `younger_ma`; occurrences inherit
+Only CollectionEvent owns source-normalized `older_ma` and `younger_ma`; occurrences inherit
 them. PostgreSQL NUMERIC has no fixed scale. Original early/late interval names remain
 separate. Known bounds must be finite/nonnegative and older ≥ younger. Either may
 be NULL; 0 is present, never unknown. JSON numbers are a presentation convenience,
@@ -109,11 +109,27 @@ than guessing. API ranges require both finite ordered bounds within 0–10000 Ma
 (an API guard, not a database definition). The frontend sends bounds and displays
 backend results without independent age filtering.
 
-`/api/v1/time-intervals` serves `demo-windows-v1`: four numeric windows from 12–0 Ma.
-These are explicitly not named formal periods. A versioned authoritative timescale
-can replace the configuration later without scattering definitions through the UI.
-UFVP supplies geological labels, not numeric Ma. Its era/period/epoch/zone/group/
-formation/member strings are retained without conversion; numeric bounds stay NULL.
+`/api/v1/time-intervals` serves ICS v2026/06: 178 published concepts plus eight
+separately cited formal subepoch compositions. The central attributed JSON retains
+hierarchy, decimal calibration, uncertainty, GSSP metadata and CGMW colors. Two
+verified RDF/PDF discrepancies are corrected transparently; see
+[research](geological-timescale-research.md). These are calibrated reference envelopes,
+not measured material ages. No formal Middle Pliocene or numeric NALMA range is invented.
+
+UFVP source numeric bounds remain NULL. AgeInterpretation separately maps the finest
+populated source age field (age, epoch, period, era) through conservative exact aliases.
+Mixed/alternative/uncertain assertions are ambiguous; unsupported labels are unmapped;
+missing assertions are absent. Unresolved finer labels never fall back to a broader
+period. Original field/label, source content hash, policy version, rule, status,
+reference interval and interpretation timestamp are retained. Application writes use
+insert-on-conflict-do-nothing; no database immutability trigger is installed.
+
+CatalogEntry chooses complete source numeric bounds when available, otherwise a
+mapped reference envelope, otherwise no effective range. Its age_basis makes the
+distinction explicit. Discovery applies the same inclusive overlap rule to effective
+bounds. Active ranges exclude unresolved/partial ages; All ages includes them.
+The legacy `/map/occurrences` still filters source bounds only; interactive Explore
+uses `/map/places` and `/catalog` for derived filtering.
 
 ## Geography and queries
 
@@ -129,15 +145,50 @@ into west..180 OR −180..east. South ≤ north. World-spanning client views nor
 to −180..180. A zero-width envelope is a boundary query, not the whole world.
 Generalized points remain selectable and visibly marked. No distance query exists.
 
-The map query joins occurrence/event/locality/taxon in one statement and uses EXISTS
-for evidence state. Stable UUID ordering and limit+1 detect truncation without a
-full count. B-tree indexes on event.locality_id and occurrence.collection_event_id
-support spatial joins; primary/unique indexes cover identity/evidence access.
-Detail eager loading takes two statements, not one query per evidence record.
-Measure scale before adding age indexes, server clustering, or pagination.
-Museum mode excludes synthetic evidence; explicit demo mode uses it. The map joins
-the optional specimen to display catalog identifiers. Coordinates normalize only
+Discovery joins typed catalog membership and uses current/nonsynthetic source evidence
+with matching revision hash. Exact coordinate aggregates report total assertions,
+distinct canonical localities, interpreted assertions and generalization status.
+Aggregation never merges Locality identities or jitters coordinates. Spatial clusters
+sum those assertion counts. Geometry GiST, foreign-key B-tree and catalog indexes
+support query plans; the planner may choose sequential scans for broad small-sample
+queries. Catalog/search/graph/place pages expose actual totals and stable keyset
+cursors fingerprinted to active filters. Material without usable coordinates remains
+searchable and inspectable in nonspatial context.
+
+All public scientific queries exclude synthetic evidence. Coordinates normalize only
 from accepted WGS84 aliases; unsupported/unknown datums remain unmapped, never guessed.
+
+## Derived discovery entities
+
+Migration `0004_discovery` adds six tables without replacing canonical entities:
+
+| Entity | Identity and relationships |
+| --- | --- |
+| GeologicalInterval | Versioned reference key, parent FK, NUMERIC calibration, rank/color/reference JSONB |
+| AgeInterpretation | Composite source-record/revision-hash/policy PK; composite revision FK and interval FK |
+| TaxonPath | Composite leaf/ancestor Taxon FKs; only source-published classification membership |
+| ContextTerm | Dataset-scoped deterministic UUID, exact source field/label, explicit namespace |
+| CatalogEntry | Occurrence PK/FK; typed material/custody/locality/taxon/source and interpretation FKs |
+| CatalogTerm | Composite occurrence/term FK membership, no unchecked polymorphic links |
+
+Taxon gains dataset and nullable parent FKs. Published rank-prefix groups coexist
+with existing source identification identities; matching names do not collapse them.
+Missing ranks remain absent. The adapter never asserts accepted-name taxonomy.
+ContextTerm distinguishes source geology, stratigraphy, NALMA and unclassified source
+biochronology. Formation labels receive no inferred numerical age.
+
+CatalogEntry is a transactional rebuildable projection with generated simple TSVECTOR,
+GIN full-text/trigram, accession-prefix, effective-age and typed FK indexes. Source
+raw JSON is read during explicit rebuilding, not interactive search. Historical age
+interpretations survive rebuilds. Only current source content enters the projection.
+The PostgreSQL discovery_uuid function supplies deterministic adapter UUID layout.
+
+Graph responses are projections, not stored edges: canonical material/classification/
+location/custody/source-term joins. Specimen-root edges have direct named meanings;
+other roots explicitly show shared-material associations. Nodes have one of six
+validated kinds, each resolved against a real table. Pagination balances kinds and
+reports bounded totals. No Publication entity was introduced: audited UFVP core
+contains no bibliographic fields. Dataset attribution is not a research relationship.
 
 ## Migration and deferred choices
 
@@ -147,6 +198,7 @@ PostGIS is intentionally retained. Connections use `search_path=public` to keep
 Tiger/topology schemas outside application autogeneration. Alembic ignores the
 PostGIS-owned spatial_ref_sys and explicitly renders GeoAlchemy types.
 
+0004 is additive and downgrades discovery before museum entities, retaining pg_trgm.
 0003 is additive and downgrades museum entities before the older schema. Existing
 0001 and 0002 remain unchanged. Downgrades belong only in disposable validation.
 EntityIdentifier registries, merge redirects, field-level assertions, canonical

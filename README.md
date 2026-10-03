@@ -1,175 +1,155 @@
 # PaleoGraph
 
-A paleobiology atlas connecting occurrence assertions across time, geography,
-taxonomy, and source collections. Phase 3 implements `/explore` end to end:
-Next.js → typed API client → FastAPI → SQLAlchemy → PostgreSQL/PostGIS.
+A Florida museum atlas for cataloged fossil material, published localities,
+geological interpretation and source-supported relationships. Phase 3.5 uses
+one scientific collection: Florida Museum of Natural History UFVP. It is not a
+universal taxonomy or occurrence authority. No public demo mode remains.
 
-Explore defaults to **real Florida Museum UFVP catalog assertions**, imported into
-local PostgreSQL/PostGIS. The source is **CC BY-NC 4.0**; retain creator, museum,
-dataset/version and license attribution. This phase is for noncommercial use.
-See [source verification](docs/ufvp-source-research.md) and
-[ingestion rules](docs/ufvp-ingestion.md).
+The current local import is the **complete Florida scope: 462,280 UFVP v1.182
+assertions**, with 254,866 mapped assertions and 445,678 derived age envelopes.
+Source data is CC BY-NC 4.0;
+geological reference data is ICS v2026/06, CC BY 4.0. Source ages, derived interval
+envelopes and research evidence remain visibly separate.
 
-The 40 seeded examples remain separate at `/explore?data_mode=demo`. Their taxon,
-age and place associations are invented, visibly labeled synthetic, and never
-included in the default museum view.
+[Phase 3.5 completion and validation](docs/phase-3.5-validation.md) records actual
+checks, screenshots, measurements, limitations and all 48 requested report items.
+Historical reports: [Phase 2](docs/phase-2-validation.md), [Phase 3](docs/phase-3-validation.md).
+The [full Florida follow-up](docs/phase-3.5-full-florida-validation.md) records the
+SSD backup/restore check, completed import and full-scope measurements separately
+from the original 25,000-record validation.
 
 ## Local setup
 
-Prerequisites: Node 24 (see `.node-version`), pnpm 10.34.6, uv 0.12.21 or compatible
-newer uv, Docker with Compose v2 and Linux containers. uv installs Python 3.12.
-GNU Make is optional. Run commands from this repository root. In PowerShell use
-`pnpm.cmd` / `npm.cmd` if execution policy blocks their `.ps1` wrappers.
-
-For a new checkout, copy `.env.example` to `.env` (`Copy-Item .env.example .env`
-in PowerShell). For an existing checkout, retain credentials and add the two
-`NEXT_PUBLIC_*` settings below. Do not overwrite an existing `.env`.
+Requirements: Node version in `.node-version`, pnpm 10.34.6, uv/Python 3.12 and
+Docker Compose with PostGIS. Run these commands from the repository root.
+On PowerShell use `pnpm.cmd` if execution policy blocks the pnpm shim.
 
 ```sh
 pnpm install --frozen-lockfile
 uv sync --project apps/api --locked
+```
+
+Copy `.env.example` to `.env` if it does not already exist, then:
+
+```sh
 docker compose up -d --wait db
 uv run --project apps/api alembic -c apps/api/alembic.ini upgrade head
 uv run --project apps/api python -m app.db
-uv run --project apps/api python -m app.seed_demo
-uv run --project apps/api python -m app.ingestion.import_ufvp --limit 1000
 ```
 
-Start each application in its own terminal:
+Existing Phase 2/3 databases: review the exact legacy demo manifest before applying
+its atomic cleanup. No name matching or geographic matching is used; unrelated
+foreign-key dependencies abort deletion. The current local database was already
+cleaned in Phase 3.5. Repeating these commands is safe for an absent manifest.
+
+```sh
+uv run --project apps/api python -m app.discovery.remove_legacy_demo
+uv run --project apps/api python -m app.discovery.remove_legacy_demo --apply
+uv run --project apps/api python -m app.discovery.index
+```
+
+A new database has no museum material. Import a bounded official source snapshot:
+
+```sh
+uv run --project apps/api python -m app.ingestion.import_ufvp --version 1.182 --limit 1000
+```
+
+Completed/partial imports rebuild discovery automatically. Use `app.discovery.index`
+after upgrading an existing imported database, or explicitly to refresh the projection.
+The retained source facts and historical revisions are preserved. See
+[ingestion and rights](docs/ufvp-ingestion.md). This local database already contains
+the complete pinned Florida scope. Its pre-import backup and retained archive are
+on the user-authorized E: SSD; the existing Docker volume remains in place.
+
+Run the API and frontend in separate terminals:
 
 ```sh
 uv run --project apps/api uvicorn app.main:app --reload --reload-dir apps/api/app
-```
-
-```sh
 pnpm dev
 ```
 
-Open http://localhost:3000/explore. Pan/zoom, choose a time window or adjust age
-bounds, and select a map point or result row. Co-located assertions have a choice
-popup. Inspection includes collection context and source evidence. The URL retains
-center, zoom, ages, and selected UUID; browser back/forward restores selection.
-The textual results support keyboard access; Escape closes inspection and restores
-focus. The homepage and `/api/v1/health` remain available.
+Open http://localhost:3000/explore. API documentation: http://localhost:8000/docs.
+Health is process liveness; `app.db` actually verifies PostgreSQL/PostGIS.
 
-**UFVP does not supply numeric Ma bounds.** Its geological text is retained;
-numeric ages remain NULL. Use **All ages** for museum records. A numeric range
-currently excludes them rather than inventing dates. This is an explicit source
-limitation, not a formal geological timescale conversion.
+## Explore
 
-For an offline, eight-record museum fixture, run:
+Search catalog numbers, specimen identifiers, source classifications, localities,
+collections, institutions and source context. Select a result to inspect its evidence
+and pivot the shared context. Individual context assertions can be removed. Selecting
+a specimen opens its catalog view; it does not restrict every result to one specimen.
 
-```sh
-uv run --project apps/api python scripts/prepare_ufvp_fixture.py
-uv run --project apps/api python -m app.ingestion.import_ufvp --archive data/raw/ufvp-offline-fixture.zip --limit 8
-```
+Map circles count catalog assertions, including client spatial clusters. Exact
+coordinate stacks retain all distinct localities and lead to a fully paginated
+catalog. Counts are not counts of organisms or an assertion of locality equivalence.
+The catalog exposes true totals and 30-row pages. Generalization halos express
+status, not an uncertainty radius. Missing/withheld positions never become 0,0;
+search and nonspatial entity views still expose eligible material.
 
-For the complete Florida scope, run the following against the **complete official
-archive**, never a subset fixture. Only a successful full import marks unseen
-source records inactive; it never hard deletes canonical objects.
+The geological instrument uses a single highlighted track with two accessible
+handles, older to the left and present to the right. Named selections and hierarchy
+come from the pinned ICS reference. Drill into periods, epochs and ages; validated
+formal subepoch compositions are distinguished in reference metadata. Dragging
+creates a custom range. All ages includes unresolved source ages. Arrows adjust
+the focused scale; Shift multiplies steps by ten, Page keys step ten percent,
+Home/End reach permitted limits. Handle release commits once; keyboard changes
+settle after 250 ms. Reference calibration is not a measured specimen age.
 
-```sh
-uv run --project apps/api python -m app.ingestion.import_ufvp --full-florida
-```
+Relationships display bounded source-supported neighborhoods. Expand to 24 visible
+neighbors, then continue to the next neighborhood. A keyboard-accessible edge list
+provides the same relationships. Aggregate edges mean shared catalog material,
+not inferred biology. This UFVP archive contains no bibliographic references or
+DOIs; no research papers or publication edges are invented.
 
-Equivalent Make targets: `ingest-ufvp-fixture`, `ingest-ufvp-sample`, and
-`ingest-ufvp-florida`. `--version 1.182` pins the verified snapshot;
-`--archive PATH --limit N` reuses retained bytes without networking. Samples select
-the first accepted Florida records in archive order and are not statistically
-representative. Current imports are visible in the source strip.
+URL/history restores context, time, camera, selected entity and exploration surface.
+Small pans reuse buffered coverage. Pending/error requests retain previously loaded
+points and rows with a visible notice. Reduced motion avoids decorative transitions.
 
-The time control uses one linear track, older on the left and present on the right.
-Drag either handle to set a custom range, or choose a numeric demo preset below it.
-The highlighted band and adjacent handle labels show the selected interval. Tab
-between handles; Left/Up adds 0.01 Ma and Right/Down subtracts 0.01 Ma. Hold Shift
-for 0.1 Ma steps; Page Up/Down changes by 1 Ma. Home/End moves to the permitted
-minimum/maximum. Handles cannot cross. All ages clears the filter, including for
-unknown ages. Demo presets are not a formal geological timescale.
+## API and schema
 
-Handle movement previews immediately; release commits one shareable range. Keyboard
-changes commit after a short pause or when focus leaves the handle. Small map pans
-reuse a buffered geographic window. While a new query loads, existing points and
-rows remain visible with a restrained last-loaded/updating indicator. Back/Forward
-restores committed time ranges and selection. See [continuity notes](docs/explore-continuity.md).
+| GET endpoint under `/api/v1` | Purpose |
+| --- | --- |
+| `/catalog` | Cursor-paginated material and true matching total |
+| `/search` | Ranked mixed scientific entities, total and cursor |
+| `/map/places` | Exact-coordinate aggregation, totals, unmapped count and cursor |
+| `/entities/{kind}/{uuid}` | Source-supported entity context and evidence summary |
+| `/graph/{kind}/{uuid}` | Bounded progressive relationship neighborhood |
+| `/time-intervals` | Versioned attributed ICS hierarchy and calibration |
+| `/occurrences/{uuid}` | Preserved detailed source assertion and provenance |
+| `/map/occurrences` | Legacy capped individual assertions; source numeric ages only |
+| `/datasets/ufvp` | Current import scope/counts/status and source attribution |
 
-API documentation: http://localhost:8000/docs. Health is process liveness; the
-`app.db` command above actually connects to PostGIS.
+Discovery queries share taxon/locality/collection/institution/term UUID filters,
+optional exact coordinate pair, optional viewport and paired `older_ma`/`younger_ma`
+bounds. Ages overlap inclusively. Active ranges exclude unresolved ages; source
+numeric bounds take precedence over derived interval envelopes. Catalog/search/
+graph limits default to 30 and max at 100; the graph UI requests 12. Place pages
+default to 1,500 and max at 5,000. Context-bound cursors reject changed filters.
+The interactive UI uses discovery endpoints, not the legacy occurrence cap.
+
+Migration `0004_discovery` is additive: GeologicalInterval, AgeInterpretation,
+TaxonPath, ContextTerm, CatalogEntry and CatalogTerm; source-scoped taxon metadata,
+`pg_trgm`, typed foreign keys and PostgreSQL indexes. Prior migrations are unchanged.
+Only Alembic owns schema changes. [Data model](docs/data-model.md),
+[architecture](docs/architecture.md), [ADRs](docs/adr/) and
+[timescale research](docs/geological-timescale-research.md) explain the boundaries.
 
 ## Configuration
 
-Settings read the root `.env`; process environment wins. Keep `DATABASE_URL` in
-sync with `POSTGRES_*`; URL-encode special password characters. `CORS_ORIGINS` is a
-JSON array of exact origins (default `["http://localhost:3000"]`).
+Root `.env` is read by API/Next/Compose; process environment wins. Keep POSTGRES
+settings and DATABASE_URL consistent. URL-encode special password characters.
+CORS_ORIGINS is a JSON array of exact origins. No new scientific API keys are needed.
 
 | Setting | Purpose |
 | --- | --- |
-| `NEXT_PUBLIC_API_BASE_URL` | Browser API prefix; default `http://localhost:8000/api/v1` |
-| `NEXT_PUBLIC_MAP_STYLE_URL` | MapLibre style URL; default `/styles/paleograph.json` |
-| `TEST_DATABASE_URL` | Explicit opt-in to tests against a migrated disposable database |
+| `NEXT_PUBLIC_API_BASE_URL` | Public API prefix; default localhost:8000/api/v1 |
+| `NEXT_PUBLIC_MAP_STYLE_URL` | Owned MapLibre style; default /styles/paleograph.json |
+| `TEST_DATABASE_URL` | Explicit opt-in to a migrated disposable test database |
+| `NEXT_DIST_DIR` | Optional isolated Next build directory for validation; default .next |
+| `E2E_BASE_URL`, `E2E_API_BASE_URL` | Browser validation server URLs; script sets these |
 
-`NEXT_PUBLIC_*` values are public and embedded at build time. Restart development
-or rebuild production after changes. Blank style configuration provides a neutral
-canvas and notice. Basemap tiles require network access and retain provider
-attribution. The project-owned style uses OpenFreeMap/OpenMapTiles/OSM cartography.
-See [visual identity and provider terms](docs/visual-identity.md). Provider continuity
-and production suitability remain a release decision; no deployment is configured.
-
-## Schema and seed
-
-New migration `0002_explore_schema` adds Source, SourceDataset, IngestionRun,
-SourceRecord, Taxon, Locality, CollectionEvent, Occurrence, and four evidence link
-tables. Existing `0001_enable_postgis` is unchanged. Only Alembic owns schema
-changes. See the [data model](docs/data-model.md) for relationships and constraints.
-
-Phase 3 adds `0003_ufvp_specimens`: Institution, Collection, Specimen, typed specimen
-evidence, retained source-record revisions, and ingestion scope/snapshot metadata.
-Run `upgrade head` before importing. Existing migrations and demo IDs are preserved.
-
-`make seed-demo` (or the seed command above) creates two synthetic sources/datasets,
-two fixed ingestion snapshots, six taxa, 20 localities, 40 contexts, 40 assertions,
-and their source records. Fixed UUIDv4 fixture identities make reruns idempotent.
-36 assertions have coordinates; four exercise missing/withheld locations. The
-initial viewport shows a subset. Ages include unknown/partial cases; some points
-are generalized. Genus names may be real, but their associations are invented.
-
-Replace only the reserved demo fixtures atomically:
-
-```sh
-uv run --project apps/api python -m app.seed_demo --reset
-```
-
-Equivalent: `make reset-demo`. This does not clear the database. Unrelated entities
-remain; foreign-key dependencies from non-demo data abort reset. Repeated seeds do
-not overwrite fixture edits; use reset intentionally to restore original examples.
-
-## Explore API
-
-| Endpoint | Response |
-| --- | --- |
-| `GET /api/v1/map/occurrences` | Minimal items plus `returned`, `limit`, `truncated` |
-| `GET /api/v1/occurrences/{uuid}` | Scientific/contextual detail and source/dataset evidence |
-| `GET /api/v1/time-intervals` | Versioned numeric demo windows, not a formal timescale |
-| `GET /api/v1/datasets/ufvp` | Local current/mapped/numeric-age counts, latest scope/status and source credit |
-
-Map queries require `west`, `south`, `east`, `north`. Optional `older_ma` and
-`younger_ma` must be supplied together (0–10000 Ma, older ≥ younger). `limit`
-defaults to 200, maximum 1000. Example:
-
-`data_mode` defaults to `museum` and excludes synthetic evidence. Use `demo`
-explicitly for development examples. Capped responses state `truncated: true`;
-co-located assertions can remain capped even after zooming. No aggregate count or
-server cluster is inferred from loaded records.
-
-```text
-http://localhost:8000/api/v1/map/occurrences?west=-88&south=24&east=-79&north=32&older_ma=2&younger_ma=0.1
-```
-
-Spatial boundaries are inclusive; west > east crosses the antimeridian. Missing
-and withheld coordinates are absent from spatial results. Map assertions require
-current source evidence. Active age filters match fully known closed intervals by
-inclusive overlap; unknown/partial ages are excluded. Without an age filter they
-remain eligible. Only the backend performs filtering. Errors use
-`{ "error": { "code": "…", "message": "…", "details": [] } }`.
+NEXT_PUBLIC values are embedded at build time. Basemap tiles/fonts require network
+access. Preserve OpenFreeMap/OpenMapTiles/OpenStreetMap attribution. Blank style
+configuration provides a neutral canvas and notice. No deployment is configured.
 
 ## Checks
 
@@ -183,51 +163,40 @@ uv run --project apps/api ruff format --check apps/api scripts
 uv run --project apps/api mypy --config-file apps/api/pyproject.toml apps/api/app
 uv run --project apps/api pytest apps/api/tests
 uv run --project apps/api python scripts/test_db.py
-```
-
-Ordinary pytest uses an unreachable database URL; integration cases are deselected unless
-`TEST_DATABASE_URL` is supplied. **Prefer `make test-db`** (last command above): a
-separate `paleograph-test` Compose project on port 55432 uses ephemeral storage,
-runs upgrade/repeat/downgrade/re-upgrade/drift checks and integration tests, then
-removes that project. It never uses the normal development database. Do not point
-manual integration runs at valuable data.
-
-For browser checks, migrate, seed demo, import the eight-record offline museum
-fixture above, and run both servers first:
-
-```sh
 pnpm --filter @paleograph/web exec playwright install chromium
-pnpm --filter @paleograph/web test:e2e
+uv run --project apps/api python scripts/test_browser.py
 ```
 
-These use the real local API/database and MapLibre worker, with an intercepted
-minimal basemap so external tile availability cannot determine test results.
-Browser tests currently run locally. CI runs frontend checks/state tests and backend
-tests against its disposable PostGIS service with a migration round trip.
-Remote CI execution is not claimed.
+Ordinary pytest skips integration without TEST_DATABASE_URL. `test_db.py` owns an
+ephemeral Compose project on 55432, runs migration repeat/downgrade/re-upgrade/drift
+checks and integration tests, then removes only that project. `test_browser.py`
+owns a second disposable PostGIS database on 56432, API 8001, production Next 3001
+and an isolated build. Ensure these ports are free. It creates explicitly fictional
+dense **test-only** rows plus eight attributed offline UFVP rows. It never seeds
+normal development data. Scientific API/database/MapLibre workers are real; only
+basemap traffic is stubbed in regression tests. CI includes both the PostGIS service
+migration suite and a separate disposable production browser job; remote CI has not
+been executed in this session.
 
-Make shortcuts: `db-up`, `db-down`, `migrate`, `verify-db`, `seed-demo`, `reset-demo`,
-`ingest-ufvp-fixture`, `ingest-ufvp-sample`, `ingest-ufvp-florida`, `dev-api`,
-`dev-web`, `test`, `test-db`, `lint`, `typecheck`, `build`.
+`uv run --project apps/api python scripts/profile_discovery.py` records warm read-only
+query timings/plans/table sizes for the currently imported scope in ignored
+`data/processed/`. Both the earlier bounded and subsequent full-scope measurements
+are documented separately. Unmocked visual captures use
+`scripts/capture_phase35.mjs` with separately running real-data servers on 3001/8001.
 
-## Boundaries and next work
+## Limits
 
-Occurrences are assertions and link separately to cataloged physical material.
-A UFVP catalog entry can contain several pieces; Specimen does not assert exactly
-one organism. Localities and collection contexts remain separate. PaleoGraph is
-not a universal taxonomic or specimen authority. Cross-source reconciliation,
-field-level conflict resolution, search infrastructure, graph, accounts, AI and
-deployment remain outside this phase.
+The import covers Florida rows in pinned UFVP v1.182, not later museum updates or
+non-Florida material. Published source taxonomy
+is incomplete; no accepted-name reconciliation occurs. Uncertain/mixed geological
+labels stay unresolved; NALMA stays regional biochronology without invented numerical
+correlation. Source records are evidence, not papers. Chromium checks are not a broad
+cross-browser or WCAG certification. Warm local measurements do not establish
+production throughput or cold-start behavior. Commercial UFVP use requires compatible permission.
+No second scientific occurrence source, auth, AI, new search service or deployment
+was introduced. Phase 4 has not begun.
 
-Explore caps results without pagination/server clustering. Controls default to 0–12 Ma
-and extend for larger URL age ranges. Generalization rings indicate status, not a
-measured uncertainty radius. Missing locations can be inspected by UUID but are
-absent from the spatial list. Production scale, a formal timescale, and broad
-cross-browser/accessibility audits remain future work. On WebGL failure the default
-Florida list remains available.
-
-Recommended Phase 4: improve discovery and completeness for co-located museum
-assertions, with measured full-Florida performance and accessible pagination.
-Any geological text-to-age mapping requires a separately approved, authoritative,
-versioned policy. Commercial use requires compatible permission from the rights
-holder. No decision blocks this noncommercial Phase 3 slice.
+Docker Compose down retains the development volume. Changing credentials does not
+rewrite an existing volume. Do not use `down -v` to troubleshoot valuable data.
+PostGIS/pg_trgm migrations require extension-capable database credentials. Worker
+assets are prepared by `pnpm dev`/`pnpm build`; use those scripts after dependency changes.

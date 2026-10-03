@@ -70,7 +70,7 @@ def map_occurrences(session: Session, query: ExploreQuery) -> MapResponse:
             viewport_filter(query),
             Locality.location_is_withheld.is_(False),
             Occurrence.source_records.any(SourceRecord.is_current),
-            synthetic if query.data_mode == "demo" else ~synthetic,
+            ~synthetic,
         )
         .order_by(Occurrence.id)
         .limit(query.limit + 1)
@@ -89,7 +89,10 @@ def occurrence_detail(session: Session, occurrence_id: UUID) -> OccurrenceDetail
         select(Occurrence, func.ST_X(Locality.geom), func.ST_Y(Locality.geom))
         .join(Occurrence.collection_event)
         .outerjoin(CollectionEvent.locality)
-        .where(Occurrence.id == occurrence_id)
+        .where(
+            Occurrence.id == occurrence_id,
+            ~Occurrence.source_records.any(SourceRecord.dataset.has(SourceDataset.is_synthetic)),
+        )
         .options(
             joinedload(Occurrence.taxon),
             joinedload(Occurrence.specimen)
@@ -117,6 +120,13 @@ def occurrence_detail(session: Session, occurrence_id: UUID) -> OccurrenceDetail
             key: str(raw[key])
             for key in (
                 "scientificName",
+                "kingdom",
+                "phylum",
+                "class",
+                "order",
+                "family",
+                "genus",
+                "specificEpithet",
                 "identificationQualifier",
                 "basisOfRecord",
                 "eventDate",

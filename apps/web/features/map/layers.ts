@@ -6,7 +6,7 @@ const sources = new WeakMap<GeoJSONSource, { items: MapOccurrence[]; features: M
 const feature = (item: MapOccurrence, coLocated: number): Feature => ({
   type: "Feature", id: item.id,
   geometry: { type: "Point", coordinates: [item.longitude, item.latitude] },
-  properties: { id: item.id, name: item.scientific_name, catalog: item.catalog_label ?? "", unknown: item.older_ma === null || item.younger_ma === null, generalized: item.location_is_generalized, coLocated, glyph: coLocated > 1 ? "atlas-stack" : item.older_ma === null || item.younger_ma === null ? "atlas-unknown" : "atlas-record" },
+  properties: { id: item.id, name: item.scientific_name, catalog: item.catalog_label ?? "", record_count: item.record_count ?? 1, locality_count: item.locality_count ?? 1, unknown: item.interpreted_count !== undefined ? item.interpreted_count === 0 : item.older_ma === null || item.younger_ma === null, generalized: item.location_is_generalized, coLocated: item.record_count ?? coLocated, glyph: (item.record_count ?? coLocated) > 1 ? "atlas-stack" : item.interpreted_count === 0 || item.interpreted_count === undefined && (item.older_ma === null || item.younger_ma === null) ? "atlas-unknown" : "atlas-record" },
 });
 
 function featuresFor(items: MapOccurrence[]) {
@@ -66,7 +66,9 @@ export function addOccurrenceLayers(map: MapLibreMap) {
   addNotation(map, "atlas-record", color("--map-point"), false);
   addNotation(map, "atlas-unknown", color("--map-point"), true);
   addNotation(map, "atlas-stack", color("--map-point"), true, true);
-  map.addSource("occurrences", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+  map.addSource("occurrences", { type: "geojson", cluster: true, clusterMaxZoom: 9, clusterRadius: 38, clusterProperties: { record_count: ["+", ["get", "record_count"]] }, data: { type: "FeatureCollection", features: [] } });
+  map.addLayer({ id: "place-clusters", type: "circle", source: "occurrences", filter: ["has", "point_count"], paint: { "circle-radius": ["step", ["get", "record_count"], 17, 100, 21, 1000, 25], "circle-color": color("--map-point"), "circle-stroke-color": "#f5ebd3", "circle-stroke-width": 2 } });
+  map.addLayer({ id: "place-counts", type: "symbol", source: "occurrences", filter: ["has", "point_count"], layout: { "text-field": ["to-string", ["get", "record_count"]], "text-font": ["Noto Sans Regular"], "text-size": 11, "text-allow-overlap": true }, paint: { "text-color": "#fff5dd" } });
   map.addLayer({
     id: "generalized-locations", type: "circle", source: "occurrences",
     filter: ["==", ["get", "generalized"], true],
@@ -74,8 +76,10 @@ export function addOccurrenceLayers(map: MapLibreMap) {
   });
   map.addLayer({
     id: "occurrence-points", type: "symbol", source: "occurrences",
+    filter: ["!", ["has", "point_count"]],
     layout: { "icon-image": ["get", "glyph"], "icon-allow-overlap": true, "icon-ignore-placement": true, "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.8, 10, 1.15] },
   });
+  map.addLayer({ id: "co-location-counts", type: "symbol", source: "occurrences", filter: ["all", ["!", ["has", "point_count"]], [">", ["get", "record_count"], 1]], layout: { "text-field": ["to-string", ["get", "record_count"]], "text-font": ["Noto Sans Regular"], "text-size": 10, "text-offset": [1.25, -1], "text-anchor": "left", "text-allow-overlap": true }, paint: { "text-color": color("--map-point"), "text-halo-color": "#f4efdf", "text-halo-width": 2 } });
   map.addLayer({
     id: "selected-occurrence", type: "circle", source: "occurrences",
     filter: ["==", ["get", "id"], ""],

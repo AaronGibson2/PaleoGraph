@@ -1,0 +1,5244 @@
+{
+  "title": "International Chronostratigraphic Chart: sourced reference transcription",
+  "version": "2026-06",
+  "verified_on": "2026-10-02",
+  "publisher": "International Commission on Stratigraphy",
+  "source_url": "https://stratigraphy.org/chart/",
+  "source_data_url": "https://raw.githubusercontent.com/i-c-stratigraphy/chart/81618a865cdb04998355a302f3e859908a080c0e/chart.ttl",
+  "source_commit": "81618a865cdb04998355a302f3e859908a080c0e",
+  "source_commit_date": "2026-07-27T13:57:29Z",
+  "source_sha256": "8548707d66c383460b3bddc20afb7070cb5f3ea187ea1262418dc3a6f2d6e9f7",
+  "source_modified": "2026-06-20",
+  "license": "CC-BY-4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "copyright": "Copyright International Commission on Stratigraphy, 2026",
+  "adaptation_notice": "PaleoGraph reference transcription of numeric interval properties, English labels and hierarchy. CamelCase source identifiers rendered readably only where an English preferred label is absent. Pridoli has both source ranks Age and Epoch and is presented once at Epoch rank. No intervals, ratification claims or colors invented; original inconsistent RDF values preserved alongside two explicitly documented official-PDF-supported boundary corrections. Includes all 178 chart units, so full Phanerozoic and ancestor context are available. Subepoch compositions require a separate cited registry. Two official-PDF-supported boundary corrections are applied to normalized numeric fields; original RDF values and precision strings remain in rdf_* fields and source_decimal. Correction evidence is recorded centrally and per affected unit.",
+  "citation": "Cohen K, Harper D, Gibbard P, Car N. The ICS international chronostratigraphic chart this decade. Episodes2025;48:105-115. https://doi.org/10.18814/epiiugs/2025/025001",
+  "source_inconsistencies": [
+    {
+      "kind": "sibling_boundary_mismatch",
+      "parent": "Silurian",
+      "older_child": "Ludlow",
+      "younger_child": "Pridoli",
+      "older_child_top_ma": 419.62,
+      "younger_child_base_ma": 422.7
+    },
+    {
+      "kind": "parent_youngest_boundary_mismatch",
+      "parent": "Ludlow",
+      "child": "Ludfordian",
+      "parent_ma": 419.62,
+      "child_ma": 422.7
+    },
+    {
+      "kind": "parent_oldest_boundary_mismatch",
+      "parent": "Miocene",
+      "child": "Aquitanian",
+      "parent_ma": 23.04,
+      "child_ma": 23.03
+    }
+  ],
+  "units": [
+    {
+      "id": "Hadean",
+      "source_id": "https://data.stratigraphy.org/data/gts/Hadean",
+      "name": "Hadean",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Eon",
+      "parent": "Precambrian",
+      "older_ma": 4567.0,
+      "younger_ma": 4031.0,
+      "older_boundary": {
+        "ma": 4567.0,
+        "source_decimal": "4567",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 4031.0,
+        "source_decimal": "4031",
+        "margin_of_error_ma": 3.0,
+        "note": null
+      },
+      "color": "#AE027E",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Eon"
+      ]
+    },
+    {
+      "id": "Precambrian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Precambrian",
+      "name": "Precambrian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Super-Eon",
+      "parent": null,
+      "older_ma": 4567.0,
+      "younger_ma": 538.8,
+      "older_boundary": {
+        "ma": 4567.0,
+        "source_decimal": "4567",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#F74370",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Super-Eon"
+      ]
+    },
+    {
+      "id": "Archean",
+      "source_id": "https://data.stratigraphy.org/data/gts/Archean",
+      "name": "Archean",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Eon",
+      "parent": "Precambrian",
+      "older_ma": 4031.0,
+      "younger_ma": 2500.0,
+      "older_boundary": {
+        "ma": 4031.0,
+        "source_decimal": "4031",
+        "margin_of_error_ma": 3.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 2500.0,
+        "source_decimal": "2500",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F0047F",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Eon"
+      ]
+    },
+    {
+      "id": "Eoarchean",
+      "source_id": "https://data.stratigraphy.org/data/gts/Eoarchean",
+      "name": "Eoarchean",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Archean",
+      "older_ma": 4031.0,
+      "younger_ma": 3600.0,
+      "older_boundary": {
+        "ma": 4031.0,
+        "source_decimal": "4031",
+        "margin_of_error_ma": 3.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 3600.0,
+        "source_decimal": "3600",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#DA037F",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Paleoarchean",
+      "source_id": "https://data.stratigraphy.org/data/gts/Paleoarchean",
+      "name": "Paleoarchean",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Archean",
+      "older_ma": 3600.0,
+      "younger_ma": 3200.0,
+      "older_boundary": {
+        "ma": 3600.0,
+        "source_decimal": "3600",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 3200.0,
+        "source_decimal": "3200",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F4449F",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Mesoarchean",
+      "source_id": "https://data.stratigraphy.org/data/gts/Mesoarchean",
+      "name": "Mesoarchean",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Archean",
+      "older_ma": 3200.0,
+      "younger_ma": 2800.0,
+      "older_boundary": {
+        "ma": 3200.0,
+        "source_decimal": "3200",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 2800.0,
+        "source_decimal": "2800",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F768A9",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Neoarchean",
+      "source_id": "https://data.stratigraphy.org/data/gts/Neoarchean",
+      "name": "Neoarchean",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Archean",
+      "older_ma": 2800.0,
+      "younger_ma": 2500.0,
+      "older_boundary": {
+        "ma": 2800.0,
+        "source_decimal": "2800",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 2500.0,
+        "source_decimal": "2500",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F99BC1",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Proterozoic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Proterozoic",
+      "name": "Proterozoic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Eon",
+      "parent": "Precambrian",
+      "older_ma": 2500.0,
+      "younger_ma": 538.8,
+      "older_boundary": {
+        "ma": 2500.0,
+        "source_decimal": "2500",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#F73563",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Eon"
+      ]
+    },
+    {
+      "id": "Paleoproterozoic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Paleoproterozoic",
+      "name": "Paleoproterozoic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Proterozoic",
+      "older_ma": 2500.0,
+      "younger_ma": 1600.0,
+      "older_boundary": {
+        "ma": 2500.0,
+        "source_decimal": "2500",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 1600.0,
+        "source_decimal": "1600",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F74370",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Siderian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Siderian",
+      "name": "Siderian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleoproterozoic",
+      "older_ma": 2500.0,
+      "younger_ma": 2300.0,
+      "older_boundary": {
+        "ma": 2500.0,
+        "source_decimal": "2500",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 2300.0,
+        "source_decimal": "2300",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F74F7C",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Rhyacian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Rhyacian",
+      "name": "Rhyacian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleoproterozoic",
+      "older_ma": 2300.0,
+      "younger_ma": 2050.0,
+      "older_boundary": {
+        "ma": 2300.0,
+        "source_decimal": "2300",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 2050.0,
+        "source_decimal": "2050",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F75B89",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Orosirian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Orosirian",
+      "name": "Orosirian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleoproterozoic",
+      "older_ma": 2050.0,
+      "younger_ma": 1800.0,
+      "older_boundary": {
+        "ma": 2050.0,
+        "source_decimal": "2050",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 1800.0,
+        "source_decimal": "1800",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F76898",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Statherian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Statherian",
+      "name": "Statherian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleoproterozoic",
+      "older_ma": 1800.0,
+      "younger_ma": 1600.0,
+      "older_boundary": {
+        "ma": 1800.0,
+        "source_decimal": "1800",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 1600.0,
+        "source_decimal": "1600",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F875A7",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Mesoproterozoic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Mesoproterozoic",
+      "name": "Mesoproterozoic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Proterozoic",
+      "older_ma": 1600.0,
+      "younger_ma": 1000.0,
+      "older_boundary": {
+        "ma": 1600.0,
+        "source_decimal": "1600",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 1000.0,
+        "source_decimal": "1000",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDB462",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Calymmian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Calymmian",
+      "name": "Calymmian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Mesoproterozoic",
+      "older_ma": 1600.0,
+      "younger_ma": 1400.0,
+      "older_boundary": {
+        "ma": 1600.0,
+        "source_decimal": "1600",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 1400.0,
+        "source_decimal": "1400",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDC07A",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Ectasian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Ectasian",
+      "name": "Ectasian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Mesoproterozoic",
+      "older_ma": 1400.0,
+      "younger_ma": 1200.0,
+      "older_boundary": {
+        "ma": 1400.0,
+        "source_decimal": "1400",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 1200.0,
+        "source_decimal": "1200",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDCC8A",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Stenian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Stenian",
+      "name": "Stenian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Mesoproterozoic",
+      "older_ma": 1200.0,
+      "younger_ma": 1000.0,
+      "older_boundary": {
+        "ma": 1200.0,
+        "source_decimal": "1200",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 1000.0,
+        "source_decimal": "1000",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FED99A",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Neoproterozoic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Neoproterozoic",
+      "name": "Neoproterozoic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Proterozoic",
+      "older_ma": 1000.0,
+      "younger_ma": 538.8,
+      "older_boundary": {
+        "ma": 1000.0,
+        "source_decimal": "1000",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#FEB342",
+      "ratified_gssp": true,
+      "ratified_gssa": true,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Tonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Tonian",
+      "name": "Tonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Neoproterozoic",
+      "older_ma": 1000.0,
+      "younger_ma": 720.0,
+      "older_boundary": {
+        "ma": 1000.0,
+        "source_decimal": "1000",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 720.0,
+        "source_decimal": "720",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#FEBF4E",
+      "ratified_gssp": null,
+      "ratified_gssa": true,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Cryogenian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Cryogenian",
+      "name": "Cryogenian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Neoproterozoic",
+      "older_ma": 720.0,
+      "younger_ma": 635.0,
+      "older_boundary": {
+        "ma": 720.0,
+        "source_decimal": "720",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 635.0,
+        "source_decimal": "635",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#FECC5C",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Ediacaran",
+      "source_id": "https://data.stratigraphy.org/data/gts/Ediacaran",
+      "name": "Ediacaran",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Neoproterozoic",
+      "older_ma": 635.0,
+      "younger_ma": 538.8,
+      "older_boundary": {
+        "ma": 635.0,
+        "source_decimal": "635",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#FED96A",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Fortunian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Fortunian",
+      "name": "Fortunian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Terreneuvian",
+      "older_ma": 538.8,
+      "younger_ma": 529.0,
+      "older_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 529.0,
+        "source_decimal": "529.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#99B575",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Phanerozoic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Phanerozoic",
+      "name": "Phanerozoic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Eon",
+      "parent": null,
+      "older_ma": 538.8,
+      "younger_ma": 0.0,
+      "older_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0,
+        "source_decimal": "0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#9AD9DD",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Eon"
+      ]
+    },
+    {
+      "id": "Terreneuvian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Terreneuvian",
+      "name": "Terreneuvian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Cambrian",
+      "older_ma": 538.8,
+      "younger_ma": 521.0,
+      "older_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 521.0,
+        "source_decimal": "521.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#8CB06C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Paleozoic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Paleozoic",
+      "name": "Paleozoic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Phanerozoic",
+      "older_ma": 538.8,
+      "younger_ma": 251.902,
+      "older_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 251.902,
+        "source_decimal": "251.902",
+        "margin_of_error_ma": 0.024,
+        "note": null
+      },
+      "color": "#99C08D",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Cambrian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Cambrian",
+      "name": "Cambrian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleozoic",
+      "older_ma": 538.8,
+      "younger_ma": 486.85,
+      "older_boundary": {
+        "ma": 538.8,
+        "source_decimal": "538.8",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 486.85,
+        "source_decimal": "486.85",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "color": "#7FA056",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "CambrianStage2",
+      "source_id": "https://data.stratigraphy.org/data/gts/CambrianStage2",
+      "name": "Stage 2",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Terreneuvian",
+      "older_ma": 529.0,
+      "younger_ma": 521.0,
+      "older_boundary": {
+        "ma": 529.0,
+        "source_decimal": "529.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 521.0,
+        "source_decimal": "521.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#A6BA80",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "CambrianStage3",
+      "source_id": "https://data.stratigraphy.org/data/gts/CambrianStage3",
+      "name": "Stage 3",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "CambrianSeries2",
+      "older_ma": 521.0,
+      "younger_ma": 514.5,
+      "older_boundary": {
+        "ma": 521.0,
+        "source_decimal": "521.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 514.5,
+        "source_decimal": "514.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#A6C583",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "CambrianSeries2",
+      "source_id": "https://data.stratigraphy.org/data/gts/CambrianSeries2",
+      "name": "Series 2",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Cambrian",
+      "older_ma": 521.0,
+      "younger_ma": 506.5,
+      "older_boundary": {
+        "ma": 521.0,
+        "source_decimal": "521.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 506.5,
+        "source_decimal": "506.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#99C078",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "CambrianStage4",
+      "source_id": "https://data.stratigraphy.org/data/gts/CambrianStage4",
+      "name": "Stage 4",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "CambrianSeries2",
+      "older_ma": 514.5,
+      "younger_ma": 506.5,
+      "older_boundary": {
+        "ma": 514.5,
+        "source_decimal": "514.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 506.5,
+        "source_decimal": "506.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#B3CA8E",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Wuliuan",
+      "source_id": "https://data.stratigraphy.org/data/gts/Wuliuan",
+      "name": "Wuliuan",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miaolingian",
+      "older_ma": 506.5,
+      "younger_ma": 504.5,
+      "older_boundary": {
+        "ma": 506.5,
+        "source_decimal": "506.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 504.5,
+        "source_decimal": "504.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#B3D492",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Miaolingian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Miaolingian",
+      "name": "Miaolingian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Cambrian",
+      "older_ma": 506.5,
+      "younger_ma": 497.0,
+      "older_boundary": {
+        "ma": 506.5,
+        "source_decimal": "506.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 497.0,
+        "source_decimal": "497.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#A6CF86",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Drumian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Drumian",
+      "name": "Drumian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miaolingian",
+      "older_ma": 504.5,
+      "younger_ma": 500.5,
+      "older_boundary": {
+        "ma": 504.5,
+        "source_decimal": "504.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 500.5,
+        "source_decimal": "500.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#BFD99D",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Guzhangian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Guzhangian",
+      "name": "Guzhangian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miaolingian",
+      "older_ma": 500.5,
+      "younger_ma": 497.0,
+      "older_boundary": {
+        "ma": 500.5,
+        "source_decimal": "500.5",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 497.0,
+        "source_decimal": "497.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#CCDFAA",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Paibian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Paibian",
+      "name": "Paibian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Furongian",
+      "older_ma": 497.0,
+      "younger_ma": 494.2,
+      "older_boundary": {
+        "ma": 497.0,
+        "source_decimal": "497.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 494.2,
+        "source_decimal": "494.2",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#CCEBAE",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Furongian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Furongian",
+      "name": "Furongian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Cambrian",
+      "older_ma": 497.0,
+      "younger_ma": 486.85,
+      "older_boundary": {
+        "ma": 497.0,
+        "source_decimal": "497.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 486.85,
+        "source_decimal": "486.85",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "color": "#B3E095",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Jiangshanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Jiangshanian",
+      "name": "Jiangshanian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Furongian",
+      "older_ma": 494.2,
+      "younger_ma": 491.0,
+      "older_boundary": {
+        "ma": 494.2,
+        "source_decimal": "494.2",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 491.0,
+        "source_decimal": "491.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#D9F0BB",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "CambrianStage10",
+      "source_id": "https://data.stratigraphy.org/data/gts/CambrianStage10",
+      "name": "Stage 10",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Furongian",
+      "older_ma": 491.0,
+      "younger_ma": 486.85,
+      "older_boundary": {
+        "ma": 491.0,
+        "source_decimal": "491.0",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 486.85,
+        "source_decimal": "486.85",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "color": "#E6F5C9",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Tremadocian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Tremadocian",
+      "name": "Tremadocian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerOrdovician",
+      "older_ma": 486.85,
+      "younger_ma": 477.1,
+      "older_boundary": {
+        "ma": 486.85,
+        "source_decimal": "486.85",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 477.1,
+        "source_decimal": "477.1",
+        "margin_of_error_ma": 1.2,
+        "note": null
+      },
+      "color": "#33A97E",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "LowerOrdovician",
+      "source_id": "https://data.stratigraphy.org/data/gts/LowerOrdovician",
+      "name": "Lower Ordovician",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Ordovician",
+      "older_ma": 486.85,
+      "younger_ma": 471.3,
+      "older_boundary": {
+        "ma": 486.85,
+        "source_decimal": "486.85",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 471.3,
+        "source_decimal": "471.3",
+        "margin_of_error_ma": 1.4,
+        "note": null
+      },
+      "color": "#1A9D6F",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Ordovician",
+      "source_id": "https://data.stratigraphy.org/data/gts/Ordovician",
+      "name": "Ordovician",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleozoic",
+      "older_ma": 486.85,
+      "younger_ma": 443.1,
+      "older_boundary": {
+        "ma": 486.85,
+        "source_decimal": "486.85",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 443.1,
+        "source_decimal": "443.1",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "color": "#009270",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Floian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Floian",
+      "name": "Floian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerOrdovician",
+      "older_ma": 477.1,
+      "younger_ma": 471.3,
+      "older_boundary": {
+        "ma": 477.1,
+        "source_decimal": "477.1",
+        "margin_of_error_ma": 1.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 471.3,
+        "source_decimal": "471.3",
+        "margin_of_error_ma": 1.4,
+        "note": null
+      },
+      "color": "#41B087",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Dapingian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Dapingian",
+      "name": "Dapingian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleOrdovician",
+      "older_ma": 471.3,
+      "younger_ma": 469.4,
+      "older_boundary": {
+        "ma": 471.3,
+        "source_decimal": "471.3",
+        "margin_of_error_ma": 1.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 469.4,
+        "source_decimal": "469.4",
+        "margin_of_error_ma": 0.9,
+        "note": null
+      },
+      "color": "#66C092",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "MiddleOrdovician",
+      "source_id": "https://data.stratigraphy.org/data/gts/MiddleOrdovician",
+      "name": "Middle Ordovician",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Ordovician",
+      "older_ma": 471.3,
+      "younger_ma": 458.2,
+      "older_boundary": {
+        "ma": 471.3,
+        "source_decimal": "471.3",
+        "margin_of_error_ma": 1.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 458.2,
+        "source_decimal": "458.2",
+        "margin_of_error_ma": 0.7,
+        "note": null
+      },
+      "color": "#4DB47E",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Darriwilian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Darriwilian",
+      "name": "Darriwilian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleOrdovician",
+      "older_ma": 469.4,
+      "younger_ma": 458.2,
+      "older_boundary": {
+        "ma": 469.4,
+        "source_decimal": "469.4",
+        "margin_of_error_ma": 0.9,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 458.2,
+        "source_decimal": "458.2",
+        "margin_of_error_ma": 0.7,
+        "note": null
+      },
+      "color": "#74C69C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Sandbian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Sandbian",
+      "name": "Sandbian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperOrdovician",
+      "older_ma": 458.2,
+      "younger_ma": 452.8,
+      "older_boundary": {
+        "ma": 458.2,
+        "source_decimal": "458.2",
+        "margin_of_error_ma": 0.7,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 452.8,
+        "source_decimal": "452.8",
+        "margin_of_error_ma": 0.7,
+        "note": null
+      },
+      "color": "#8CD094",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "UpperOrdovician",
+      "source_id": "https://data.stratigraphy.org/data/gts/UpperOrdovician",
+      "name": "Upper Ordovician",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Ordovician",
+      "older_ma": 458.2,
+      "younger_ma": 443.1,
+      "older_boundary": {
+        "ma": 458.2,
+        "source_decimal": "458.2",
+        "margin_of_error_ma": 0.7,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 443.1,
+        "source_decimal": "443.1",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "color": "#7FCA93",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Katian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Katian",
+      "name": "Katian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperOrdovician",
+      "older_ma": 452.8,
+      "younger_ma": 445.2,
+      "older_boundary": {
+        "ma": 452.8,
+        "source_decimal": "452.8",
+        "margin_of_error_ma": 0.7,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 445.2,
+        "source_decimal": "445.2",
+        "margin_of_error_ma": 0.9,
+        "note": null
+      },
+      "color": "#99D69F",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Hirnantian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Hirnantian",
+      "name": "Hirnantian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperOrdovician",
+      "older_ma": 445.2,
+      "younger_ma": 443.1,
+      "older_boundary": {
+        "ma": 445.2,
+        "source_decimal": "445.2",
+        "margin_of_error_ma": 0.9,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 443.1,
+        "source_decimal": "443.1",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "color": "#A6DBAB",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Rhuddanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Rhuddanian",
+      "name": "Rhuddanian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Llandovery",
+      "older_ma": 443.1,
+      "younger_ma": 440.5,
+      "older_boundary": {
+        "ma": 443.1,
+        "source_decimal": "443.1",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 440.5,
+        "source_decimal": "440.5",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "color": "#A6DCB5",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Llandovery",
+      "source_id": "https://data.stratigraphy.org/data/gts/Llandovery",
+      "name": "Llandovery",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Silurian",
+      "older_ma": 443.1,
+      "younger_ma": 432.9,
+      "older_boundary": {
+        "ma": 443.1,
+        "source_decimal": "443.1",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 432.9,
+        "source_decimal": "432.9",
+        "margin_of_error_ma": 1.2,
+        "note": null
+      },
+      "color": "#99D7B3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Silurian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Silurian",
+      "name": "Silurian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleozoic",
+      "older_ma": 443.1,
+      "younger_ma": 419.62,
+      "older_boundary": {
+        "ma": 443.1,
+        "source_decimal": "443.1",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 419.62,
+        "source_decimal": "419.62",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "color": "#B3E1B6",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Aeronian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Aeronian",
+      "name": "Aeronian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Llandovery",
+      "older_ma": 440.5,
+      "younger_ma": 438.6,
+      "older_boundary": {
+        "ma": 440.5,
+        "source_decimal": "440.5",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 438.6,
+        "source_decimal": "438.6",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "color": "#B3E1C2",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Telychian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Telychian",
+      "name": "Telychian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Llandovery",
+      "older_ma": 438.6,
+      "younger_ma": 432.9,
+      "older_boundary": {
+        "ma": 438.6,
+        "source_decimal": "438.6",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 432.9,
+        "source_decimal": "432.9",
+        "margin_of_error_ma": 1.2,
+        "note": null
+      },
+      "color": "#BFE6CF",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Sheinwoodian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Sheinwoodian",
+      "name": "Sheinwoodian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Wenlock",
+      "older_ma": 432.9,
+      "younger_ma": 430.6,
+      "older_boundary": {
+        "ma": 432.9,
+        "source_decimal": "432.9",
+        "margin_of_error_ma": 1.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 430.6,
+        "source_decimal": "430.6",
+        "margin_of_error_ma": 1.3,
+        "note": null
+      },
+      "color": "#BFE6C3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Wenlock",
+      "source_id": "https://data.stratigraphy.org/data/gts/Wenlock",
+      "name": "Wenlock",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Silurian",
+      "older_ma": 432.9,
+      "younger_ma": 426.7,
+      "older_boundary": {
+        "ma": 432.9,
+        "source_decimal": "432.9",
+        "margin_of_error_ma": 1.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 426.7,
+        "source_decimal": "426.7",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "color": "#B3E1C2",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Homerian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Homerian",
+      "name": "Homerian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Wenlock",
+      "older_ma": 430.6,
+      "younger_ma": 426.7,
+      "older_boundary": {
+        "ma": 430.6,
+        "source_decimal": "430.6",
+        "margin_of_error_ma": 1.3,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 426.7,
+        "source_decimal": "426.7",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "color": "#CCEBD1",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Gorstian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Gorstian",
+      "name": "Gorstian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Ludlow",
+      "older_ma": 426.7,
+      "younger_ma": 425.0,
+      "older_boundary": {
+        "ma": 426.7,
+        "source_decimal": "426.7",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 425.0,
+        "source_decimal": "425.0",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "color": "#CCECDD",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Ludlow",
+      "source_id": "https://data.stratigraphy.org/data/gts/Ludlow",
+      "name": "Ludlow",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Silurian",
+      "older_ma": 426.7,
+      "younger_ma": 422.7,
+      "older_boundary": {
+        "ma": 426.7,
+        "source_decimal": "426.7",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 422.7,
+        "source_decimal": "419.62",
+        "margin_of_error_ma": 1.6,
+        "note": null,
+        "rdf_ma": 419.62,
+        "chart_decimal": "422.7",
+        "correction_source": "official PDF page1",
+        "rdf_margin_of_error_ma": 1.36
+      },
+      "color": "#BFE6CF",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ],
+      "rdf_younger_ma": 419.62,
+      "corrections": [
+        {
+          "unit_id": "Ludlow",
+          "field": "younger_ma",
+          "rdf_value": 419.62,
+          "chart_value": 422.7,
+          "rdf_margin_of_error_ma": 1.36,
+          "chart_margin_of_error_ma": 1.6,
+          "source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+          "source_page": 1,
+          "proof_image": "docs/source-data/ics-2026-06-silurian-detail.png",
+          "reason": "PDF shared Ludlow/Ludfordian top and Pridoli base are422.7 +/-1.6 Ma."
+        }
+      ]
+    },
+    {
+      "id": "Ludfordian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Ludfordian",
+      "name": "Ludfordian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Ludlow",
+      "older_ma": 425.0,
+      "younger_ma": 422.7,
+      "older_boundary": {
+        "ma": 425.0,
+        "source_decimal": "425.0",
+        "margin_of_error_ma": 1.5,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 422.7,
+        "source_decimal": "422.7",
+        "margin_of_error_ma": 1.6,
+        "note": null
+      },
+      "color": "#D9F0DF",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Pridoli",
+      "source_id": "https://data.stratigraphy.org/data/gts/Pridoli",
+      "name": "Pridoli",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "ranks": [
+        "Age",
+        "Epoch"
+      ],
+      "rank_note": "Source assigns both Age and Epoch; use Epoch as hierarchy presentation rank, not two duplicated intervals.",
+      "parent": "Silurian",
+      "older_ma": 422.7,
+      "younger_ma": 419.62,
+      "older_boundary": {
+        "ma": 422.7,
+        "source_decimal": "422.7",
+        "margin_of_error_ma": 1.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 419.62,
+        "source_decimal": "419.62",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "color": "#E6F5E1",
+      "ratified_gssp": true,
+      "ratified_gssa": null
+    },
+    {
+      "id": "Lochkovian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Lochkovian",
+      "name": "Lochkovian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerDevonian",
+      "older_ma": 419.62,
+      "younger_ma": 413.02,
+      "older_boundary": {
+        "ma": 419.62,
+        "source_decimal": "419.62",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 413.02,
+        "source_decimal": "413.02",
+        "margin_of_error_ma": 1.91,
+        "note": null
+      },
+      "color": "#E5B75A",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "LowerDevonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/LowerDevonian",
+      "name": "Lower Devonian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Devonian",
+      "older_ma": 419.62,
+      "younger_ma": 393.47,
+      "older_boundary": {
+        "ma": 419.62,
+        "source_decimal": "419.62",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 393.47,
+        "source_decimal": "393.47",
+        "margin_of_error_ma": 0.99,
+        "note": null
+      },
+      "color": "#E5AC4D",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Devonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Devonian",
+      "name": "Devonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleozoic",
+      "older_ma": 419.62,
+      "younger_ma": 358.86,
+      "older_boundary": {
+        "ma": 419.62,
+        "source_decimal": "419.62",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 358.86,
+        "source_decimal": "358.86",
+        "margin_of_error_ma": 0.19,
+        "note": null
+      },
+      "color": "#CB8C37",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Pragian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Pragian",
+      "name": "Pragian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerDevonian",
+      "older_ma": 413.02,
+      "younger_ma": 410.62,
+      "older_boundary": {
+        "ma": 413.02,
+        "source_decimal": "413.02",
+        "margin_of_error_ma": 1.91,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 410.62,
+        "source_decimal": "410.62",
+        "margin_of_error_ma": 1.95,
+        "note": null
+      },
+      "color": "#E5C468",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Emsian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Emsian",
+      "name": "Emsian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerDevonian",
+      "older_ma": 410.62,
+      "younger_ma": 393.47,
+      "older_boundary": {
+        "ma": 410.62,
+        "source_decimal": "410.62",
+        "margin_of_error_ma": 1.95,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 393.47,
+        "source_decimal": "393.47",
+        "margin_of_error_ma": 0.99,
+        "note": null
+      },
+      "color": "#E5D075",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Eifelian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Eifelian",
+      "name": "Eifelian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleDevonian",
+      "older_ma": 393.47,
+      "younger_ma": 387.95,
+      "older_boundary": {
+        "ma": 393.47,
+        "source_decimal": "393.47",
+        "margin_of_error_ma": 0.99,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 387.95,
+        "source_decimal": "387.95",
+        "margin_of_error_ma": 1.04,
+        "note": null
+      },
+      "color": "#F1D576",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "MiddleDevonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/MiddleDevonian",
+      "name": "Middle Devonian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Devonian",
+      "older_ma": 393.47,
+      "younger_ma": 382.31,
+      "older_boundary": {
+        "ma": 393.47,
+        "source_decimal": "393.47",
+        "margin_of_error_ma": 0.99,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 382.31,
+        "source_decimal": "382.31",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "color": "#F1C868",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Givetian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Givetian",
+      "name": "Givetian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleDevonian",
+      "older_ma": 387.95,
+      "younger_ma": 382.31,
+      "older_boundary": {
+        "ma": 387.95,
+        "source_decimal": "387.95",
+        "margin_of_error_ma": 1.04,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 382.31,
+        "source_decimal": "382.31",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "color": "#F1E185",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Frasnian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Frasnian",
+      "name": "Frasnian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperDevonian",
+      "older_ma": 382.31,
+      "younger_ma": 372.15,
+      "older_boundary": {
+        "ma": 382.31,
+        "source_decimal": "382.31",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 372.15,
+        "source_decimal": "372.15",
+        "margin_of_error_ma": 0.46,
+        "note": null
+      },
+      "color": "#F2EDAD",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "UpperDevonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/UpperDevonian",
+      "name": "Upper Devonian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Devonian",
+      "older_ma": 382.31,
+      "younger_ma": 358.86,
+      "older_boundary": {
+        "ma": 382.31,
+        "source_decimal": "382.31",
+        "margin_of_error_ma": 1.36,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 358.86,
+        "source_decimal": "358.86",
+        "margin_of_error_ma": 0.19,
+        "note": null
+      },
+      "color": "#F1E19D",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Famennian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Famennian",
+      "name": "Famennian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperDevonian",
+      "older_ma": 372.15,
+      "younger_ma": 358.86,
+      "older_boundary": {
+        "ma": 372.15,
+        "source_decimal": "372.15",
+        "margin_of_error_ma": 0.46,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 358.86,
+        "source_decimal": "358.86",
+        "margin_of_error_ma": 0.19,
+        "note": null
+      },
+      "color": "#F2EDB3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Tournaisian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Tournaisian",
+      "name": "Tournaisian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerMississippian",
+      "older_ma": 358.86,
+      "younger_ma": 346.7,
+      "older_boundary": {
+        "ma": 358.86,
+        "source_decimal": "358.86",
+        "margin_of_error_ma": 0.19,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 346.7,
+        "source_decimal": "346.7",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#8CB06C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "LowerMississippian",
+      "source_id": "https://data.stratigraphy.org/data/gts/LowerMississippian",
+      "name": "Lower Mississippian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Mississippian",
+      "older_ma": 358.86,
+      "younger_ma": 346.7,
+      "older_boundary": {
+        "ma": 358.86,
+        "source_decimal": "358.86",
+        "margin_of_error_ma": 0.19,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 346.7,
+        "source_decimal": "346.7",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#80AB6C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Carboniferous",
+      "source_id": "https://data.stratigraphy.org/data/gts/Carboniferous",
+      "name": "Carboniferous",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleozoic",
+      "older_ma": 358.86,
+      "younger_ma": 298.9,
+      "older_boundary": {
+        "ma": 358.86,
+        "source_decimal": "358.86",
+        "margin_of_error_ma": 0.19,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 298.9,
+        "source_decimal": "298.9",
+        "margin_of_error_ma": 0.15,
+        "note": null
+      },
+      "color": "#67A599",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Mississippian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Mississippian",
+      "name": "Mississippian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Sub-Period",
+      "parent": "Carboniferous",
+      "older_ma": 358.86,
+      "younger_ma": 323.4,
+      "older_boundary": {
+        "ma": 358.86,
+        "source_decimal": "358.86",
+        "margin_of_error_ma": 0.19,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 323.4,
+        "source_decimal": "323.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#678F66",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Sub-Period"
+      ]
+    },
+    {
+      "id": "Visean",
+      "source_id": "https://data.stratigraphy.org/data/gts/Visean",
+      "name": "Visean",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleMississippian",
+      "older_ma": 346.7,
+      "younger_ma": 330.3,
+      "older_boundary": {
+        "ma": 346.7,
+        "source_decimal": "346.7",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 330.3,
+        "source_decimal": "330.3",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#A6B96C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "MiddleMississippian",
+      "source_id": "https://data.stratigraphy.org/data/gts/MiddleMississippian",
+      "name": "Middle Mississippian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Mississippian",
+      "older_ma": 346.7,
+      "younger_ma": 330.3,
+      "older_boundary": {
+        "ma": 346.7,
+        "source_decimal": "346.7",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 330.3,
+        "source_decimal": "330.3",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#99B46C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Serpukhovian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Serpukhovian",
+      "name": "Serpukhovian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperMississippian",
+      "older_ma": 330.3,
+      "younger_ma": 323.4,
+      "older_boundary": {
+        "ma": 330.3,
+        "source_decimal": "330.3",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 323.4,
+        "source_decimal": "323.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#BFC26B",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "UpperMississippian",
+      "source_id": "https://data.stratigraphy.org/data/gts/UpperMississippian",
+      "name": "Upper Mississippian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Mississippian",
+      "older_ma": 330.3,
+      "younger_ma": 323.4,
+      "older_boundary": {
+        "ma": 330.3,
+        "source_decimal": "330.3",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 323.4,
+        "source_decimal": "323.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#B3BE6C",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Bashkirian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Bashkirian",
+      "name": "Bashkirian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerPennsylvanian",
+      "older_ma": 323.4,
+      "younger_ma": 315.2,
+      "older_boundary": {
+        "ma": 323.4,
+        "source_decimal": "323.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 315.2,
+        "source_decimal": "315.2",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#99C2B5",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "LowerPennsylvanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/LowerPennsylvanian",
+      "name": "Lower Pennsylvanian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Pennsylvanian",
+      "older_ma": 323.4,
+      "younger_ma": 315.2,
+      "older_boundary": {
+        "ma": 323.4,
+        "source_decimal": "323.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 315.2,
+        "source_decimal": "315.2",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#8CBEB4",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Pennsylvanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Pennsylvanian",
+      "name": "Pennsylvanian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Sub-Period",
+      "parent": "Carboniferous",
+      "older_ma": 323.4,
+      "younger_ma": 298.9,
+      "older_boundary": {
+        "ma": 323.4,
+        "source_decimal": "323.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 298.9,
+        "source_decimal": "298.9",
+        "margin_of_error_ma": 0.15,
+        "note": null
+      },
+      "color": "#7EBCC6",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Sub-Period"
+      ]
+    },
+    {
+      "id": "Moscovian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Moscovian",
+      "name": "Moscovian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddlePennsylvanian",
+      "older_ma": 315.2,
+      "younger_ma": 307.0,
+      "older_boundary": {
+        "ma": 315.2,
+        "source_decimal": "315.2",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 307.0,
+        "source_decimal": "307.0",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "color": "#B3CBB9",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "MiddlePennsylvanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/MiddlePennsylvanian",
+      "name": "Middle Pennsylvanian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Pennsylvanian",
+      "older_ma": 315.2,
+      "younger_ma": 307.0,
+      "older_boundary": {
+        "ma": 315.2,
+        "source_decimal": "315.2",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 307.0,
+        "source_decimal": "307.0",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "color": "#A6C7B7",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Kasimovian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Kasimovian",
+      "name": "Kasimovian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperPennsylvanian",
+      "older_ma": 307.0,
+      "younger_ma": 303.7,
+      "older_boundary": {
+        "ma": 307.0,
+        "source_decimal": "307.0",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 303.7,
+        "source_decimal": "303.7",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "color": "#BFD0C5",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "UpperPennsylvanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/UpperPennsylvanian",
+      "name": "Upper Pennsylvanian",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Pennsylvanian",
+      "older_ma": 307.0,
+      "younger_ma": 298.9,
+      "older_boundary": {
+        "ma": 307.0,
+        "source_decimal": "307.0",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 298.9,
+        "source_decimal": "298.9",
+        "margin_of_error_ma": 0.15,
+        "note": null
+      },
+      "color": "#BFD0BA",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Gzhelian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Gzhelian",
+      "name": "Gzhelian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperPennsylvanian",
+      "older_ma": 303.7,
+      "younger_ma": 298.9,
+      "older_boundary": {
+        "ma": 303.7,
+        "source_decimal": "303.7",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 298.9,
+        "source_decimal": "298.9",
+        "margin_of_error_ma": 0.15,
+        "note": null
+      },
+      "color": "#CCD4C7",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Asselian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Asselian",
+      "name": "Asselian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Cisuralian",
+      "older_ma": 298.9,
+      "younger_ma": 293.52,
+      "older_boundary": {
+        "ma": 298.9,
+        "source_decimal": "298.9",
+        "margin_of_error_ma": 0.15,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 293.52,
+        "source_decimal": "293.52",
+        "margin_of_error_ma": 0.17,
+        "note": null
+      },
+      "color": "#E36350",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Cisuralian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Cisuralian",
+      "name": "Cisuralian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Permian",
+      "older_ma": 298.9,
+      "younger_ma": 274.4,
+      "older_boundary": {
+        "ma": 298.9,
+        "source_decimal": "298.9",
+        "margin_of_error_ma": 0.15,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 274.4,
+        "source_decimal": "274.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#EF5845",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Permian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Permian",
+      "name": "Permian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Paleozoic",
+      "older_ma": 298.9,
+      "younger_ma": 251.902,
+      "older_boundary": {
+        "ma": 298.9,
+        "source_decimal": "298.9",
+        "margin_of_error_ma": 0.15,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 251.902,
+        "source_decimal": "251.902",
+        "margin_of_error_ma": 0.024,
+        "note": null
+      },
+      "color": "#F04028",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Sakmarian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Sakmarian",
+      "name": "Sakmarian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Cisuralian",
+      "older_ma": 293.52,
+      "younger_ma": 290.1,
+      "older_boundary": {
+        "ma": 293.52,
+        "source_decimal": "293.52",
+        "margin_of_error_ma": 0.17,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 290.1,
+        "source_decimal": "290.1",
+        "margin_of_error_ma": 0.26,
+        "note": null
+      },
+      "color": "#E36F5C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Artinskian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Artinskian",
+      "name": "Artinskian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Cisuralian",
+      "older_ma": 290.1,
+      "younger_ma": 283.3,
+      "older_boundary": {
+        "ma": 290.1,
+        "source_decimal": "290.1",
+        "margin_of_error_ma": 0.26,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 283.3,
+        "source_decimal": "283.3",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#E37B68",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Kungurian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Kungurian",
+      "name": "Kungurian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Cisuralian",
+      "older_ma": 283.3,
+      "younger_ma": 274.4,
+      "older_boundary": {
+        "ma": 283.3,
+        "source_decimal": "283.3",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 274.4,
+        "source_decimal": "274.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#E38776",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Roadian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Roadian",
+      "name": "Roadian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Guadalupian",
+      "older_ma": 274.4,
+      "younger_ma": 266.9,
+      "older_boundary": {
+        "ma": 274.4,
+        "source_decimal": "274.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 266.9,
+        "source_decimal": "266.9",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "color": "#FB8069",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Guadalupian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Guadalupian",
+      "name": "Guadalupian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Permian",
+      "older_ma": 274.4,
+      "younger_ma": 259.857,
+      "older_boundary": {
+        "ma": 274.4,
+        "source_decimal": "274.4",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 259.857,
+        "source_decimal": "259.857",
+        "margin_of_error_ma": 0.084,
+        "note": null
+      },
+      "color": "#FB745C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Wordian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Wordian",
+      "name": "Wordian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Guadalupian",
+      "older_ma": 266.9,
+      "younger_ma": 264.28,
+      "older_boundary": {
+        "ma": 266.9,
+        "source_decimal": "266.9",
+        "margin_of_error_ma": 0.4,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 264.28,
+        "source_decimal": "264.28",
+        "margin_of_error_ma": 0.16,
+        "note": null
+      },
+      "color": "#FB8D76",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Capitanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Capitanian",
+      "name": "Capitanian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Guadalupian",
+      "older_ma": 264.28,
+      "younger_ma": 259.857,
+      "older_boundary": {
+        "ma": 264.28,
+        "source_decimal": "264.28",
+        "margin_of_error_ma": 0.16,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 259.857,
+        "source_decimal": "259.857",
+        "margin_of_error_ma": 0.084,
+        "note": null
+      },
+      "color": "#FB9A85",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Wuchiapingian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Wuchiapingian",
+      "name": "Wuchiapingian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Lopingian",
+      "older_ma": 259.857,
+      "younger_ma": 254.14,
+      "older_boundary": {
+        "ma": 259.857,
+        "source_decimal": "259.857",
+        "margin_of_error_ma": 0.084,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 254.14,
+        "source_decimal": "254.14",
+        "margin_of_error_ma": 0.07,
+        "note": null
+      },
+      "color": "#FCB4A2",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Lopingian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Lopingian",
+      "name": "Lopingian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Permian",
+      "older_ma": 259.857,
+      "younger_ma": 251.902,
+      "older_boundary": {
+        "ma": 259.857,
+        "source_decimal": "259.857",
+        "margin_of_error_ma": 0.084,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 251.902,
+        "source_decimal": "251.902",
+        "margin_of_error_ma": 0.024,
+        "note": null
+      },
+      "color": "#FBA794",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Changhsingian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Changhsingian",
+      "name": "Changhsingian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Lopingian",
+      "older_ma": 254.14,
+      "younger_ma": 251.902,
+      "older_boundary": {
+        "ma": 254.14,
+        "source_decimal": "254.14",
+        "margin_of_error_ma": 0.07,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 251.902,
+        "source_decimal": "251.902",
+        "margin_of_error_ma": 0.024,
+        "note": null
+      },
+      "color": "#FCC0B2",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Induan",
+      "source_id": "https://data.stratigraphy.org/data/gts/Induan",
+      "name": "Induan",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerTriassic",
+      "older_ma": 251.902,
+      "younger_ma": 250.8,
+      "older_boundary": {
+        "ma": 251.902,
+        "source_decimal": "251.902",
+        "margin_of_error_ma": 0.024,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 250.8,
+        "source_decimal": "250.8",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#A4469F",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "LowerTriassic",
+      "source_id": "https://data.stratigraphy.org/data/gts/LowerTriassic",
+      "name": "Lower Triassic",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Triassic",
+      "older_ma": 251.902,
+      "younger_ma": 247.0,
+      "older_boundary": {
+        "ma": 251.902,
+        "source_decimal": "251.902",
+        "margin_of_error_ma": 0.024,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 247.0,
+        "source_decimal": "247.0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#983999",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Mesozoic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Mesozoic",
+      "name": "Mesozoic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Phanerozoic",
+      "older_ma": 251.902,
+      "younger_ma": 66.0,
+      "older_boundary": {
+        "ma": 251.902,
+        "source_decimal": "251.902",
+        "margin_of_error_ma": 0.024,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 66.0,
+        "source_decimal": "66.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#67C5CA",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Triassic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Triassic",
+      "name": "Triassic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Mesozoic",
+      "older_ma": 251.902,
+      "younger_ma": 201.4,
+      "older_boundary": {
+        "ma": 251.902,
+        "source_decimal": "251.902",
+        "margin_of_error_ma": 0.024,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 201.4,
+        "source_decimal": "201.4",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#812B92",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Olenekian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Olenekian",
+      "name": "Olenekian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerTriassic",
+      "older_ma": 250.8,
+      "younger_ma": 247.0,
+      "older_boundary": {
+        "ma": 250.8,
+        "source_decimal": "250.8",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 247.0,
+        "source_decimal": "247.0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#B051A5",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Anisian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Anisian",
+      "name": "Anisian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleTriassic",
+      "older_ma": 247.0,
+      "younger_ma": 241.464,
+      "older_boundary": {
+        "ma": 247.0,
+        "source_decimal": "247.0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 241.464,
+        "source_decimal": "241.464",
+        "margin_of_error_ma": 0.28,
+        "note": null
+      },
+      "color": "#BC75B7",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "MiddleTriassic",
+      "source_id": "https://data.stratigraphy.org/data/gts/MiddleTriassic",
+      "name": "Middle Triassic",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Triassic",
+      "older_ma": 247.0,
+      "younger_ma": 237.0,
+      "older_boundary": {
+        "ma": 247.0,
+        "source_decimal": "247.0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 237.0,
+        "source_decimal": "237",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#B168B1",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Ladinian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Ladinian",
+      "name": "Ladinian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleTriassic",
+      "older_ma": 241.464,
+      "younger_ma": 237.0,
+      "older_boundary": {
+        "ma": 241.464,
+        "source_decimal": "241.464",
+        "margin_of_error_ma": 0.28,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 237.0,
+        "source_decimal": "237",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#C983BF",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Carnian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Carnian",
+      "name": "Carnian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperTriassic",
+      "older_ma": 237.0,
+      "younger_ma": 227.3,
+      "older_boundary": {
+        "ma": 237.0,
+        "source_decimal": "237",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 227.3,
+        "source_decimal": "227.3",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#C99BCB",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "UpperTriassic",
+      "source_id": "https://data.stratigraphy.org/data/gts/UpperTriassic",
+      "name": "Upper Triassic",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Triassic",
+      "older_ma": 237.0,
+      "younger_ma": 201.4,
+      "older_boundary": {
+        "ma": 237.0,
+        "source_decimal": "237",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 201.4,
+        "source_decimal": "201.4",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#BD8CC3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Norian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Norian",
+      "name": "Norian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperTriassic",
+      "older_ma": 227.3,
+      "younger_ma": 205.7,
+      "older_boundary": {
+        "ma": 227.3,
+        "source_decimal": "227.3",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 205.7,
+        "source_decimal": "205.7",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "color": "#D6AAD3",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Rhaetian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Rhaetian",
+      "name": "Rhaetian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperTriassic",
+      "older_ma": 205.7,
+      "younger_ma": 201.4,
+      "older_boundary": {
+        "ma": 205.7,
+        "source_decimal": "205.7",
+        "margin_of_error_ma": null,
+        "note": "uncertain"
+      },
+      "younger_boundary": {
+        "ma": 201.4,
+        "source_decimal": "201.4",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#E3B9DB",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Hettangian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Hettangian",
+      "name": "Hettangian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerJurassic",
+      "older_ma": 201.4,
+      "younger_ma": 199.5,
+      "older_boundary": {
+        "ma": 201.4,
+        "source_decimal": "201.4",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 199.5,
+        "source_decimal": "199.5",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "color": "#4EB3D3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "LowerJurassic",
+      "source_id": "https://data.stratigraphy.org/data/gts/LowerJurassic",
+      "name": "Lower Jurassic",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Jurassic",
+      "older_ma": 201.4,
+      "younger_ma": 174.7,
+      "older_boundary": {
+        "ma": 201.4,
+        "source_decimal": "201.4",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 174.7,
+        "source_decimal": "174.7",
+        "margin_of_error_ma": 0.8,
+        "note": null
+      },
+      "color": "#42AED0",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Jurassic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Jurassic",
+      "name": "Jurassic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Mesozoic",
+      "older_ma": 201.4,
+      "younger_ma": 143.1,
+      "older_boundary": {
+        "ma": 201.4,
+        "source_decimal": "201.4",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 143.1,
+        "source_decimal": "143.1",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#34B2C9",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Sinemurian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Sinemurian",
+      "name": "Sinemurian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerJurassic",
+      "older_ma": 199.5,
+      "younger_ma": 192.9,
+      "older_boundary": {
+        "ma": 199.5,
+        "source_decimal": "199.5",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 192.9,
+        "source_decimal": "192.9",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "color": "#67BCD8",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Pliensbachian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Pliensbachian",
+      "name": "Pliensbachian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerJurassic",
+      "older_ma": 192.9,
+      "younger_ma": 184.2,
+      "older_boundary": {
+        "ma": 192.9,
+        "source_decimal": "192.9",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 184.2,
+        "source_decimal": "184.2",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "color": "#80C5DD",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Toarcian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Toarcian",
+      "name": "Toarcian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerJurassic",
+      "older_ma": 184.2,
+      "younger_ma": 174.7,
+      "older_boundary": {
+        "ma": 184.2,
+        "source_decimal": "184.2",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 174.7,
+        "source_decimal": "174.7",
+        "margin_of_error_ma": 0.8,
+        "note": null
+      },
+      "color": "#99CEE3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Aalenian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Aalenian",
+      "name": "Aalenian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleJurassic",
+      "older_ma": 174.7,
+      "younger_ma": 170.9,
+      "older_boundary": {
+        "ma": 174.7,
+        "source_decimal": "174.7",
+        "margin_of_error_ma": 0.8,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 170.9,
+        "source_decimal": "170.9",
+        "margin_of_error_ma": 0.8,
+        "note": null
+      },
+      "color": "#9AD9DD",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "MiddleJurassic",
+      "source_id": "https://data.stratigraphy.org/data/gts/MiddleJurassic",
+      "name": "Middle Jurassic",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Jurassic",
+      "older_ma": 174.7,
+      "younger_ma": 161.5,
+      "older_boundary": {
+        "ma": 174.7,
+        "source_decimal": "174.7",
+        "margin_of_error_ma": 0.8,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 161.5,
+        "source_decimal": "161.5",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "color": "#80CFD8",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Bajocian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Bajocian",
+      "name": "Bajocian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleJurassic",
+      "older_ma": 170.9,
+      "younger_ma": 168.2,
+      "older_boundary": {
+        "ma": 170.9,
+        "source_decimal": "170.9",
+        "margin_of_error_ma": 0.8,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 168.2,
+        "source_decimal": "168.2",
+        "margin_of_error_ma": 1.2,
+        "note": null
+      },
+      "color": "#A6DDE0",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Bathonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Bathonian",
+      "name": "Bathonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleJurassic",
+      "older_ma": 168.2,
+      "younger_ma": 165.3,
+      "older_boundary": {
+        "ma": 168.2,
+        "source_decimal": "168.2",
+        "margin_of_error_ma": 1.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 165.3,
+        "source_decimal": "165.3",
+        "margin_of_error_ma": 1.1,
+        "note": null
+      },
+      "color": "#B3E2E3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Callovian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Callovian",
+      "name": "Callovian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "MiddleJurassic",
+      "older_ma": 165.3,
+      "younger_ma": 161.5,
+      "older_boundary": {
+        "ma": 165.3,
+        "source_decimal": "165.3",
+        "margin_of_error_ma": 1.1,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 161.5,
+        "source_decimal": "161.5",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "color": "#BFE7E5",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Oxfordian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Oxfordian",
+      "name": "Oxfordian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperJurassic",
+      "older_ma": 161.5,
+      "younger_ma": 154.8,
+      "older_boundary": {
+        "ma": 161.5,
+        "source_decimal": "161.5",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 154.8,
+        "source_decimal": "154.8",
+        "margin_of_error_ma": 0.8,
+        "note": null
+      },
+      "color": "#BFE7F1",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "UpperJurassic",
+      "source_id": "https://data.stratigraphy.org/data/gts/UpperJurassic",
+      "name": "Upper Jurassic",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Jurassic",
+      "older_ma": 161.5,
+      "younger_ma": 143.1,
+      "older_boundary": {
+        "ma": 161.5,
+        "source_decimal": "161.5",
+        "margin_of_error_ma": 1.0,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 143.1,
+        "source_decimal": "143.1",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#B3E3EE",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Kimmeridgian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Kimmeridgian",
+      "name": "Kimmeridgian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperJurassic",
+      "older_ma": 154.8,
+      "younger_ma": 149.2,
+      "older_boundary": {
+        "ma": 154.8,
+        "source_decimal": "154.8",
+        "margin_of_error_ma": 0.8,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 149.2,
+        "source_decimal": "149.2",
+        "margin_of_error_ma": 0.7,
+        "note": null
+      },
+      "color": "#CCECF4",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Tithonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Tithonian",
+      "name": "Tithonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperJurassic",
+      "older_ma": 149.2,
+      "younger_ma": 143.1,
+      "older_boundary": {
+        "ma": 149.2,
+        "source_decimal": "149.2",
+        "margin_of_error_ma": 0.7,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 143.1,
+        "source_decimal": "143.1",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#D9F1F7",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Berriasian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Berriasian",
+      "name": "Berriasian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerCretaceous",
+      "older_ma": 143.1,
+      "younger_ma": 137.05,
+      "older_boundary": {
+        "ma": 143.1,
+        "source_decimal": "143.1",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 137.05,
+        "source_decimal": "137.05",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#8CCD60",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "LowerCretaceous",
+      "source_id": "https://data.stratigraphy.org/data/gts/LowerCretaceous",
+      "name": "Lower Cretaceous",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Cretaceous",
+      "older_ma": 143.1,
+      "younger_ma": 100.5,
+      "older_boundary": {
+        "ma": 143.1,
+        "source_decimal": "143.1",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 100.5,
+        "source_decimal": "100.5",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "color": "#8CCD57",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Cretaceous",
+      "source_id": "https://data.stratigraphy.org/data/gts/Cretaceous",
+      "name": "Cretaceous",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Mesozoic",
+      "older_ma": 143.1,
+      "younger_ma": 66.0,
+      "older_boundary": {
+        "ma": 143.1,
+        "source_decimal": "143.1",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 66.0,
+        "source_decimal": "66.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#7FC64E",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Valanginian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Valanginian",
+      "name": "Valanginian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerCretaceous",
+      "older_ma": 137.05,
+      "younger_ma": 132.6,
+      "older_boundary": {
+        "ma": 137.05,
+        "source_decimal": "137.05",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 132.6,
+        "source_decimal": "132.6",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#99D36A",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Hauterivian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Hauterivian",
+      "name": "Hauterivian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerCretaceous",
+      "older_ma": 132.6,
+      "younger_ma": 125.77,
+      "older_boundary": {
+        "ma": 132.6,
+        "source_decimal": "132.6",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 125.77,
+        "source_decimal": "125.77",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#A6D975",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Barremian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Barremian",
+      "name": "Barremian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerCretaceous",
+      "older_ma": 125.77,
+      "younger_ma": 121.4,
+      "older_boundary": {
+        "ma": 125.77,
+        "source_decimal": "125.77",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 121.4,
+        "source_decimal": "121.4",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "color": "#B3DF7F",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Aptian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Aptian",
+      "name": "Aptian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerCretaceous",
+      "older_ma": 121.4,
+      "younger_ma": 113.2,
+      "older_boundary": {
+        "ma": 121.4,
+        "source_decimal": "121.4",
+        "margin_of_error_ma": 0.6,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 113.2,
+        "source_decimal": "113.2",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "color": "#BFE48A",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Albian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Albian",
+      "name": "Albian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "LowerCretaceous",
+      "older_ma": 113.2,
+      "younger_ma": 100.5,
+      "older_boundary": {
+        "ma": 113.2,
+        "source_decimal": "113.2",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 100.5,
+        "source_decimal": "100.5",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "color": "#CCEA97",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Cenomanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Cenomanian",
+      "name": "Cenomanian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperCretaceous",
+      "older_ma": 100.5,
+      "younger_ma": 93.9,
+      "older_boundary": {
+        "ma": 100.5,
+        "source_decimal": "100.5",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 93.9,
+        "source_decimal": "93.9",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#B3DE53",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "UpperCretaceous",
+      "source_id": "https://data.stratigraphy.org/data/gts/UpperCretaceous",
+      "name": "Upper Cretaceous",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Epoch",
+      "parent": "Cretaceous",
+      "older_ma": 100.5,
+      "younger_ma": 66.0,
+      "older_boundary": {
+        "ma": 100.5,
+        "source_decimal": "100.5",
+        "margin_of_error_ma": 0.1,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 66.0,
+        "source_decimal": "66.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#A6D84A",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Turonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Turonian",
+      "name": "Turonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperCretaceous",
+      "older_ma": 93.9,
+      "younger_ma": 89.8,
+      "older_boundary": {
+        "ma": 93.9,
+        "source_decimal": "93.9",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 89.8,
+        "source_decimal": "89.8",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "color": "#BFE35D",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Coniacian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Coniacian",
+      "name": "Coniacian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperCretaceous",
+      "older_ma": 89.8,
+      "younger_ma": 85.7,
+      "older_boundary": {
+        "ma": 89.8,
+        "source_decimal": "89.8",
+        "margin_of_error_ma": 0.3,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 85.7,
+        "source_decimal": "85.7",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#CCE968",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Santonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Santonian",
+      "name": "Santonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperCretaceous",
+      "older_ma": 85.7,
+      "younger_ma": 83.6,
+      "older_boundary": {
+        "ma": 85.7,
+        "source_decimal": "85.7",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 83.6,
+        "source_decimal": "83.6",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#D9EF74",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Campanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Campanian",
+      "name": "Campanian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperCretaceous",
+      "older_ma": 83.6,
+      "younger_ma": 72.2,
+      "older_boundary": {
+        "ma": 83.6,
+        "source_decimal": "83.6",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 72.2,
+        "source_decimal": "72.2",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "color": "#E6F47F",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Maastrichtian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Maastrichtian",
+      "name": "Maastrichtian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "UpperCretaceous",
+      "older_ma": 72.2,
+      "younger_ma": 66.0,
+      "older_boundary": {
+        "ma": 72.2,
+        "source_decimal": "72.2",
+        "margin_of_error_ma": 0.2,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 66.0,
+        "source_decimal": "66.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F2FA8C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Danian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Danian",
+      "name": "Danian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Paleocene",
+      "older_ma": 66.0,
+      "younger_ma": 61.66,
+      "older_boundary": {
+        "ma": 66.0,
+        "source_decimal": "66.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 61.66,
+        "source_decimal": "61.66",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDB462",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Paleocene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Paleocene",
+      "name": "Paleocene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Paleogene",
+      "older_ma": 66.0,
+      "younger_ma": 56.0,
+      "older_boundary": {
+        "ma": 66.0,
+        "source_decimal": "66.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 56.0,
+        "source_decimal": "56.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDA75F",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Cenozoic",
+      "source_id": "https://data.stratigraphy.org/data/gts/Cenozoic",
+      "name": "Cenozoic",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Era",
+      "parent": "Phanerozoic",
+      "older_ma": 66.0,
+      "younger_ma": 0.0,
+      "older_boundary": {
+        "ma": 66.0,
+        "source_decimal": "66.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0,
+        "source_decimal": "0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F2F91D",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Era"
+      ]
+    },
+    {
+      "id": "Paleogene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Paleogene",
+      "name": "Paleogene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Cenozoic",
+      "older_ma": 66.0,
+      "younger_ma": 23.04,
+      "older_boundary": {
+        "ma": 66.0,
+        "source_decimal": "66.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 23.04,
+        "source_decimal": "23.04",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FD9A52",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Selandian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Selandian",
+      "name": "Selandian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Paleocene",
+      "older_ma": 61.66,
+      "younger_ma": 59.24,
+      "older_boundary": {
+        "ma": 61.66,
+        "source_decimal": "61.66",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 59.24,
+        "source_decimal": "59.24",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FEBF65",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Thanetian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Thanetian",
+      "name": "Thanetian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Paleocene",
+      "older_ma": 59.24,
+      "younger_ma": 56.0,
+      "older_boundary": {
+        "ma": 59.24,
+        "source_decimal": "59.24",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 56.0,
+        "source_decimal": "56.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDBF6F",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Ypresian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Ypresian",
+      "name": "Ypresian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Eocene",
+      "older_ma": 56.0,
+      "younger_ma": 48.07,
+      "older_boundary": {
+        "ma": 56.0,
+        "source_decimal": "56.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 48.07,
+        "source_decimal": "48.07",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FCA773",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Eocene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Eocene",
+      "name": "Eocene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Paleogene",
+      "older_ma": 56.0,
+      "younger_ma": 33.9,
+      "older_boundary": {
+        "ma": 56.0,
+        "source_decimal": "56.00",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 33.9,
+        "source_decimal": "33.9",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDB46C",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Lutetian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Lutetian",
+      "name": "Lutetian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Eocene",
+      "older_ma": 48.07,
+      "younger_ma": 41.03,
+      "older_boundary": {
+        "ma": 48.07,
+        "source_decimal": "48.07",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 41.03,
+        "source_decimal": "41.03",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDB482",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Bartonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Bartonian",
+      "name": "Bartonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Eocene",
+      "older_ma": 41.03,
+      "younger_ma": 37.71,
+      "older_boundary": {
+        "ma": 41.03,
+        "source_decimal": "41.03",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 37.71,
+        "source_decimal": "37.71",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDC091",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Priabonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Priabonian",
+      "name": "Priabonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Eocene",
+      "older_ma": 37.71,
+      "younger_ma": 33.9,
+      "older_boundary": {
+        "ma": 37.71,
+        "source_decimal": "37.71",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 33.9,
+        "source_decimal": "33.9",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDCDA1",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Rupelian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Rupelian",
+      "name": "Rupelian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Oligocene",
+      "older_ma": 33.9,
+      "younger_ma": 27.3,
+      "older_boundary": {
+        "ma": 33.9,
+        "source_decimal": "33.9",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 27.3,
+        "source_decimal": "27.30",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FED99A",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Oligocene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Oligocene",
+      "name": "Oligocene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Paleogene",
+      "older_ma": 33.9,
+      "younger_ma": 23.04,
+      "older_boundary": {
+        "ma": 33.9,
+        "source_decimal": "33.9",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 23.04,
+        "source_decimal": "23.04",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FEC07A",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Chattian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Chattian",
+      "name": "Chattian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Oligocene",
+      "older_ma": 27.3,
+      "younger_ma": 23.04,
+      "older_boundary": {
+        "ma": 27.3,
+        "source_decimal": "27.30",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 23.04,
+        "source_decimal": "23.04",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FEE6AA",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Miocene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Miocene",
+      "name": "Miocene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Neogene",
+      "older_ma": 23.04,
+      "younger_ma": 5.333,
+      "older_boundary": {
+        "ma": 23.04,
+        "source_decimal": "23.04",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 5.333,
+        "source_decimal": "5.333",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFF00",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Neogene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Neogene",
+      "name": "Neogene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Cenozoic",
+      "older_ma": 23.04,
+      "younger_ma": 2.58,
+      "older_boundary": {
+        "ma": 23.04,
+        "source_decimal": "23.04",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 2.58,
+        "source_decimal": "2.58",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFE619",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Aquitanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Aquitanian",
+      "name": "Aquitanian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miocene",
+      "older_ma": 23.04,
+      "younger_ma": 20.45,
+      "older_boundary": {
+        "ma": 23.04,
+        "source_decimal": "23.03",
+        "margin_of_error_ma": null,
+        "note": null,
+        "rdf_ma": 23.03,
+        "chart_decimal": "23.04",
+        "correction_source": "official PDF page1"
+      },
+      "younger_boundary": {
+        "ma": 20.45,
+        "source_decimal": "20.45",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFF33",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ],
+      "rdf_older_ma": 23.03,
+      "corrections": [
+        {
+          "unit_id": "Aquitanian",
+          "field": "older_ma",
+          "rdf_value": 23.03,
+          "chart_value": 23.04,
+          "source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+          "source_page": 1,
+          "proof_image": "docs/source-data/ics-2026-06-cenozoic-detail.png",
+          "reason": "PDF shared Neogene/Miocene/Aquitanian base and Oligocene top are23.04 Ma."
+        }
+      ]
+    },
+    {
+      "id": "Burdigalian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Burdigalian",
+      "name": "Burdigalian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miocene",
+      "older_ma": 20.45,
+      "younger_ma": 15.98,
+      "older_boundary": {
+        "ma": 20.45,
+        "source_decimal": "20.45",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 15.98,
+        "source_decimal": "15.98",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFF41",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Langhian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Langhian",
+      "name": "Langhian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miocene",
+      "older_ma": 15.98,
+      "younger_ma": 13.82,
+      "older_boundary": {
+        "ma": 15.98,
+        "source_decimal": "15.98",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 13.82,
+        "source_decimal": "13.82",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFF4D",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Serravallian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Serravallian",
+      "name": "Serravallian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miocene",
+      "older_ma": 13.82,
+      "younger_ma": 11.63,
+      "older_boundary": {
+        "ma": 13.82,
+        "source_decimal": "13.82",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 11.63,
+        "source_decimal": "11.63",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFF59",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Tortonian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Tortonian",
+      "name": "Tortonian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miocene",
+      "older_ma": 11.63,
+      "younger_ma": 7.246,
+      "older_boundary": {
+        "ma": 11.63,
+        "source_decimal": "11.63",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 7.246,
+        "source_decimal": "7.246",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFF66",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Messinian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Messinian",
+      "name": "Messinian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Miocene",
+      "older_ma": 7.246,
+      "younger_ma": 5.333,
+      "older_boundary": {
+        "ma": 7.246,
+        "source_decimal": "7.246",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 5.333,
+        "source_decimal": "5.333",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFF73",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Zanclean",
+      "source_id": "https://data.stratigraphy.org/data/gts/Zanclean",
+      "name": "Zanclean",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Pliocene",
+      "older_ma": 5.333,
+      "younger_ma": 3.6,
+      "older_boundary": {
+        "ma": 5.333,
+        "source_decimal": "5.333",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 3.6,
+        "source_decimal": "3.600",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFFB3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Pliocene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Pliocene",
+      "name": "Pliocene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Neogene",
+      "older_ma": 5.333,
+      "younger_ma": 2.58,
+      "older_boundary": {
+        "ma": 5.333,
+        "source_decimal": "5.333",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 2.58,
+        "source_decimal": "2.58",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFF99",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Piacenzian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Piacenzian",
+      "name": "Piacenzian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Pliocene",
+      "older_ma": 3.6,
+      "younger_ma": 2.58,
+      "older_boundary": {
+        "ma": 3.6,
+        "source_decimal": "3.600",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 2.58,
+        "source_decimal": "2.58",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFFFBF",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Gelasian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Gelasian",
+      "name": "Gelasian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Pleistocene",
+      "older_ma": 2.58,
+      "younger_ma": 1.8,
+      "older_boundary": {
+        "ma": 2.58,
+        "source_decimal": "2.58",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 1.8,
+        "source_decimal": "1.80",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFEDB3",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Pleistocene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Pleistocene",
+      "name": "Pleistocene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Quaternary",
+      "older_ma": 2.58,
+      "younger_ma": 0.0117,
+      "older_boundary": {
+        "ma": 2.58,
+        "source_decimal": "2.58",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0117,
+        "source_decimal": "0.0117",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFEFAF",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Quaternary",
+      "source_id": "https://data.stratigraphy.org/data/gts/Quaternary",
+      "name": "Quaternary",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Period",
+      "parent": "Cenozoic",
+      "older_ma": 2.58,
+      "younger_ma": 0.0,
+      "older_boundary": {
+        "ma": 2.58,
+        "source_decimal": "2.58",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0,
+        "source_decimal": "0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#F9F97F",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Period"
+      ]
+    },
+    {
+      "id": "Calabrian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Calabrian",
+      "name": "Calabrian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Pleistocene",
+      "older_ma": 1.8,
+      "younger_ma": 0.774,
+      "older_boundary": {
+        "ma": 1.8,
+        "source_decimal": "1.80",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.774,
+        "source_decimal": "0.774",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFF2BA",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Chibanian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Chibanian",
+      "name": "Chibanian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Pleistocene",
+      "older_ma": 0.774,
+      "younger_ma": 0.129,
+      "older_boundary": {
+        "ma": 0.774,
+        "source_decimal": "0.774",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.129,
+        "source_decimal": "0.129",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFF2C7",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "UpperPleistocene",
+      "source_id": "https://data.stratigraphy.org/data/gts/UpperPleistocene",
+      "name": "Upper Pleistocene",
+      "name_origin": "Readable source identifier (English skos:prefLabel absent)",
+      "rank": "Age",
+      "parent": "Pleistocene",
+      "older_ma": 0.129,
+      "younger_ma": 0.0117,
+      "older_boundary": {
+        "ma": 0.129,
+        "source_decimal": "0.129",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0117,
+        "source_decimal": "0.0117",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FFF2D3",
+      "ratified_gssp": null,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Greenlandian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Greenlandian",
+      "name": "Greenlandian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Holocene",
+      "older_ma": 0.0117,
+      "younger_ma": 0.0082,
+      "older_boundary": {
+        "ma": 0.0117,
+        "source_decimal": "0.0117",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0082,
+        "source_decimal": "0.0082",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FEECDB",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Holocene",
+      "source_id": "https://data.stratigraphy.org/data/gts/Holocene",
+      "name": "Holocene",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Epoch",
+      "parent": "Quaternary",
+      "older_ma": 0.0117,
+      "younger_ma": 0.0,
+      "older_boundary": {
+        "ma": 0.0117,
+        "source_decimal": "0.0117",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0,
+        "source_decimal": "0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FEEBD2",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Epoch"
+      ]
+    },
+    {
+      "id": "Northgrippian",
+      "source_id": "https://data.stratigraphy.org/data/gts/Northgrippian",
+      "name": "Northgrippian",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Holocene",
+      "older_ma": 0.0082,
+      "younger_ma": 0.0042,
+      "older_boundary": {
+        "ma": 0.0082,
+        "source_decimal": "0.0082",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0042,
+        "source_decimal": "0.0042",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDECE4",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    },
+    {
+      "id": "Meghalayan",
+      "source_id": "https://data.stratigraphy.org/data/gts/Meghalayan",
+      "name": "Meghalayan",
+      "name_origin": "English skos:prefLabel",
+      "rank": "Age",
+      "parent": "Holocene",
+      "older_ma": 0.0042,
+      "younger_ma": 0.0,
+      "older_boundary": {
+        "ma": 0.0042,
+        "source_decimal": "0.0042",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "younger_boundary": {
+        "ma": 0.0,
+        "source_decimal": "0",
+        "margin_of_error_ma": null,
+        "note": null
+      },
+      "color": "#FDEDEC",
+      "ratified_gssp": true,
+      "ratified_gssa": null,
+      "ranks": [
+        "Age"
+      ]
+    }
+  ],
+  "chart_pdf_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+  "chart_pdf_sha256": "1909daecaf1fc15a8f9d432ea3af4f65f4dc9126a4a6a6b09a030aa71bb67ddc",
+  "chart_supported_corrections": [
+    {
+      "unit_id": "Aquitanian",
+      "field": "older_ma",
+      "rdf_value": 23.03,
+      "chart_value": 23.04,
+      "source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "source_page": 1,
+      "proof_image": "docs/source-data/ics-2026-06-cenozoic-detail.png",
+      "reason": "PDF shared Neogene/Miocene/Aquitanian base and Oligocene top are23.04 Ma."
+    },
+    {
+      "unit_id": "Ludlow",
+      "field": "younger_ma",
+      "rdf_value": 419.62,
+      "chart_value": 422.7,
+      "rdf_margin_of_error_ma": 1.36,
+      "chart_margin_of_error_ma": 1.6,
+      "source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "source_page": 1,
+      "proof_image": "docs/source-data/ics-2026-06-silurian-detail.png",
+      "reason": "PDF shared Ludlow/Ludfordian top and Pridoli base are422.7 +/-1.6 Ma."
+    }
+  ],
+  "validated_subepoch_compositions": [
+    {
+      "id": "paleograph:subepoch:early-miocene",
+      "name": "Early Miocene",
+      "rank": "Subepoch",
+      "parent": "Miocene",
+      "older_ma": 23.04,
+      "younger_ma": 15.98,
+      "children": [
+        "Aquitanian",
+        "Burdigalian"
+      ],
+      "aliases": [
+        "Lower Miocene"
+      ],
+      "formal_status": "formal",
+      "composition_source_url": "https://www.usgs.gov/publications/ratification-neogene-subseries-formal-units-international-chronostratigraphy",
+      "boundary_source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "boundary_source_page": 1,
+      "source_note": "Explicit validated composition; not a standalone node or ID in the pinned chart RDF."
+    },
+    {
+      "id": "paleograph:subepoch:middle-miocene",
+      "name": "Middle Miocene",
+      "rank": "Subepoch",
+      "parent": "Miocene",
+      "older_ma": 15.98,
+      "younger_ma": 11.63,
+      "children": [
+        "Langhian",
+        "Serravallian"
+      ],
+      "aliases": [],
+      "formal_status": "formal",
+      "composition_source_url": "https://www.usgs.gov/publications/ratification-neogene-subseries-formal-units-international-chronostratigraphy",
+      "boundary_source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "boundary_source_page": 1,
+      "source_note": "Explicit validated composition; not a standalone node or ID in the pinned chart RDF."
+    },
+    {
+      "id": "paleograph:subepoch:late-miocene",
+      "name": "Late Miocene",
+      "rank": "Subepoch",
+      "parent": "Miocene",
+      "older_ma": 11.63,
+      "younger_ma": 5.333,
+      "children": [
+        "Tortonian",
+        "Messinian"
+      ],
+      "aliases": [
+        "Upper Miocene"
+      ],
+      "formal_status": "formal",
+      "composition_source_url": "https://www.usgs.gov/publications/ratification-neogene-subseries-formal-units-international-chronostratigraphy",
+      "boundary_source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "boundary_source_page": 1,
+      "source_note": "Explicit validated composition; not a standalone node or ID in the pinned chart RDF."
+    },
+    {
+      "id": "paleograph:subepoch:early-pliocene",
+      "name": "Early Pliocene",
+      "rank": "Subepoch",
+      "parent": "Pliocene",
+      "older_ma": 5.333,
+      "younger_ma": 3.6,
+      "children": [
+        "Zanclean"
+      ],
+      "aliases": [
+        "Lower Pliocene"
+      ],
+      "formal_status": "formal",
+      "composition_source_url": "https://www.usgs.gov/publications/ratification-neogene-subseries-formal-units-international-chronostratigraphy",
+      "boundary_source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "boundary_source_page": 1,
+      "source_note": "Explicit validated composition; not a standalone node or ID in the pinned chart RDF."
+    },
+    {
+      "id": "paleograph:subepoch:late-pliocene",
+      "name": "Late Pliocene",
+      "rank": "Subepoch",
+      "parent": "Pliocene",
+      "older_ma": 3.6,
+      "younger_ma": 2.58,
+      "children": [
+        "Piacenzian"
+      ],
+      "aliases": [
+        "Upper Pliocene"
+      ],
+      "formal_status": "formal",
+      "composition_source_url": "https://www.usgs.gov/publications/ratification-neogene-subseries-formal-units-international-chronostratigraphy",
+      "boundary_source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "boundary_source_page": 1,
+      "source_note": "Explicit validated composition; not a standalone node or ID in the pinned chart RDF."
+    },
+    {
+      "id": "paleograph:subepoch:early-pleistocene",
+      "name": "Early Pleistocene",
+      "rank": "Subepoch",
+      "parent": "Pleistocene",
+      "older_ma": 2.58,
+      "younger_ma": 0.774,
+      "children": [
+        "Gelasian",
+        "Calabrian"
+      ],
+      "aliases": [
+        "Lower Pleistocene"
+      ],
+      "formal_status": "formal",
+      "composition_source_url": "https://quaternary.stratigraphy.org/major-divisions",
+      "boundary_source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "boundary_source_page": 1,
+      "source_note": "Explicit validated composition; not a standalone node or ID in the pinned chart RDF."
+    },
+    {
+      "id": "paleograph:subepoch:middle-pleistocene",
+      "name": "Middle Pleistocene",
+      "rank": "Subepoch",
+      "parent": "Pleistocene",
+      "older_ma": 0.774,
+      "younger_ma": 0.129,
+      "children": [
+        "Chibanian"
+      ],
+      "aliases": [],
+      "formal_status": "formal",
+      "composition_source_url": "https://quaternary.stratigraphy.org/major-divisions",
+      "boundary_source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "boundary_source_page": 1,
+      "source_note": "Explicit validated composition; not a standalone node or ID in the pinned chart RDF."
+    },
+    {
+      "id": "paleograph:subepoch:late-pleistocene",
+      "name": "Late Pleistocene",
+      "rank": "Subepoch",
+      "parent": "Pleistocene",
+      "older_ma": 0.129,
+      "younger_ma": 0.0117,
+      "children": [
+        "UpperPleistocene"
+      ],
+      "aliases": [
+        "Upper Pleistocene"
+      ],
+      "formal_status": "name_ratified_boundary_gssp_pending",
+      "composition_source_url": "https://quaternary.stratigraphy.org/major-divisions",
+      "boundary_source_url": "https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf",
+      "boundary_source_page": 1,
+      "source_note": "Explicit validated composition; not a standalone node or ID in the pinned chart RDF."
+    }
+  ]
+}

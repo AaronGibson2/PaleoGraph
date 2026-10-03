@@ -1,20 +1,22 @@
 "use client";
 
 import { useEffect, useReducer, useState } from "react";
-import { api, occurrenceQuery } from "../../lib/api/client";
+import { api } from "../../lib/api/client";
 import type { AgeRange, DatasetStatus, OccurrenceDetail, TimeConfiguration, Viewport } from "../../lib/api/types";
+import { contextQuery, discovery, type ExplorationContext } from "../../lib/api/discovery";
+import type { MapResponse } from "../../lib/api/types";
 import { initialWindow, occurrenceWindow } from "./occurrenceWindow";
 
 type LoadState<T> = { key: string; data?: T; error?: string };
 const message = (error: unknown) => error instanceof Error ? error.message : "Data could not be loaded.";
 
-export function useOccurrences(viewport: Viewport, age: AgeRange, retry: number) {
+export function useOccurrences(viewport: Viewport, age: AgeRange & ExplorationContext, retry: number) {
   const { west, south, east, north } = viewport;
-  const { older_ma, younger_ma, data_mode } = age;
+  const contextKey = JSON.stringify({ older_ma: age.older_ma, younger_ma: age.younger_ma, taxon_id: age.taxon_id, locality_id: age.locality_id, collection_id: age.collection_id, institution_id: age.institution_id, term_id: age.term_id, at_lon: age.at_lon, at_lat: age.at_lat });
   const [state, dispatch] = useReducer(occurrenceWindow, { viewport, age, retry }, initialWindow);
   useEffect(() => {
-    dispatch({ type: "intent", intent: { viewport: { west, south, east, north }, age: { older_ma, younger_ma, data_mode }, retry } });
-  }, [west, south, east, north, older_ma, younger_ma, data_mode, retry]);
+    dispatch({ type: "intent", intent: { viewport: { west, south, east, north }, age: JSON.parse(contextKey) as AgeRange & ExplorationContext, retry } });
+  }, [west, south, east, north, contextKey, retry]);
   useEffect(() => {
     const request = state.request;
     if (!request) return;
@@ -22,12 +24,12 @@ export function useOccurrences(viewport: Viewport, age: AgeRange, retry: number)
     const timer = setTimeout(async () => {
       try {
         let bounds = request.bounds;
-        let data = await api.occurrences(occurrenceQuery(bounds, request.age), controller.signal);
+        let data = await loadPlaces(bounds, request.age, controller.signal);
         // A capped buffer is not complete coverage. Re-query the actual view so
         // offscreen records cannot crowd visible records out of the result cap.
         if (data.truncated && !controller.signal.aborted) {
           bounds = request.viewport;
-          data = await api.occurrences(occurrenceQuery(bounds, request.age), controller.signal);
+          data = await loadPlaces(bounds, request.age, controller.signal);
         }
         if (!controller.signal.aborted) dispatch({ type: "success", id: request.id, bounds, data });
       } catch (error) {
@@ -78,4 +80,16 @@ export function useTimeConfiguration(retry: number) {
     return () => controller.abort();
   }, [retry]);
   return result;
+}
+
+async function loadPlaces(bounds: Viewport, context: AgeRange & ExplorationContext, signal: AbortSignal): Promise<MapResponse> {
+  const params = contextQuery(context, bounds);
+  let page = await discovery.places(params.toString(), signal);
+  const places = [...page.items];
+  while (page.next_cursor && !signal.aborted) {
+    params.set("cursor", page.next_cursor);
+    page = await discovery.places(params.toString(), signal);
+    places.push(...page.items);
+  }
+  return { items: places.map(place => ({ ...place, scientific_name: `${place.record_count.toLocaleString("en-US")} catalog assertions`, locality_name: `${place.locality_count} published localities`, older_ma: null, younger_ma: null, is_synthetic: false })), returned: places.length, truncated: false, limit: places.length };
 }

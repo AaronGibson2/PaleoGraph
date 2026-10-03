@@ -1,89 +1,56 @@
 import { expect, test } from "@playwright/test";
+import { apiBase, openCatalog, placeEndpoint, stubBasemap } from "./helpers";
+test.beforeEach(async ({page}) => stubBasemap(page));
 
-test.beforeEach(async ({ page }) => {
-  await page.route("**/styles/paleograph.json", route => route.fulfill({ json: { version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#94b5af" } }] } }));
-  // External basemap availability must not determine application test results.
-  // The real MapLibre worker, WebGL layers, API and database still run.
-  await page.route("https://tiles.openfreemap.org/**", route => route.fulfill({
-    json: { version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#dfe7e3" } }] },
-  }));
+test("database material, inspection, geological filtering and URL restoration", async ({page}) => {
+ const errors: string[]=[]; page.on("pageerror",error=>errors.push(error.message));
+ await page.goto("/explore"); await openCatalog(page);
+ await expect(page.locator(".maplibregl-canvas")).toBeVisible();
+ expect(await page.locator(".map-canvas").evaluate(e=>e.getBoundingClientRect().height)).toBeGreaterThan(400);
+ await page.locator(".catalog-entry").first().click();
+ await expect(page.getByRole("heading",{name:"Sources & evidence"})).toBeVisible();
+ await expect(page.locator(".interpretation")).toContainText("not a measured specimen age");
+ const selected=new URL(page.url()).searchParams.get("selected");
+ await page.locator(".time-window").filter({hasText:"Quaternary"}).click();
+ expect(new URL(page.url()).searchParams.get("older_ma")).toBe("2.58");
+ await page.reload();
+ await expect(page.locator(".inspector")).toBeVisible();
+ await expect(page.locator(".time-window[aria-pressed=true]")).toContainText("Quaternary");
+ expect(new URL(page.url()).searchParams.get("selected")).toBe(selected);
+ expect(errors).toEqual([]);
 });
 
-test("database occurrences, inspection, time filtering, and URL restoration", async ({ page }) => {
-  const errors: string[] = [];
-  page.on("pageerror", error => errors.push(error.message));
-  await page.goto("/explore?data_mode=demo");
-  const results = page.locator(".occurrence-list button");
-  await expect(results.first()).toBeVisible();
-  const initialCount = await results.count();
-  expect(initialCount).toBeGreaterThan(5);
-  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
-  const mapHeight = await page.locator(".map-canvas").evaluate(element => element.getBoundingClientRect().height);
-  expect(mapHeight).toBeGreaterThan(400);
-  await expect(page.getByText("Synthetic demo data", { exact: false })).toBeVisible();
-  await expect(page.locator(".map-notice")).toHaveCount(0);
-  await results.first().click();
-  await expect(page.getByRole("heading", { name: "Sources & evidence" })).toBeVisible();
-  await expect(page.locator(".demo-note")).toContainText("not evidence of a real fossil");
-  const selected = new URL(page.url()).searchParams.get("selected");
-  expect(selected).toBeTruthy();
-  await page.getByRole("button", { name: "2–0.1 Ma", exact: true }).click();
-  await expect(page.locator(".result-count")).not.toContainText("Updating");
-  await expect.poll(() => results.count()).toBeLessThan(initialCount);
-  expect(new URL(page.url()).searchParams.get("older_ma")).toBe("2");
-  await page.reload();
-  await expect(page.getByRole("button", { name: "2–0.1 Ma", exact: true })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator(".inspector")).toBeVisible();
-  await expect(page.locator(".inspector .demo-note")).toBeVisible();
-  expect(new URL(page.url()).searchParams.get("selected")).toBe(selected);
-  expect(errors).toEqual([]);
+test("empty view and recoverable API failure", async ({page}) => {
+ await page.goto("/explore?lat=0&lng=0&zoom=7");
+ await page.getByRole("button",{name:"Museum catalog",exact:false}).first().click();
+ await expect(page.getByText("No material matches this view and context.",{exact:false})).toBeVisible();
+ await page.route(placeEndpoint,route=>route.fulfill({status:503,json:{error:{message:"Temporary outage"}}}));
+ await page.getByRole("button",{name:"Return to Florida"}).click();
+ await expect(page.getByRole("button",{name:"Retry data"})).toBeVisible();
+ await page.unroute(placeEndpoint); await page.getByRole("button",{name:"Retry data"}).click();
+ await expect(page.getByRole("button",{name:"Retry data"})).toHaveCount(0);
+ await expect(page.locator(".catalog-entry").first()).toBeVisible();
 });
 
-test("empty view and recoverable API failure", async ({ page }) => {
-  await page.goto("/explore?data_mode=demo&lat=0&lng=0&zoom=7");
-  await expect(page.getByText("No occurrences in this view and age range.", { exact: false })).toBeVisible();
-  await page.route("**/api/v1/map/occurrences?**", route => route.fulfill({ status: 503, json: { error: { code: "DATABASE_UNAVAILABLE", message: "Occurrence data is temporarily unavailable." } } }));
-  await page.getByRole("button", { name: "Return to Florida" }).click();
-  await expect(page.getByRole("button", { name: "Retry data" })).toBeVisible();
-  await expect(page.locator(".occurrence-list button")).toHaveCount(0);
-  await page.unroute("**/api/v1/map/occurrences?**");
-  await page.getByRole("button", { name: "Retry data" }).click();
-  await expect(page.locator(".occurrence-list button").first()).toBeVisible();
+test("mobile keyboard inspection and focus restoration", async ({page}) => {
+ await page.setViewportSize({width:390,height:844}); await page.goto("/explore"); await openCatalog(page);
+ const first=page.locator(".catalog-entry").first(); await first.focus(); await page.keyboard.press("Enter");
+ await expect(page.locator("#inspection-heading")).toBeFocused(); await page.keyboard.press("Escape");
+ await expect(page.locator(".inspector")).toHaveCount(0); await expect(first).toBeFocused();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
-test("mobile keyboard inspection and focus restoration", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/explore?data_mode=demo");
-  const first = page.locator(".occurrence-list button").first();
-  await expect(first).toBeVisible();
-  await first.focus();
-  await page.keyboard.press("Enter");
-  await expect(page.locator("#inspection-heading")).toBeFocused();
-  await page.keyboard.press("Escape");
-  await expect(page.locator(".inspector")).toHaveCount(0);
-  await expect(first).toBeFocused();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-});
-
-test("map markers expose co-located assertions and browser history restores selection", async ({ page, request }) => {
-  const response = await request.get("http://localhost:8000/api/v1/map/occurrences?data_mode=demo&west=-88&south=24&east=-79&north=32");
-  expect(response.ok()).toBe(true);
-  const { items } = await response.json();
-  const point = items[0];
-  await page.goto(`/explore?data_mode=demo&lat=${point.latitude}&lng=${point.longitude}&zoom=9`);
-  await expect(page.locator(".occurrence-list button").first()).toBeVisible();
-  const canvas = page.locator(".maplibregl-canvas");
-  // The API point is at the map center; retry while the real worker paints GeoJSON.
-  await expect(async () => {
-    await canvas.click();
-    await expect(page.locator(".map-choice").first()).toBeVisible({ timeout: 500 });
-  }).toPass();
-  await page.locator(".map-choice").first().click();
-  await expect(page.getByRole("heading", { name: "Sources & evidence" })).toBeVisible();
-  const selected = new URL(page.url()).searchParams.get("selected");
-  await page.goBack();
-  await expect(page.locator(".inspector")).toHaveCount(0);
-  await page.goForward();
-  await expect(page.locator(".inspector .demo-note")).toBeVisible();
-  expect(new URL(page.url()).searchParams.get("selected")).toBe(selected);
+test("rendered dense marker opens every co-located record and history restores context", async ({page,request}) => {
+ const response=await request.get(`${apiBase}/map/places?at_lon=-82.19&at_lat=29.36`);
+ expect(response.ok()).toBe(true); expect((await response.json()).items[0].record_count).toBe(73);
+ await page.goto("/explore?lat=29.36&lng=-82.19&zoom=12");
+ const canvas=page.locator(".maplibregl-canvas");
+ await expect(async()=>{await canvas.click();await expect(page.locator(".catalog-panel")).toBeVisible({timeout:500});}).toPass();
+ await expect(page.locator(".result-count")).toHaveText("73 assertions");
+ expect(new URL(page.url()).searchParams.get("at_lon")).toBe("-82.19");
+ await page.locator(".catalog-entry").first().click(); await expect(page.locator(".provenance")).toBeVisible();
+ const selected=new URL(page.url()).searchParams.get("selected");
+ await page.goBack(); await expect(page.locator(".inspector")).toHaveCount(0);
+ await page.goForward(); await expect(page.locator(".provenance")).toBeVisible();
+ expect(new URL(page.url()).searchParams.get("selected")).toBe(selected);
 });

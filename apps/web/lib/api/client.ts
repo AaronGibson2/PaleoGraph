@@ -11,7 +11,7 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
+export async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(`${baseUrl}${path}`, { signal, headers: { Accept: "application/json" }, cache: "no-store" });
   if (!response.ok) {
     const body = await response.json().catch(() => null);
@@ -28,7 +28,6 @@ export function occurrenceQuery(viewport: Viewport, age: AgeRange): string {
     params.set("younger_ma", String(age.younger_ma));
   }
   params.set("limit", "200");
-  params.set("data_mode", age.data_mode ?? "museum");
   return params.toString();
 }
 

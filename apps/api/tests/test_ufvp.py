@@ -6,6 +6,7 @@ from pathlib import Path
 from uuid import UUID
 
 import pytest
+from fixtures.synthetic import seed_demo
 from sqlalchemy import event, func, select
 from sqlalchemy.orm import Session
 
@@ -21,7 +22,6 @@ from app.models import (
     Specimen,
     taxon_evidence,
 )
-from app.seed_demo import seed_demo
 
 FIXTURE = Path(__file__).parent / "fixtures/ufvp"
 
@@ -196,7 +196,7 @@ def test_real_api_semantics_and_snapshot_provenance(db_session: Session, tmp_pat
     assert (
         map_occurrences(db_session, ExploreQuery(**bounds, older_ma=5, younger_ma=2)).returned == 0
     )
-    assert map_occurrences(db_session, ExploreQuery(**bounds, data_mode="demo")).returned == 36
+    assert map_occurrences(db_session, ExploreQuery(**bounds)).returned == 8
     statements: list[str] = []
 
     def record_query(conn, cursor, statement, parameters, context, executemany) -> None:

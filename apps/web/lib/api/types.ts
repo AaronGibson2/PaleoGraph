@@ -1,4 +1,4 @@
-export type AgeRange = { older_ma: number | null; younger_ma: number | null; data_mode?: "museum" | "demo" };
+export type AgeRange = { older_ma: number | null; younger_ma: number | null };
 export type Viewport = { west: number; south: number; east: number; north: number };
 
 export type MapOccurrence = AgeRange & {
@@ -11,6 +11,9 @@ export type MapOccurrence = AgeRange & {
   is_synthetic: boolean;
   catalog_label?: string | null;
   source_age_label?: string | null;
+  record_count?: number;
+  locality_count?: number;
+  interpreted_count?: number;
 };
 
 export type MapResponse = {
@@ -79,7 +82,18 @@ export type DatasetStatus = {
 
 export type TimeConfiguration = {
   version: string;
-  kind: "demo_windows";
+  kind: "international_chronostratigraphic_chart";
   max_ma: number;
-  windows: { label: string; older_ma: number; younger_ma: number }[];
+  attribution: string;
+  source_url: string;
+  license_url: string;
+  units: GeologicalInterval[];
+};
+
+export type GeologicalInterval = {
+  id: string; name: string; rank: string; parent: string | null;
+  older_ma: number; younger_ma: number; color: string;
+  formal_status?: string; ratified_gssp?: boolean | null;
+  older_boundary?: { source_decimal: string; margin_of_error_ma: number | null; note: string | null };
+  younger_boundary?: { source_decimal: string; margin_of_error_ma: number | null; note: string | null };
 };

@@ -1,10 +1,11 @@
 import type { AgeRange, MapResponse, Viewport } from "../../lib/api/types.ts";
+import { contextKeys, type ExplorationContext } from "../../lib/api/discovery.ts";
 import { normalizeViewport } from "./state.ts";
 
 const span = (box: Viewport) => box.east >= box.west ? box.east - box.west : 360 + box.east - box.west;
 const offset = (from: number, to: number) => ((to - from) % 360 + 360) % 360;
 export const sameViewport = (a: Viewport, b: Viewport) => a.west === b.west && a.east === b.east && a.south === b.south && a.north === b.north;
-const sameAge = (a: AgeRange, b: AgeRange) => a.older_ma === b.older_ma && a.younger_ma === b.younger_ma && (a.data_mode ?? "museum") === (b.data_mode ?? "museum");
+const sameAge = (a: AgeRange & ExplorationContext, b: AgeRange & ExplorationContext) => a.older_ma === b.older_ma && a.younger_ma === b.younger_ma && contextKeys.every(key => (a[key] ?? null) === (b[key] ?? null));
 
 export function bufferedViewport(view: Viewport): Viewport {
   // 25% per edge: at most 1.5× the width/height, capped at the world bounds.
@@ -28,9 +29,9 @@ function visible(data: MapResponse, view: Viewport): MapResponse {
   return { ...data, items, returned: items.length };
 }
 
-export type Intent = { viewport: Viewport; age: AgeRange; retry: number };
+export type Intent = { viewport: Viewport; age: AgeRange & ExplorationContext; retry: number };
 export type WindowRequest = Intent & { id: number; bounds: Viewport };
-type Loaded = { bounds: Viewport; data: MapResponse; age: AgeRange; retry: number };
+type Loaded = { bounds: Viewport; data: MapResponse; age: AgeRange & ExplorationContext; retry: number };
 export type WindowState = {
   intent: Intent; serial: number; request: WindowRequest | null;
   loaded?: Loaded; display?: MapResponse; error?: string;
@@ -45,7 +46,6 @@ function reusable(loaded: Loaded, intent: Intent, margin: number): boolean {
 }
 
 function plan(state: WindowState, intent: Intent, margin = 0.05): WindowState {
-  if ((state.intent.age.data_mode ?? "museum") !== (intent.age.data_mode ?? "museum")) state = { intent, serial: state.serial, request: null };
   if (state.loaded && reusable(state.loaded, intent, margin)) {
     return { ...state, intent, request: null, error: undefined, display: visible(state.loaded.data, intent.viewport) };
   }

@@ -1,6 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
-// Explicitly targets already-running local services and a seeded development DB.
+// scripts/test_browser.py owns isolated production servers and disposable PostGIS.
+// Manual runs require explicit E2E URLs and the dedicated browser fixture database.
 export default defineConfig({
   testDir: "tests/e2e",
   fullyParallel: false,

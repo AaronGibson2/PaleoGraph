@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Map, NavigationControl, Popup, ScaleControl, setWorkerUrl } from "maplibre-gl";
+import { Map, NavigationControl, Popup, ScaleControl, setWorkerUrl, type GeoJSONSource } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { MapOccurrence, Viewport } from "../../lib/api/types";
 import { normalizeViewport, type ExploreState } from "../explore/state";
@@ -83,10 +83,18 @@ export default function ExploreMap(props: Props) {
         }
         popup.setLngLat(event.lngLat).setDOMContent(choices).addTo(map);
       });
+      map.on("click", "place-clusters", event => {
+        const point = event.features?.[0];
+        if (!point || point.geometry.type !== "Point") return;
+        const center = point.geometry.coordinates as [number, number];
+        map.getSource<GeoJSONSource>("occurrences")?.getClusterExpansionZoom(Number(point.properties.cluster_id)).then(zoom => {
+          if (!cancelled) map.jumpTo({ center, zoom });
+        }).catch(() => { /* A new dataset may have invalidated this transient cluster. */ });
+      });
       map.on("mousemove", "occurrence-points", event => {
         map.getCanvas().style.cursor = "pointer";
         const count = event.features?.length ?? 0;
-        const label = count > 1 ? `${count} loaded assertions at this place · click to choose` : `${event.features?.[0]?.properties.name ?? "Occurrence"} · click to inspect`;
+        const label = count > 1 ? `${count} published positions · click to choose` : `${event.features?.[0]?.properties.record_count ?? 1} catalog assertions / ${event.features?.[0]?.properties.locality_count ?? 1} localities · click to browse all material`;
         hover.setLngLat(event.lngLat).setText(label).addTo(map);
       });
       map.on("mouseleave", "occurrence-points", () => { map.getCanvas().style.cursor = ""; hover.remove(); });

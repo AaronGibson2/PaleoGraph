@@ -58,12 +58,12 @@ test("an error retains successful data and an explicit retry creates a new reque
 });
 
 
-test("museum/demo switches never retain or reuse another dataset window", () => {
+test("changing entity context invalidates cached coverage and retains the last visible window", () => {
   const intent = { viewport: {west:-88,south:24,east:-79,north:32}, age: {older_ma:null,younger_ma:null}, retry:0 };
   const first = initialWindow(intent);
   const loaded = occurrenceWindow(first, {type:"success",id:first.request!.id,bounds:first.request!.bounds,data:{items:[],returned:0,truncated:false,limit:200}});
-  const changed = occurrenceWindow(loaded, {type:"intent",intent:{...intent,age:{...intent.age,data_mode:"demo"}}});
-  assert.equal(changed.loaded, undefined);
-  assert.equal(changed.display, undefined);
+  const changed = occurrenceWindow(loaded, {type:"intent",intent:{...intent,age:{...intent.age,taxon_id:"de000000-0000-4000-8000-000300000000"}}});
+  assert.equal(changed.loaded, loaded.loaded);
+  assert.equal(changed.display, loaded.display);
   assert.ok(changed.request);
 });
