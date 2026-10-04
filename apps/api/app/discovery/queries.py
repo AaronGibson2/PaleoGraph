@@ -11,6 +11,7 @@ from fastapi import HTTPException
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.discovery.classification import classification_labels
 from app.discovery.schemas import (
     CatalogItem,
     CatalogPage,
@@ -36,6 +37,21 @@ PUBLIC = (
     "ON sd.id = sr.source_dataset_id WHERE sr.id = ce.source_record_id "
     "AND sr.is_current AND NOT sd.is_synthetic AND sr.content_hash = ce.content_hash)"
 )
+
+
+def safe_geography(description: Any, withheld: bool) -> dict[str, str]:
+    """Public administrative labels; never return raw coordinate-bearing JSON."""
+    try:
+        raw = json.loads(description or "{}")
+    except (TypeError, ValueError):
+        return {}
+    if not isinstance(raw, dict):
+        return {}
+    return {
+        key: raw[key]
+        for key in ("continent", "country", "stateProvince", "county")
+        if isinstance(raw.get(key), str) and not (withheld and key == "county")
+    }
 
 
 def matching(query: ContextQuery) -> tuple[str, dict[str, Any]]:
@@ -162,49 +178,56 @@ def catalog(session: Session, query: ContextQuery) -> CatalogPage:
 
 def places(session: Session, query: ContextQuery) -> PlacePage:
     where, params = matching(query)
-    totals = session.execute(
-        text(f"""
-        SELECT count(*) total,
-               count(*) FILTER (WHERE l.geom IS NULL OR l.location_is_withheld) unmapped
-        {JOINS} WHERE {where}
-        """),
-        params,
-    ).one()
-    grouped = f"""
-        SELECT discovery_uuid(ST_AsEWKT(l.geom)) id, ST_X(l.geom) longitude, ST_Y(l.geom) latitude,
-               count(*) record_count, count(DISTINCT ce.locality_id) locality_count,
-               count(*) FILTER (WHERE ce.older_ma IS NOT NULL AND ce.younger_ma IS NOT NULL)
-                   interpreted_count, bool_or(l.location_is_generalized) location_is_generalized
-        {JOINS} WHERE {where} AND l.geom IS NOT NULL AND NOT l.location_is_withheld
-        GROUP BY l.geom
-        """
-    total_places = int(session.scalar(text(f"SELECT count(*) FROM ({grouped}) p"), params) or 0)
-    # Presentation aggregation has its own stable key; never claim it is a canonical locality.
     cursor = decode_cursor(query, "places")
-    extra = ""
+    seek = ""
     if cursor:
         try:
             params["after"] = UUID(cursor)
         except ValueError as error:
             raise HTTPException(422, "Invalid place cursor") from error
-        extra = "WHERE id > :after"
+        seek = "WHERE id > :after"
     params["limit"] = query.limit + 1
-    rows = (
+    # Material is counted once per canonical locality before position aggregation.
+    # The same snapshot supplies totals and pagination, including an empty page.
+    row = (
         session.execute(
-            text(f"SELECT * FROM ({grouped}) p {extra} ORDER BY id LIMIT :limit"), params
+            text(f"""
+        WITH membership AS MATERIALIZED (
+            SELECT ce.locality_id, count(*) record_count,
+                count(*) FILTER (WHERE ce.older_ma IS NOT NULL AND ce.younger_ma IS NOT NULL)
+                    interpreted_count
+            {JOINS} WHERE {where} GROUP BY ce.locality_id
+        ), points AS MATERIALIZED (
+            SELECT discovery_uuid(ST_AsEWKT(l.geom)) id, ST_X(l.geom) longitude,
+                ST_Y(l.geom) latitude, sum(m.record_count)::bigint record_count,
+                count(*) locality_count, sum(m.interpreted_count)::bigint interpreted_count,
+                bool_or(l.location_is_generalized) location_is_generalized
+            FROM membership m JOIN locality l ON l.id=m.locality_id
+            WHERE l.geom IS NOT NULL AND NOT l.location_is_withheld GROUP BY l.geom
+        ), totals AS (
+            SELECT coalesce(sum(m.record_count),0)::bigint total_records,
+                coalesce(sum(m.record_count) FILTER (WHERE l.geom IS NULL OR
+        l.location_is_withheld),0)::bigint unmapped_records
+            FROM membership m LEFT JOIN locality l ON l.id=m.locality_id
+        ), page AS (SELECT * FROM points {seek} ORDER BY id LIMIT :limit)
+        SELECT totals.*, (SELECT count(*) FROM points) total_places,
+            coalesce((SELECT jsonb_agg(to_jsonb(page) ORDER BY id) FROM page),'[]'::jsonb) items
+        FROM totals
+    """),
+            params,
         )
         .mappings()
-        .all()
+        .one()
     )
-    items = [Place.model_validate(row) for row in rows[: query.limit]]
+    items = [Place.model_validate(item) for item in row["items"][: query.limit]]
     return PlacePage(
         items=items,
-        total_records=totals[0],
-        unmapped_records=totals[1],
-        total_places=total_places,
+        total_records=row["total_records"],
+        unmapped_records=row["unmapped_records"],
+        total_places=row["total_places"],
         limit=query.limit,
         next_cursor=encode_cursor(query, "places", str(items[-1].id))
-        if len(rows) > query.limit
+        if len(row["items"]) > query.limit
         else None,
     )
 
@@ -256,7 +279,13 @@ def search(session: Session, query: ContextQuery) -> SearchPage:
         .mappings()
         .all()
     )
-    items = [EntityRef.model_validate(row) for row in rows[: query.limit]]
+    classes = classification_labels(
+        session, [row["id"] for row in rows[: query.limit] if row["kind"] == "taxon"]
+    )
+    items = [
+        EntityRef.model_validate({**row, "classification": classes.get(str(row["id"]), [])})
+        for row in rows[: query.limit]
+    ]
     last = rows[query.limit - 1] if len(rows) > query.limit else None
     return SearchPage(
         items=items,
@@ -307,7 +336,12 @@ def entity_ref(session: Session, kind: EntityKind, identifier: UUID) -> EntityRe
     )
     if row is None:
         raise HTTPException(404, "Entity not found")
-    return EntityRef(kind=kind, **dict(row))
+    classification = (
+        classification_labels(session, [identifier]).get(str(identifier), [])
+        if kind == "taxon"
+        else []
+    )
+    return EntityRef(kind=kind, **dict(row), classification=classification)
 
 
 def related_sql(kind: EntityKind, identifier: UUID, where: str) -> str:
@@ -457,6 +491,9 @@ def detail(
             .one()
         )
         properties = dict(row)
+        properties["geography"] = safe_geography(
+            properties.pop("description"), row["location_is_withheld"]
+        )
     elif kind == "taxon":
         row = (
             session.execute(

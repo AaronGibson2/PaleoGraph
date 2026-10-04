@@ -1,7 +1,25 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { DEFAULT_VIEW, normalizeViewport, parseExploreState, serializeExploreState } from "./state.ts";
+import { DEFAULT_VIEW, normalizeViewport, parseExploreState, serializeExploreState, lineageContext } from "./state.ts";
 import { occurrenceQuery } from "../../lib/api/client.ts";
+
+test("locality and lineage surfaces restore stable classification focus", () => {
+  const id = "de000000-0000-4000-8000-000600000001";
+  for (const surface of ["localities", "lineage"] as const) {
+    const state = parseExploreState(new URLSearchParams(`surface=${surface}&lineage_focus=${id}&locality_id=${id}`));
+    assert.equal(state.surface, surface);
+    assert.equal(state.lineage_focus, id);
+    assert.equal(parseExploreState(new URLSearchParams(serializeExploreState(state))).lineage_focus, id);
+  }
+  assert.equal(parseExploreState(new URLSearchParams("surface=lineage&lineage_focus=invalid")).lineage_focus, undefined);
+});
+
+test("lineage actions narrow ancestors and retain an active descendant context", () => {
+  assert.equal(lineageContext(null, "genus", [{ id: "class" }, { id: "genus" }]), "genus");
+  assert.equal(lineageContext("class", "genus", [{ id: "class" }, { id: "genus" }]), "genus");
+  assert.equal(lineageContext("species", "genus", [{ id: "class" }, { id: "genus" }]), "species");
+  assert.equal(lineageContext("species", null, []), "species");
+});
 
 test("shareable state round-trips including selection and age zero", () => {
   const state = { ...DEFAULT_VIEW, selected: "de000000-0000-4000-8000-000600000001", older_ma: 2, younger_ma: 0 };

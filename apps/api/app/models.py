@@ -399,3 +399,18 @@ class CatalogTerm(Base):
     term_id: Mapped[UUID] = mapped_column(
         ForeignKey("context_term.id"), primary_key=True, index=True
     )
+
+
+class ClassificationLink(Base):
+    """Rebuildable source-rank links. This is a projection, not a phylogenetic entity."""
+
+    __tablename__ = "classification_link"
+    taxon_id: Mapped[UUID] = mapped_column(
+        ForeignKey("taxon.id", ondelete="CASCADE"), primary_key=True
+    )
+    parent_taxon_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("taxon.id", ondelete="SET NULL"), index=True
+    )
+    __table_args__ = (
+        CheckConstraint("taxon_id <> parent_taxon_id", name="ck_classification_no_self_parent"),
+    )

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { discovery, type EntityRef, type Page } from "../../lib/api/discovery";
+import { TaxonIcon } from "./ScientificVisual";
 import { useResource } from "./useResource";
 
 export function Search({ value, context, onChange, onSelect }: { value: string; context: string; onChange: (value: string) => void; onSelect: (entity: EntityRef) => void }) {
@@ -34,7 +35,7 @@ export function Search({ value, context, onChange, onSelect }: { value: string; 
       <p className="search-meta" role="status">{result.loading ? "Searching the local catalog…" : result.error ?? `${result.data?.total.toLocaleString("en-US") ?? 0} matching entities`}</p>
       <ul role="listbox" id="search-results" aria-label="Museum search results" aria-busy={result.loading}>
         {items.map((entity, index) => <li key={`${entity.kind}:${entity.id}`} id={`search-option-${index}`} role="option" aria-selected={index === active}>
-          <button disabled={result.loading} tabIndex={-1} onMouseDown={event => event.preventDefault()} onClick={() => select(entity)}><span className="search-kind">{entity.kind}</span><strong>{entity.label}</strong><small>{entity.subtitle}</small></button>
+          <button disabled={result.loading} tabIndex={-1} onMouseDown={event => event.preventDefault()} onClick={() => select(entity)}><span className="search-kind">{entity.kind}</span><strong>{entity.kind === "taxon" && <TaxonIcon classification={entity.classification} />}{entity.label}</strong><small>{entity.subtitle}</small></button>
         </li>)}
       </ul>
       {!result.loading && !result.error && items.length === 0 && <p className="search-meta">No current material matches. Try a taxon, locality or accession.</p>}

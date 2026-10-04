@@ -60,6 +60,6 @@ test("mobile keyboard search opens a locality and retains its context across map
  await expect(page.locator("#inspection-heading")).toHaveText("Fictional automated test locality 0");
  const id=new URL(page.url()).searchParams.get("locality_id");expect(id).toBeTruthy();
  await page.getByRole("button",{name:"Explore relationships",exact:false}).click();await expect(page.locator(".graph-root")).toContainText("Fictional automated test locality 0");
- await page.getByRole("button",{name:"Map",exact:true}).click();expect(new URL(page.url()).searchParams.get("locality_id")).toBe(id);
+ await page.getByRole("button",{name:"Atlas",exact:true}).click();expect(new URL(page.url()).searchParams.get("locality_id")).toBe(id);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

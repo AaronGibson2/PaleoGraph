@@ -204,3 +204,13 @@ PostGIS-owned spatial_ref_sys and explicitly renders GeoAlchemy types.
 EntityIdentifier registries, merge redirects, field-level assertions, canonical
 conflict preferences and cross-source reconciliation remain deferred. See
 [UFVP ingestion](ufvp-ingestion.md) for normalization and lifecycle rules.
+
+0005 adds `classification_link`, a rebuildable source-membership projection with
+Taxon foreign keys, a primary taxon index, a parent index and a no-self-parent check.
+It preserves the original source parent fields and connects the nearest supplied
+rank across missing fields. Identification leaves remain distinct from prefix-rank
+nodes even when labels repeat. Migration population and transactional discovery
+refresh use the existing source paths; neither rewrites canonical museum assertions.
+Lineage counts pass current-public membership and context, deduplicating specimens
+across multiple identification assertions. Locality grouping uses canonical IDs;
+exact-coordinate presentation aggregates never merge those identities.

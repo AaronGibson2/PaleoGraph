@@ -47,6 +47,15 @@ class EntityRef(BaseModel):
     id: UUID
     label: str
     subtitle: str | None = None
+    classification: list[str] = Field(default_factory=list)
+
+
+class AssociationQuery(ContextQuery):
+    order: Literal["count", "name", "hierarchy"] = "count"
+
+
+class LineageQuery(ContextQuery):
+    focus: UUID | None = None
 
 
 class PlaceQuery(ContextQuery):
@@ -125,3 +134,55 @@ class GraphPage(BaseModel):
     total_neighbors: int
     next_cursor: str | None
     limit: int
+
+
+class AssociationItem(EntityRef):
+    assertion_count: int
+    specimen_count: int
+    source_taxon_count: int
+    older_ma: float | None
+    younger_ma: float | None
+    known_age_count: int
+    unknown_age_count: int
+
+
+class AssociationPage(BaseModel):
+    items: list[AssociationItem]
+    total: int
+    next_cursor: str | None
+    limit: int
+
+
+class LocalitySummary(BaseModel):
+    entity: EntityRef
+    assertion_count: int
+    specimen_count: int
+    source_taxon_count: int
+    collection_count: int
+    institution_count: int
+    known_age_count: int
+    unknown_age_count: int
+    older_ma: float | None
+    younger_ma: float | None
+    properties: dict[str, Any]
+    source_terms: list[dict[str, Any]]
+    interpreted_intervals: list[dict[str, Any]]
+    custody: list[dict[str, Any]]
+    related_localities: list[EntityRef]
+
+
+class LineageItem(AssociationItem):
+    parent_id: UUID | None
+    has_children: bool
+    is_source_identification: bool
+
+
+class LineagePage(BaseModel):
+    items: list[LineageItem]
+    focus: EntityRef | None
+    focal: LineageItem | None = None
+    breadcrumbs: list[EntityRef]
+    total: int
+    next_cursor: str | None
+    limit: int
+    relationship: str = "source-classification membership; not ancestry"

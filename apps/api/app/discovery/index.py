@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.config import Settings
 from app.db import create_db_engine
+from app.discovery.classification import LINK_SQL
 from app.discovery.timescale import NALMA, POLICY_VERSION, interpret, interval_key, intervals
 from app.ingestion.import_ufvp import CANONICAL_DATASET_ID, upsert
 from app.models import GeologicalInterval
@@ -268,6 +269,9 @@ def rebuild(session: Session) -> dict[str, Any]:
             """),
             {"dataset": str(CANONICAL_DATASET_ID), "field": field},
         )
+    session.execute(text("DELETE FROM classification_link"))
+    session.execute(text("INSERT INTO classification_link " + LINK_SQL))
+    session.execute(text("ANALYZE classification_link"))
     session.execute(text("ANALYZE catalog_entry"))
     session.execute(text("ANALYZE taxon_path"))
     session.execute(text("ANALYZE catalog_term"))

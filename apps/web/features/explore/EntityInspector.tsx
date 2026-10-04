@@ -4,12 +4,13 @@ import { useEffect, useRef } from "react";
 import { api } from "../../lib/api/client";
 import { discovery, type EntityDetail, type EntityKind, type EntityRef } from "../../lib/api/discovery";
 import type { GeologicalInterval, OccurrenceDetail, Viewport } from "../../lib/api/types";
+import { SpecimenVisual, TaxonIcon } from "./ScientificVisual";
 import { useResource } from "./useResource";
 
 const numeric = (value: unknown) => typeof value === "number" || typeof value === "string" ? Number(value).toLocaleString("en-US", { maximumFractionDigits: 4 }) : "unknown";
 const safeUrl = (value: string | null) => { try { const url = new URL(value ?? ""); return ["http:", "https:"].includes(url.protocol) ? url.href : undefined; } catch { return undefined; } };
 
-export function EntityInspector({ kind, id, context, viewport, onPivot, onClose, onGraph, onInterval, onPosition, retry }: { kind: EntityKind; id: string; context: string; viewport: Viewport; onPivot: (entity: EntityRef) => void; onClose: () => void; onGraph: () => void; onInterval: (interval: GeologicalInterval) => void; onPosition: (id: string, longitude: number, latitude: number) => void; retry: number }) {
+export function EntityInspector({ kind, id, context, viewport, onPivot, onClose, onGraph, onLocality, onLineage, onInterval, onPosition, retry }: { kind: EntityKind; id: string; context: string; viewport: Viewport; onPivot: (entity: EntityRef) => void; onClose: () => void; onGraph: () => void; onLocality: () => void; onLineage: () => void; onInterval: (interval: GeologicalInterval) => void; onPosition: (id: string, longitude: number, latitude: number) => void; retry: number }) {
   const result = useResource<EntityDetail>(`${kind}:${id}:${context}:${retry}`, signal => discovery.entity(kind, id, context, signal));
   const occurrenceId = result.data?.entity.id === id ? result.data.properties.occurrence_id : undefined;
   const occurrence = useResource<OccurrenceDetail>(typeof occurrenceId === "string" ? `${occurrenceId}:${retry}` : null, signal => api.occurrence(String(occurrenceId), signal));
@@ -33,7 +34,10 @@ export function EntityInspector({ kind, id, context, viewport, onPivot, onClose,
     {!data && <p role="status">{result.error ?? "Loading scientific context…"}</p>}
     {data && <>
       {outside && <p className="uncertainty-label">Selected record is outside the current map results. Its source evidence remains available.</p>}
+      {kind === "specimen" && <SpecimenVisual />}
+      {kind === "taxon" && <TaxonIcon classification={data.entity.classification} />}
       <div className="entity-stat"><strong>{data.material_count.toLocaleString("en-US")}</strong><span>catalog assertions<br /><small>{data.mapped_count.toLocaleString("en-US")} with usable coordinates</small></span></div>
+      {(kind === "taxon" || kind === "locality") && <div className="inspector-pivots"><button onClick={onLocality}>{kind === "locality" ? "Explore this locality" : "Associated localities"} ↗</button><button onClick={onLineage}>{kind === "locality" ? "Locality in Lineage" : "Explore in Lineage"} ↗</button></div>}
       <button className="relationship-link" onClick={onGraph}>Explore relationships <span aria-hidden="true">↗</span></button>
       {p?.authority && <p className="context-note">{String(p.authority)}</p>}
       {kind === "term" && <p className="context-note">{String(p?.namespace)} / {String(p?.field)}{p?.namespace === "NALMA" || p?.namespace === "source-biochronology" ? ". Regional biochronology; no numeric ICS correlation inferred." : ". Exact source label; no inferred formation age."}</p>}

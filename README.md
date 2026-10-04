@@ -1,7 +1,7 @@
 # PaleoGraph
 
 A Florida museum atlas for cataloged fossil material, published localities,
-geological interpretation and source-supported relationships. Phase 3.5 uses
+geological interpretation and source-supported relationships. Phase 3.6 uses
 one scientific collection: Florida Museum of Natural History UFVP. It is not a
 universal taxonomy or occurrence authority. No public demo mode remains.
 
@@ -17,6 +17,20 @@ Historical reports: [Phase 2](docs/phase-2-validation.md), [Phase 3](docs/phase-
 The [full Florida follow-up](docs/phase-3.5-full-florida-validation.md) records the
 SSD backup/restore check, completed import and full-scope measurements separately
 from the original 25,000-record validation.
+
+Phase 3.6 adds **Atlas / Localities / Lineage**: dedicated locality associations and
+a time-aware source taxonomic hierarchy. Classification branches carry no ancestry
+or divergence claims; observed material spans are not biological durations. The
+existing Relationships graph remains available through inspection. Original clade
+glyphs are distinct from specimen-image placeholders; no unreliable remote preview
+is displayed. See [Phase 3.6 validation](docs/phase-3.6-validation.md),
+[visual provenance](docs/taxon-visuals.md) and [multimedia audit](docs/ufvp-multimedia-research.md).
+
+**Preserve the prepared full Florida database. Do not rerun its import or seed it.**
+For this phase, run only `alembic upgrade head` (additive `0005_classification`).
+It populates a small source-membership projection from existing paths without
+changing source assertions, specimens, derived ages or ingestion runs. This workspace
+has already applied it. No new environment variables are required.
 
 ## Local setup
 
