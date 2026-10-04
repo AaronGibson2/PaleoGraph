@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react";
 import { api } from "../../lib/api/client";
 import { discovery, type EntityDetail, type EntityKind, type EntityRef } from "../../lib/api/discovery";
 import type { GeologicalInterval, OccurrenceDetail, Viewport } from "../../lib/api/types";
-import { SpecimenVisual, TaxonIcon } from "./ScientificVisual";
+import { SpecimenVisual } from "./ScientificVisual";
+import { TaxonVisual } from "../taxon-visuals/TaxonVisual";
+import { resolveTaxonVisual } from "../taxon-visuals/resolve";
 import { useResource } from "./useResource";
 
 const numeric = (value: unknown) => typeof value === "number" || typeof value === "string" ? Number(value).toLocaleString("en-US", { maximumFractionDigits: 4 }) : "unknown";
@@ -30,12 +32,11 @@ export function EntityInspector({ kind, id, context, viewport, onPivot, onClose,
   return <aside className="inspector" aria-labelledby="inspection-heading" onKeyDown={event => { if (event.key === "Escape") onClose(); }}>
     <div className="inspector-top"><p className="eyebrow">{kind === "specimen" ? "Material / field label" : `${kind} / explorer`}</p><button className="icon-button" aria-label="Close occurrence inspection" onClick={onClose}>×</button></div>
     <h2 id="inspection-heading" ref={heading} tabIndex={-1}>{data?.entity.label ?? "Reading the record…"}</h2>
-    {data?.entity.subtitle && <p className="inspector-subtitle">{data.entity.subtitle}</p>}
+    {data?.entity.subtitle && <p className="inspector-subtitle inspection-taxon-cue">{(kind === "taxon" || kind === "specimen") && <TaxonVisual visual={resolveTaxonVisual(data.entity)} />}{data.entity.subtitle}</p>}
     {!data && <p role="status">{result.error ?? "Loading scientific context…"}</p>}
     {data && <>
       {outside && <p className="uncertainty-label">Selected record is outside the current map results. Its source evidence remains available.</p>}
       {kind === "specimen" && <SpecimenVisual />}
-      {kind === "taxon" && <TaxonIcon classification={data.entity.classification} />}
       <div className="entity-stat"><strong>{data.material_count.toLocaleString("en-US")}</strong><span>catalog assertions<br /><small>{data.mapped_count.toLocaleString("en-US")} with usable coordinates</small></span></div>
       {(kind === "taxon" || kind === "locality") && <div className="inspector-pivots"><button onClick={onLocality}>{kind === "locality" ? "Explore this locality" : "Associated localities"} ↗</button><button onClick={onLineage}>{kind === "locality" ? "Locality in Lineage" : "Explore in Lineage"} ↗</button></div>}
       <button className="relationship-link" onClick={onGraph}>Explore relationships <span aria-hidden="true">↗</span></button>

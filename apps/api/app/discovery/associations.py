@@ -11,7 +11,7 @@ from fastapi import HTTPException
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.discovery.classification import classification_labels
+from app.discovery.classification import classification_contexts
 from app.discovery.queries import (
     AGE_JOIN,
     JOINS,
@@ -74,11 +74,11 @@ def _page(
         .one()
     )
     total, rows = response["total"], response["items"]
-    classes = classification_labels(
+    classes = classification_contexts(
         session, [UUID(row["id"]) for row in rows[: query.limit] if row["kind"] == "taxon"]
     )
     items = [
-        AssociationItem.model_validate({**row, "classification": classes.get(row["id"], [])})
+        AssociationItem.model_validate({**row, **classes.get(row["id"], {})})
         for row in rows[: query.limit]
     ]
     return AssociationPage(
@@ -296,17 +296,18 @@ def lineage(session: Session, query: ContextQuery, focus: UUID | None = None) ->
     if focus and not crumbs:
         raise HTTPException(404, "Source classification not found")
     ids = [UUID(row["id"]) for row in rows[: query.limit]]
-    classifications = classification_labels(session, ids)
+    classifications = classification_contexts(session, ids + [row["id"] for row in crumbs])
     items = [
-        LineageItem.model_validate({**row, "classification": classifications.get(row["id"], [])})
+        LineageItem.model_validate({**row, **classifications.get(row["id"], {})})
         for row in rows[: query.limit]
     ]
-    breadcrumbs = [EntityRef.model_validate(row) for row in crumbs]
+    breadcrumbs = [
+        EntityRef.model_validate({**row, **classifications.get(str(row["id"]), {})})
+        for row in crumbs
+    ]
     focal_row = response["focal"]
     focal = (
-        LineageItem.model_validate(
-            {**focal_row, "classification": [item.label for item in breadcrumbs]}
-        )
+        LineageItem.model_validate({**focal_row, **classifications.get(focal_row["id"], {})})
         if focal_row
         else None
     )

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { discovery, type CatalogItem, type EntityRef, type Page } from "../../lib/api/discovery";
-import { SpecimenVisual } from "./ScientificVisual";
+import { TaxonVisual } from "../taxon-visuals/TaxonVisual";
+import { resolveTaxonVisual } from "../taxon-visuals/resolve";
 import { useResource } from "./useResource";
 
 export function Catalog({ query, onSelect, onClose, retry }: { query: string; onSelect: (entity: EntityRef) => void; onClose: () => void; retry: number }) {
@@ -18,7 +19,7 @@ export function Catalog({ query, onSelect, onClose, retry }: { query: string; on
     <ol className="catalog-list occurrence-list" start={(result.data?.offset ?? 0) + 1}>
       {items.map(item => <li key={item.id}>
         <button id={`result-${item.specimen_id}`} className="catalog-entry" disabled={result.loading && result.data === undefined} onClick={() => onSelect({ kind: "specimen", id: item.specimen_id, label: item.label, subtitle: item.scientific_name })}>
-          <SpecimenVisual compact /><span><small className="catalog-label">{item.label}</small><strong><em>{item.scientific_name}</em></strong><span>{item.locality_name ?? "Location not supplied"}</span><span className="catalog-age">{item.source_age_label ?? "Geological age not supplied"}{item.age_basis === "derived-interval" ? " · interpreted" : ""}</span></span><span className="entry-arrow" aria-hidden="true">↗</span>
+          <TaxonVisual visual={resolveTaxonVisual({ id: item.taxon_id, classification_path_ids: item.classification_path_ids })} /><span><small className="catalog-label">{item.label}</small><strong><em>{item.scientific_name}</em></strong><span>{item.locality_name ?? "Location not supplied"}</span><span className="catalog-age">{item.source_age_label ?? "Geological age not supplied"}{item.age_basis === "derived-interval" ? " · interpreted" : ""}</span></span><span className="entry-arrow" aria-hidden="true">↗</span>
         </button>
         <div className="entry-pivots"><button onClick={() => onSelect({ kind: "taxon", id: item.taxon_id, label: item.scientific_name, subtitle: "Source identification" })}>Taxon</button>{item.locality_id && <button onClick={() => onSelect({ kind: "locality", id: item.locality_id!, label: item.locality_name ?? "Locality", subtitle: null })}>Locality</button>}</div>
       </li>)}

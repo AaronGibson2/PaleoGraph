@@ -48,6 +48,11 @@ class EntityRef(BaseModel):
     label: str
     subtitle: str | None = None
     classification: list[str] = Field(default_factory=list)
+    classification_path_ids: list[UUID] = Field(
+        default_factory=list,
+        description="Source classification membership, identification/self first then "
+        "nearest parents; not phylogeny",
+    )
 
 
 class AssociationQuery(ContextQuery):
@@ -68,6 +73,7 @@ class CatalogItem(BaseModel):
     label: str
     scientific_name: str
     taxon_id: UUID
+    classification_path_ids: list[UUID] = Field(default_factory=list)
     locality_id: UUID | None
     locality_name: str | None
     longitude: float | None

@@ -1,6 +1,50 @@
 import { expect, test } from "@playwright/test";
 import { apiBase, stubBasemap } from "./helpers";
+import { resolveTaxonVisual } from "../../features/taxon-visuals/resolve";
 test.beforeEach(async ({ page }) => stubBasemap(page));
+
+test("shared renderer preserves catalog identity, decorative semantics and membership without row fetches", async ({ page, request }) => {
+  const site = (await (await request.get(`${apiBase}/localities?limit=1`)).json()).items[0];
+  const catalog = (await (await request.get(`${apiBase}/catalog?locality_id=${site.id}&limit=30`)).json()).items;
+  await page.goto(`/explore?surface=localities&locality_id=${site.id}`);
+  await expect(page.locator(".locality-counts")).toBeVisible();
+  const requests: string[] = [];
+  page.on("request", request => { if (request.url().includes("/api/v1/")) requests.push(request.url()); });
+  await page.getByRole("button", { name: "Associated material", exact: false }).click();
+  await expect(page.locator(".catalog-entry")).toHaveCount(catalog.length);
+  for (const item of catalog) {
+    const row = page.locator(`#result-${item.specimen_id}`).first();
+    const expected = resolveTaxonVisual({ id: item.taxon_id, classification_path_ids: item.classification_path_ids });
+    await expect(row).toContainText(item.label);
+    await expect(row).toContainText(item.scientific_name);
+    const icon = row.locator(".taxon-visual");
+    await expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(await icon.evaluate(element => element.tabIndex)).toBe(-1);
+    if (expected.kind === "archetype") {
+      await expect(icon).toHaveAttribute("data-archetype", expected.archetype);
+      expect(await icon.locator(".taxon-visual-mask").evaluate(element => {
+        const style = getComputedStyle(element);
+        return style.backgroundColor === style.color && style.maskImage !== "none";
+      })).toBe(true);
+    } else await expect(icon).toHaveAttribute("data-visual-kind", expected.kind);
+  }
+  expect(requests.filter(url => url.includes("/catalog?"))).toHaveLength(1);
+  expect(requests.filter(url => /\/entities\/taxon\/|\/lineage\?/.test(url))).toHaveLength(0);
+});
+
+test("unknown source membership stays neutral even when its display label names a reviewed root", async ({ page }) => {
+  await page.route("**/api/v1/lineage?**", async route => {
+    const response = await route.fetch();
+    const payload = await response.json();
+    payload.items[0] = { ...payload.items[0], label: "Rodentia", classification: ["Mammalia", "Rodentia"], classification_path_ids: ["00000000-0000-0000-0000-000000000001"], id: "00000000-0000-0000-0000-000000000001" };
+    await route.fulfill({ response, json: payload });
+  });
+  await page.goto("/explore?surface=lineage");
+  const row = page.getByRole("treeitem").filter({ hasText: "Rodentia" });
+  await expect(row).toBeVisible();
+  await expect(row.locator(".taxon-visual")).toHaveAttribute("data-visual-kind", "neutral");
+  await expect(row.locator("svg")).toBeVisible();
+});
 
 test("locality counts, fauna pivot, material and surface history share scientific context", async ({ page, request }) => {
   const response = await request.get(`${apiBase}/localities?limit=1`);

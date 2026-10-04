@@ -2,7 +2,7 @@ import type { AgeRange, Viewport } from "./types.ts";
 import { request } from "./client.ts";
 
 export type EntityKind = "specimen" | "taxon" | "locality" | "collection" | "institution" | "term";
-export type EntityRef = { kind: EntityKind; id: string; label: string; subtitle: string | null; classification?: string[] };
+export type EntityRef = { kind: EntityKind; id: string; label: string; subtitle: string | null; classification?: string[]; classification_path_ids?: string[] };
 export type ExplorationContext = {
   taxon_id?: string | null; locality_id?: string | null; collection_id?: string | null;
   institution_id?: string | null; term_id?: string | null; at_lon?: number | null; at_lat?: number | null;
@@ -10,6 +10,8 @@ export type ExplorationContext = {
 };
 export type CatalogItem = AgeRange & {
   id: string; specimen_id: string; label: string; scientific_name: string; taxon_id: string;
+  /** Identification first, then nearest source-classification parents. */
+  classification_path_ids?: string[];
   locality_id: string | null; locality_name: string | null; longitude: number | null;
   latitude: number | null; age_basis: string; source_age_label: string | null;
 };

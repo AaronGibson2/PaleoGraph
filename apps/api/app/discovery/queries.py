@@ -11,7 +11,7 @@ from fastapi import HTTPException
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.discovery.classification import classification_labels
+from app.discovery.classification import classification_contexts, common_classification
 from app.discovery.schemas import (
     CatalogItem,
     CatalogPage,
@@ -165,7 +165,11 @@ def catalog(session: Session, query: ContextQuery) -> CatalogPage:
         .mappings()
         .all()
     )
-    items = [CatalogItem.model_validate(row) for row in rows[: query.limit]]
+    classes = classification_contexts(session, [row["taxon_id"] for row in rows[: query.limit]])
+    items = [
+        CatalogItem.model_validate({**row, **classes.get(str(row["taxon_id"]), {})})
+        for row in rows[: query.limit]
+    ]
     return CatalogPage(
         items=items,
         total=total,
@@ -239,22 +243,24 @@ def search(session: Session, query: ContextQuery) -> SearchPage:
     # All kinds are scoped through actual current catalog membership and active context.
     union = f"""
         WITH material AS (SELECT ce.* {JOINS} WHERE {where}), candidates AS (
-        SELECT DISTINCT 'taxon' kind, t.id, t.scientific_name label, t.rank subtitle
+        SELECT DISTINCT 'taxon' kind, t.id, t.scientific_name label, t.rank subtitle,
+            t.id classification_taxon_id
         FROM material m JOIN taxon_path p ON p.taxon_id = m.taxon_id
         JOIN taxon t ON t.id = p.ancestor_id
         WHERE lower(t.scientific_name) LIKE :partial
-        UNION ALL SELECT DISTINCT 'locality', l.id, l.name, 'Published locality'
+        UNION ALL SELECT DISTINCT 'locality', l.id, l.name, 'Published locality', NULL::uuid
         FROM material m JOIN locality l ON l.id = m.locality_id WHERE lower(l.name) LIKE :partial
-        UNION ALL SELECT DISTINCT 'collection', c.id, coalesce(c.name,c.code), c.code
+        UNION ALL SELECT DISTINCT 'collection', c.id, coalesce(c.name,c.code), c.code, NULL::uuid
         FROM material m JOIN collection c ON c.id = m.collection_id
         WHERE lower(concat_ws(' ',c.name,c.code)) LIKE :partial
-        UNION ALL SELECT DISTINCT 'institution', i.id, i.name, i.code
+        UNION ALL SELECT DISTINCT 'institution', i.id, i.name, i.code, NULL::uuid
         FROM material m JOIN institution i ON i.id = m.institution_id
         WHERE lower(concat_ws(' ',i.name,i.code)) LIKE :partial
-        UNION ALL SELECT DISTINCT 'term', t.id, t.label, t.namespace || ' / ' || t.field
+        UNION ALL SELECT DISTINCT 'term', t.id, t.label, t.namespace || ' / ' || t.field, NULL::uuid
         FROM material m JOIN catalog_term ct ON ct.occurrence_id = m.occurrence_id
         JOIN context_term t ON t.id = ct.term_id WHERE t.search_text LIKE :partial
-        UNION ALL SELECT 'specimen', m.specimen_id, m.label, m.scientific_name FROM material m
+        UNION ALL SELECT 'specimen', m.specimen_id, m.label, m.scientific_name, m.taxon_id
+        FROM material m
         ) SELECT *, CASE WHEN lower(label) = :needle OR
             (kind = 'specimen' AND (regexp_replace(lower(label),'[^[:alnum:]]','','g')
                 = :compact OR lower(split_part(label,' / ',2)) = :needle)) THEN 0
@@ -279,11 +285,16 @@ def search(session: Session, query: ContextQuery) -> SearchPage:
         .mappings()
         .all()
     )
-    classes = classification_labels(
-        session, [row["id"] for row in rows[: query.limit] if row["kind"] == "taxon"]
+    classes = classification_contexts(
+        session,
+        [
+            row["classification_taxon_id"]
+            for row in rows[: query.limit]
+            if row["classification_taxon_id"]
+        ],
     )
     items = [
-        EntityRef.model_validate({**row, "classification": classes.get(str(row["id"]), [])})
+        EntityRef.model_validate({**row, **classes.get(str(row["classification_taxon_id"]), {})})
         for row in rows[: query.limit]
     ]
     last = rows[query.limit - 1] if len(rows) > query.limit else None
@@ -336,12 +347,27 @@ def entity_ref(session: Session, kind: EntityKind, identifier: UUID) -> EntityRe
     )
     if row is None:
         raise HTTPException(404, "Entity not found")
-    classification = (
-        classification_labels(session, [identifier]).get(str(identifier), [])
-        if kind == "taxon"
-        else []
-    )
-    return EntityRef(kind=kind, **dict(row), classification=classification)
+    classification = {}
+    if kind == "taxon":
+        classification = classification_contexts(session, [identifier]).get(str(identifier), {})
+    elif kind == "specimen":
+        ids = list(
+            session.scalars(
+                text(
+                    "SELECT DISTINCT ce.taxon_id FROM catalog_entry ce "
+                    f"WHERE ce.specimen_id=:id AND {PUBLIC}"
+                ),
+                {"id": identifier},
+            )
+        )
+        contexts = classification_contexts(session, ids)
+        classification = common_classification(
+            [
+                contexts.get(str(taxon_id), {"classification": [], "classification_path_ids": []})
+                for taxon_id in ids
+            ]
+        )
+    return EntityRef.model_validate({"kind": kind, **row, **classification})
 
 
 def related_sql(kind: EntityKind, identifier: UUID, where: str) -> str:

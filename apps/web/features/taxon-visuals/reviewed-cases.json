@@ -1,0 +1,673 @@
+[
+  {
+    "label": "Cingulata",
+    "path": [
+      "417a3de6-c84d-4fb7-8d82-c95582d709f9"
+    ],
+    "kind": "archetype",
+    "archetype": "armadillo"
+  },
+  {
+    "label": "Lagomorpha",
+    "path": [
+      "0e66c062-8580-4b70-8ba1-76aef8b7c921"
+    ],
+    "kind": "archetype",
+    "archetype": "lagomorph"
+  },
+  {
+    "label": "Rodentia",
+    "path": [
+      "6003c972-adbb-4dc7-8a33-ab98be8bf098"
+    ],
+    "kind": "archetype",
+    "archetype": "rodent"
+  },
+  {
+    "label": "Chiroptera",
+    "path": [
+      "9296c8d7-f634-416d-8d2e-fb8a45025b01"
+    ],
+    "kind": "archetype",
+    "archetype": "bat"
+  },
+  {
+    "label": "Sirenia",
+    "path": [
+      "42943182-8578-496f-8e4c-51c75ca83af6"
+    ],
+    "kind": "archetype",
+    "archetype": "sirenian"
+  },
+  {
+    "label": "Proboscidea",
+    "path": [
+      "95803e37-f9dc-4702-8ba5-469fa4b15ccb"
+    ],
+    "kind": "archetype",
+    "archetype": "proboscidean"
+  },
+  {
+    "label": "Perissodactyla",
+    "path": [
+      "e14f5ab5-76f4-44ee-8c4b-805a94b3971a"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Cervidae",
+    "path": [
+      "4998685a-6fae-48c9-858a-afe33f6fbf8c"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Bovidae",
+    "path": [
+      "a9cc760b-bfe5-42c3-844d-4bc3bb224148"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Antilocapridae",
+    "path": [
+      "dde13772-7d38-4f2c-808f-2683da52b8f0"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Dromomerycidae",
+    "path": [
+      "9ec15ebe-b0d0-402d-8018-a056e150ad92"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Moschidae",
+    "path": [
+      "203cbf0b-6463-4847-8654-7bbca3ab630a"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Camelidae",
+    "path": [
+      "1891594b-df45-495f-855c-1174915306f0"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Tayassuidae",
+    "path": [
+      "927f8d51-2728-48f5-8874-aee017d19864"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Testudines",
+    "path": [
+      "df32e392-793d-4f33-8a11-d5b57b43db63"
+    ],
+    "kind": "archetype",
+    "archetype": "turtle"
+  },
+  {
+    "label": "Colubridae",
+    "path": [
+      "99ec1eb2-d6c0-43d5-8e62-a57df393242f"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Natricidae",
+    "path": [
+      "77d60955-3cb5-4d41-8d53-34d611a60e54"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Boidae",
+    "path": [
+      "1366dd08-ad43-4209-8f5c-ee85775cb663"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Dipsadidae",
+    "path": [
+      "14233752-e1e0-4ca5-868e-8b0e37babf1e"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Viperidae",
+    "path": [
+      "f5c1f637-9246-4dc5-8f9b-58433e0dc5ed"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Elapidae",
+    "path": [
+      "dfcdd70e-b271-4ea6-86e6-553b77a88d36"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Palaeophiidae",
+    "path": [
+      "2fce8ac4-8ff7-4ff7-814d-92fcd664a1b6"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Aniliidae",
+    "path": [
+      "f2ad17f2-4819-4949-8657-3f4511bd18da"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Tropidophiidae",
+    "path": [
+      "551450fa-0588-493c-8e2d-863671206da0"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Serpentes",
+    "path": [
+      "e6eca45b-f3ce-464c-8343-db258136619c"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Colubroidea",
+    "path": [
+      "39331e8c-a5b2-41b2-85ab-8aead9634aa4"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Scolecophidia",
+    "path": [
+      "b2807644-5ac2-4191-885b-8529f0655763"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Crocodylia",
+    "path": [
+      "7446b9c1-9e06-4143-85c1-3add186115b6"
+    ],
+    "kind": "archetype",
+    "archetype": "crocodilian"
+  },
+  {
+    "label": "Osteichthyes",
+    "path": [
+      "3f5a6957-da0b-4237-805c-28cf1aec37eb"
+    ],
+    "kind": "archetype",
+    "archetype": "bony-fish"
+  },
+  {
+    "label": "Aves",
+    "path": [
+      "136b36cb-e2c3-4703-8583-cfb53c5e75f3"
+    ],
+    "kind": "archetype",
+    "archetype": "bird"
+  },
+  {
+    "label": "Anura",
+    "path": [
+      "67c74766-cca4-4651-85b9-4f540eb96ff1"
+    ],
+    "kind": "archetype",
+    "archetype": "frog"
+  },
+  {
+    "label": "Carcharhiniformes",
+    "path": [
+      "724fc6fb-b770-4483-83c6-b2745e61539a"
+    ],
+    "kind": "archetype",
+    "archetype": "shark"
+  },
+  {
+    "label": "Lamniformes",
+    "path": [
+      "72cc7521-df3c-4183-8902-b30c8f72442c"
+    ],
+    "kind": "archetype",
+    "archetype": "shark"
+  },
+  {
+    "label": "Squaliformes",
+    "path": [
+      "e01ab4d2-a7c6-458b-8a04-99efe1b17756"
+    ],
+    "kind": "archetype",
+    "archetype": "shark"
+  },
+  {
+    "label": "Orectolobiformes",
+    "path": [
+      "27b8891f-26e7-43c6-8c13-35de5fdac41c"
+    ],
+    "kind": "archetype",
+    "archetype": "shark"
+  },
+  {
+    "label": "Hexanchiformes",
+    "path": [
+      "8d6f4d80-c89a-4efb-89d0-e1fd7dcc09fb"
+    ],
+    "kind": "archetype",
+    "archetype": "shark"
+  },
+  {
+    "label": "Heterodontiformes",
+    "path": [
+      "ce9697c2-f701-4d41-879a-2e08f19fdf90"
+    ],
+    "kind": "archetype",
+    "archetype": "shark"
+  },
+  {
+    "label": "Dasypus",
+    "path": [
+      "b2cd8c2c-6bda-4b28-821d-a1ee0bbf156a",
+      "4e295a01-85d8-4ad2-8212-f04d139fd791",
+      "417a3de6-c84d-4fb7-8d82-c95582d709f9",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "archetype",
+    "archetype": "armadillo"
+  },
+  {
+    "label": "Glyptotherium",
+    "path": [
+      "95051947-7348-45df-808a-2af19bc5d04f",
+      "0960fffc-fbae-4b4d-82eb-d954dac1e858",
+      "417a3de6-c84d-4fb7-8d82-c95582d709f9",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Equus",
+    "path": [
+      "12b180f9-eb3d-4526-8a4f-55065e84eb9c",
+      "8d289d8c-71af-47ac-8a53-30841b9796a2",
+      "e14f5ab5-76f4-44ee-8c4b-805a94b3971a",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Cervus",
+    "path": [
+      "d748dc6f-c42c-4b4a-8e4d-eb912e6e1991",
+      "4998685a-6fae-48c9-858a-afe33f6fbf8c",
+      "c9e31fbc-86bb-445b-8c56-42095f58e449",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Platygonus",
+    "path": [
+      "5d207f37-f9a8-436e-861e-bbda0836deb1",
+      "927f8d51-2728-48f5-8874-aee017d19864",
+      "c9e31fbc-86bb-445b-8c56-42095f58e449",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "archetype",
+    "archetype": "terrestrial-ungulate"
+  },
+  {
+    "label": "Trachemys",
+    "path": [
+      "cc6acca1-c7ff-4d29-8ca2-26016f3e4581",
+      "27c5be24-7ce9-4562-89b9-888652e32c3b",
+      "df32e392-793d-4f33-8a11-d5b57b43db63",
+      "5fa0ef36-ee22-4759-8e0f-cb487a7fe246",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "archetype",
+    "archetype": "turtle"
+  },
+  {
+    "label": "Delphinidae",
+    "path": [
+      "0819e6c4-31c2-4999-8825-49129be2a12b",
+      "c9e31fbc-86bb-445b-8c56-42095f58e449",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Anguilliformes",
+    "path": [
+      "c023aa87-f765-4322-8b04-f4424fd75e07",
+      "3f5a6957-da0b-4237-805c-28cf1aec37eb",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Prorastomidae",
+    "path": [
+      "37687cfa-c993-4cbf-89e7-84ce746156be",
+      "42943182-8578-496f-8e4c-51c75ca83af6",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Chalicotheriidae",
+    "path": [
+      "d92c05ac-93fe-43a0-8e36-7ff40a98b628",
+      "e14f5ab5-76f4-44ee-8c4b-805a94b3971a",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Pleuronectiformes",
+    "path": [
+      "a8f07f30-7cf0-42ce-898a-3d1cff7f626a",
+      "3f5a6957-da0b-4237-805c-28cf1aec37eb",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Syngnathidae",
+    "path": [
+      "f91a8871-235f-4022-83a2-4a49af1badd7",
+      "7c98357c-6286-43aa-8b27-7034d9c5147f",
+      "3f5a6957-da0b-4237-805c-28cf1aec37eb",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Ferae",
+    "path": [
+      "ac4d3dff-af24-46dc-8aff-6423bb3a2b7a",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Mammalia",
+    "path": [
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "generic",
+    "visual": "mammal"
+  },
+  {
+    "label": "Serpentes",
+    "path": [
+      "e6eca45b-f3ce-464c-8343-db258136619c",
+      "421cb554-9eb9-4f0a-8add-217d50a2f072",
+      "5fa0ef36-ee22-4759-8e0f-cb487a7fe246",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "archetype",
+    "archetype": "snake"
+  },
+  {
+    "label": "Artiodactyla",
+    "path": [
+      "c9e31fbc-86bb-445b-8c56-42095f58e449",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Ferae",
+    "path": [
+      "ac4d3dff-af24-46dc-8aff-6423bb3a2b7a",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Pilosa",
+    "path": [
+      "88e0b761-77e8-4938-8222-aa714307c941",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Eulipotyphla",
+    "path": [
+      "f40a40e7-0a9c-4f4d-8757-f0fc2cb0c5dd",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Desmostylia",
+    "path": [
+      "659077d7-a8db-4152-8898-2c2de9d2b6ef",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Apatotheria",
+    "path": [
+      "956bf44a-61bd-43f7-89d5-185fd33333f1",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Reptilia",
+    "path": [
+      "5fa0ef36-ee22-4759-8e0f-cb487a7fe246",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Squamata",
+    "path": [
+      "421cb554-9eb9-4f0a-8add-217d50a2f072",
+      "5fa0ef36-ee22-4759-8e0f-cb487a7fe246",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Amphibia",
+    "path": [
+      "73b75da2-7e6f-4809-8362-64bd088a28d0",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Urodela",
+    "path": [
+      "7e074c62-d29f-4cb0-84d5-9167be54aec4",
+      "73b75da2-7e6f-4809-8362-64bd088a28d0",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Chondrichthyes",
+    "path": [
+      "dc7ac19f-a869-4e25-852b-88ed89c6bcb1",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Rhinopristiformes",
+    "path": [
+      "92f86a10-48d7-4591-836a-037eaf8abfb1",
+      "dc7ac19f-a869-4e25-852b-88ed89c6bcb1",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Squatiniformes",
+    "path": [
+      "bf7c1a50-318d-48a9-8526-aff74be29765",
+      "dc7ac19f-a869-4e25-852b-88ed89c6bcb1",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Glyptodontidae",
+    "path": [
+      "0960fffc-fbae-4b4d-82eb-d954dac1e858",
+      "417a3de6-c84d-4fb7-8d82-c95582d709f9",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Protosirenidae",
+    "path": [
+      "6bf8673d-39f2-4d92-88e2-e67c6bd51b99",
+      "42943182-8578-496f-8e4c-51c75ca83af6",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Prorastomidae",
+    "path": [
+      "37687cfa-c993-4cbf-89e7-84ce746156be",
+      "42943182-8578-496f-8e4c-51c75ca83af6",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Chalicotheriidae",
+    "path": [
+      "d92c05ac-93fe-43a0-8e36-7ff40a98b628",
+      "e14f5ab5-76f4-44ee-8c4b-805a94b3971a",
+      "97811091-a18d-4904-8016-dfb790dd43cd",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Anguilliformes",
+    "path": [
+      "c023aa87-f765-4322-8b04-f4424fd75e07",
+      "3f5a6957-da0b-4237-805c-28cf1aec37eb",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Pleuronectiformes",
+    "path": [
+      "a8f07f30-7cf0-42ce-898a-3d1cff7f626a",
+      "3f5a6957-da0b-4237-805c-28cf1aec37eb",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  },
+  {
+    "label": "Syngnathidae",
+    "path": [
+      "f91a8871-235f-4022-83a2-4a49af1badd7",
+      "7c98357c-6286-43aa-8b27-7034d9c5147f",
+      "3f5a6957-da0b-4237-805c-28cf1aec37eb",
+      "4583ea82-5ca4-44c0-8101-5efe972c72fe",
+      "2b5c8b16-1ead-4527-8f34-43cda7973999"
+    ],
+    "kind": "neutral"
+  }
+]

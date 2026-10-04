@@ -4,7 +4,8 @@ import { useState } from "react";
 import { discovery, type AssociationItem, type EntityRef, type Page } from "../../lib/api/discovery";
 import { ageLabel } from "./state";
 import { useResource } from "./useResource";
-import { TaxonIcon } from "./ScientificVisual";
+import { TaxonVisual } from "../taxon-visuals/TaxonVisual";
+import { resolveTaxonVisual } from "../taxon-visuals/resolve";
 
 const number = (value: number) => value.toLocaleString("en-US");
 
@@ -20,7 +21,7 @@ function AssociationList({ context, locality, onPivot }: { context: string; loca
   return <section className="association-list" aria-busy={result.loading}>
     <div className="association-list-heading"><h3>{locality ? "Associated source identifications" : "Published localities"}</h3><span role="status">{result.data ? `${number(result.data.total)} ${locality ? "source taxa" : "localities"}` : "Reading associations…"}{result.loading && result.data && " / updating"}</span></div>
     <div className="association-tools"><label><span className="sr-only">Filter {locality ? "taxa" : "localities"}</span><input value={filter} onChange={event => setFilter(event.target.value)} placeholder={locality ? "Filter source identifications…" : "Filter localities…"} /></label><label><span className="sr-only">Association ordering</span><select aria-label="Association ordering" value={order} onChange={event => setOrder(event.target.value)}><option value="count">Most material</option><option value="name">Alphabetical</option>{locality && <option value="hierarchy">Source rank</option>}</select></label></div>
-    <ol className="association-rows" start={cursors.length * 20 + 1}>{result.data?.items.map(item => <li key={item.id}><button disabled={result.loading} onClick={() => onPivot(item)}><span className="association-ordinal" aria-hidden="true">{locality ? <TaxonIcon classification={item.classification} /> : "⌖"}</span><span><strong>{item.label}</strong><small>{item.subtitle ?? "Rank not supplied"} · {ageLabel(item)} · indexed material</small></span><span className="association-count"><strong>{number(item.assertion_count)}</strong><small>assertions</small></span><span aria-hidden="true">↗</span></button></li>)}</ol>
+    <ol className="association-rows" start={cursors.length * 20 + 1}>{result.data?.items.map(item => <li key={item.id}><button disabled={result.loading} onClick={() => onPivot(item)}><span className="association-ordinal" aria-hidden="true">{locality ? <TaxonVisual visual={resolveTaxonVisual(item)} /> : "⌖"}</span><span><strong>{item.label}</strong><small>{item.subtitle ?? "Rank not supplied"} · {ageLabel(item)} · indexed material</small></span><span className="association-count"><strong>{number(item.assertion_count)}</strong><small>assertions</small></span><span aria-hidden="true">↗</span></button></li>)}</ol>
     {!result.loading && !result.error && !result.data?.items.length && <p className="panel-message">No current public material matches this context. Unknown ages do not match a numeric time filter.</p>}
     {result.error && <p role="alert">{result.error}. Last loaded associations retained. <button onClick={() => setRetry(value => value + 1)}>Retry associations</button></p>}
     <div className="association-pagination"><span>{cursors.length * 20 + (result.data?.items.length ? 1 : 0)}–{cursors.length * 20 + (result.data?.items.length ?? 0)}</span><button disabled={!cursors.length || result.loading} onClick={() => setNavigation({ base, cursors: cursors.slice(0, -1) })}>Previous associations</button><button disabled={!result.data?.next_cursor || result.loading} onClick={() => setNavigation({ base, cursors: [...cursors, result.data!.next_cursor!] })}>Next associations</button></div>

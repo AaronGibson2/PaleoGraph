@@ -381,3 +381,15 @@ body:has(.explore-workspace) #main { outline: none; }
  .graph-accessible { font-size: .64rem; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none!important; animation: none!important; scroll-behavior: auto!important; } }
+.taxon-visual { display:inline-flex; position:relative; width:36px; height:36px; flex:none; vertical-align:middle; }
+.lineage-focus > .taxon-visual { width:42px; height:42px; }
+.lineage-taxon > .taxon-visual { width:36px; height:36px; }
+.lineage-taxon[aria-selected=true] > .taxon-visual { color:var(--map-selected); }
+.search-popover strong .taxon-visual { width:24px; height:24px; }
+.taxon-visual > svg { width:100%; height:100%; }
+.taxon-visual-mask { position:absolute; inset:0; background:currentColor; mask-size:contain; mask-position:center; mask-repeat:no-repeat; mask-mode:alpha; -webkit-mask-size:contain; -webkit-mask-position:center; -webkit-mask-repeat:no-repeat; }
+.taxon-visual > .taxon-visual-mask { color:inherit; }
+.catalog-entry > .taxon-visual { width:28px; height:28px; align-self:center; }
+.inspection-taxon-cue { display:flex; align-items:center; gap:10px; margin:12px 0; }
+.inspection-taxon-cue .taxon-visual { width:32px; height:32px; }
+.inspection-taxon-cue small { display:block; color:var(--provenance); font-size:11px; }
