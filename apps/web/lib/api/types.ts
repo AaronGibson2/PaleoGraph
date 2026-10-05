@@ -78,6 +78,7 @@ export type DatasetStatus = {
   current_records: number; mapped_records: number; numeric_age_records: number;
   latest_scope: string | null; latest_status: string | null;
   creator: string | null;
+  browse_revision?: string | null;
 };
 
 export type TimeConfiguration = {

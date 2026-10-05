@@ -29,15 +29,7 @@ from app.discovery.schemas import (
     LineagePage,
     LocalitySummary,
 )
-
-COUNTS = """
-    count(*) assertion_count, count(DISTINCT ce.specimen_id) specimen_count,
-    count(DISTINCT ce.taxon_id) source_taxon_count,
-    max(ce.older_ma) FILTER (WHERE ce.younger_ma IS NOT NULL) older_ma,
-    min(ce.younger_ma) FILTER (WHERE ce.older_ma IS NOT NULL) younger_ma,
-    count(*) FILTER (WHERE ce.older_ma IS NOT NULL AND ce.younger_ma IS NOT NULL) known_age_count,
-    count(*) FILTER (WHERE ce.older_ma IS NULL OR ce.younger_ma IS NULL) unknown_age_count
-"""
+from app.discovery.summary_sql import COUNTS, lineage_nodes
 
 
 def _page(
@@ -139,6 +131,11 @@ def locality_summary(session: Session, identifier: UUID, query: ContextQuery) ->
     )
     if not row:
         raise HTTPException(404, "Current public locality not found")
+    from app.discovery.browse import locality_payload
+
+    projected = locality_payload(session, identifier, query)
+    if projected is not None:
+        return _locality_response(dict(row), projected)
     # A conflicting locality is a conjunction yielding no material, never a replacement filter.
     where, params = matching(query)
     params["focus_locality"] = identifier
@@ -189,13 +186,17 @@ def locality_summary(session: Session, identifier: UUID, query: ContextQuery) ->
         .mappings()
         .one()
     )
+    return _locality_response(dict(row), dict(result))
+
+
+def _locality_response(row: dict[str, Any], result: dict[str, Any]) -> LocalitySummary:
     properties = {
         key: value for key, value in row.items() if key not in {"id", "label", "description"}
     }
     properties["geography"] = safe_geography(row["description"], row["location_is_withheld"])
     return LocalitySummary(
-        entity=EntityRef(kind="locality", id=identifier, label=row["label"]),
-        **dict(result),
+        entity=EntityRef(kind="locality", id=row["id"], label=row["label"]),
+        **result,
         properties=properties,
     )
 
@@ -207,6 +208,8 @@ PARENTS = "parents AS (SELECT taxon_id id,parent_taxon_id parent_id FROM classif
 
 
 def lineage(session: Session, query: ContextQuery, focus: UUID | None = None) -> LineagePage:
+    from app.discovery import browse
+
     where, params = matching(query)
     params.update(focus=focus, limit=query.limit + 1)
     if focus:
@@ -214,40 +217,9 @@ def lineage(session: Session, query: ContextQuery, focus: UUID | None = None) ->
             " AND EXISTS (SELECT 1 FROM taxon_path scope WHERE "
             "scope.taxon_id=ce.taxon_id AND scope.ancestor_id=:focus)"
         )
-    # Aggregate leaf facts first, correcting ONLY specimens appearing under multiple
-    # identifications. This is exact even when one specimen has several assertions;
-    # it avoids sorting every assertion again at every ancestor rank.
-    cte = f"""WITH RECURSIVE {PARENTS}, material AS MATERIALIZED (
-        SELECT ce.taxon_id,ce.specimen_id,ce.older_ma,ce.younger_ma {JOINS} WHERE {where}
-    ), leaves AS (
-        SELECT ce.taxon_id,{COUNTS} FROM material ce GROUP BY ce.taxon_id
-    ), duplicates AS (
-        SELECT specimen_id FROM material GROUP BY specimen_id HAVING count(DISTINCT taxon_id)>1
-    ), corrections AS (
-        SELECT ancestor_id,sum(overcount)::bigint overcount FROM (
-            SELECT p.ancestor_id,m.specimen_id,count(DISTINCT m.taxon_id)-1 overcount
-            FROM material m JOIN duplicates d ON d.specimen_id=m.specimen_id
-            JOIN taxon_path p ON p.taxon_id=m.taxon_id GROUP BY p.ancestor_id,m.specimen_id
-        ) shared GROUP BY ancestor_id
-    ), envelopes AS (
-        SELECT p.ancestor_id id,sum(m.assertion_count)::bigint assertion_count,
-            sum(m.specimen_count)::bigint specimen_count,count(*)::bigint source_taxon_count,
-            max(m.older_ma) older_ma,min(m.younger_ma) younger_ma,
-            sum(m.known_age_count)::bigint known_age_count,
-            sum(m.unknown_age_count)::bigint unknown_age_count
-        FROM leaves m JOIN taxon_path p ON p.taxon_id=m.taxon_id GROUP BY p.ancestor_id
-    ), nodes AS (
-        SELECT e.id,e.assertion_count,e.specimen_count-coalesce(c.overcount,0) specimen_count,
-            e.source_taxon_count,e.older_ma,e.younger_ma,e.known_age_count,e.unknown_age_count
-        FROM envelopes e LEFT JOIN corrections c ON c.ancestor_id=e.id
-    ), branches AS (
-        SELECT n.*,t.scientific_name label,t.rank subtitle,parents.parent_id,
-            'taxon' kind, EXISTS(SELECT 1 FROM parents c JOIN nodes x ON x.id=c.id
-                WHERE c.parent_id=n.id) has_children,
-            EXISTS(SELECT 1 FROM taxon_path s WHERE s.taxon_id=n.id AND s.ancestor_id=n.id)
-                is_source_identification
-        FROM nodes n JOIN taxon t ON t.id=n.id LEFT JOIN parents ON parents.id=n.id
-    )"""
+    live_nodes = lineage_nodes(
+        f"SELECT ce.taxon_id,ce.specimen_id,ce.older_ma,ce.younger_ma {JOINS} WHERE {where}"
+    )
     condition = "parent_id IS NULL" if focus is None else "parent_id=:focus"
     namespace = f"lineage:{focus}"
     position = decode_cursor(query, namespace)
@@ -262,21 +234,56 @@ def lineage(session: Session, query: ContextQuery, focus: UUID | None = None) ->
         except ValueError as error:
             raise HTTPException(422, "Invalid lineage cursor") from error
         seek = " AND (is_source_identification,id)>(:after_identification,:after)"
-    response = (
-        session.execute(
-            text(f"""{cte}, page AS (
+    candidates = [(live_nodes, False)]
+    if browse.global_context(query, taxon=focus) and browse.ready(session):
+        scope = (
+            "p.parent_taxon_id IS NULL"
+            if focus is None
+            else ("n.id=:focus OR p.parent_taxon_id=:focus")
+        )
+        candidates.insert(
+            0,
+            (
+                f"""nodes AS (
+            SELECT n.* FROM taxon_browse_summary n
+            LEFT JOIN classification_link p ON p.taxon_id=n.id WHERE {scope})""",
+                True,
+            ),
+        )
+    params["browse_version"] = browse.VERSION
+    response = None
+    for nodes, projected in candidates:
+        children = (
+            "SELECT 1 FROM classification_link c JOIN taxon_browse_summary x ON x.id=c.taxon_id "
+            "WHERE c.parent_taxon_id=n.id"
+            if projected
+            else ("SELECT 1 FROM parents c JOIN nodes x ON x.id=c.id WHERE c.parent_id=n.id")
+        )
+        guard = f"WHERE {browse.FRESH}" if projected else ""
+        response = (
+            session.execute(
+                text(f"""WITH RECURSIVE {PARENTS},{nodes}, branches AS (
+        SELECT n.*,t.scientific_name label,t.rank subtitle,parents.parent_id,
+            'taxon' kind,EXISTS({children}) has_children,
+            EXISTS(SELECT 1 FROM taxon_path s WHERE s.taxon_id=n.id AND s.ancestor_id=n.id)
+                is_source_identification
+        FROM nodes n JOIN taxon t ON t.id=n.id LEFT JOIN parents ON parents.id=n.id
+        ), page AS (
         SELECT * FROM branches WHERE {condition}{seek}
         ORDER BY is_source_identification,id LIMIT :limit)
         SELECT (SELECT count(*) FROM branches WHERE {condition}) total,
             coalesce((SELECT jsonb_agg(to_jsonb(page) ORDER BY is_source_identification,id)
                 FROM page),'[]'::jsonb) items,
-            (SELECT to_jsonb(b) FROM branches b WHERE id=:focus) focal
+            (SELECT to_jsonb(b) FROM branches b WHERE id=:focus) focal {guard}
     """),
-            params,
+                params,
+            )
+            .mappings()
+            .first()
         )
-        .mappings()
-        .one()
-    )
+        if response is not None:
+            break
+    assert response is not None  # live aggregation also returns one row for empty material
     total = response["total"]
     rows = response["items"]
     # Breadcrumbs describe the stable published parent path, not chronology.

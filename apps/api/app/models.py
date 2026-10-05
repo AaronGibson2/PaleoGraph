@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 
 from geoalchemy2 import Geometry, WKBElement
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     CheckConstraint,
     Column,
@@ -427,3 +428,37 @@ class ClassificationLink(Base):
     __table_args__ = (
         CheckConstraint("taxon_id <> parent_taxon_id", name="ck_classification_no_self_parent"),
     )
+
+
+class BrowseProjectionState(Base):
+    """One transactional generation for disposable browse summaries, not source facts."""
+
+    __tablename__ = "browse_projection_state"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    input_revision: Mapped[int] = mapped_column(BigInteger, server_default="0")
+    built_revision: Mapped[int | None] = mapped_column(BigInteger)
+    projection_version: Mapped[str | None] = mapped_column(Text)
+    built_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    __table_args__ = (CheckConstraint("id = 1", name="singleton"),)
+
+
+class LocalityBrowseSummary(Base):
+    """Exact unconstrained locality aggregates; identity/geography remain live."""
+
+    __tablename__ = "locality_browse_summary"
+    locality_id: Mapped[UUID] = mapped_column(ForeignKey("locality.id"), primary_key=True)
+    payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+
+
+class TaxonBrowseSummary(Base):
+    """Global source-membership aggregates with exact distinct-specimen correction."""
+
+    __tablename__ = "taxon_browse_summary"
+    id: Mapped[UUID] = mapped_column(ForeignKey("taxon.id"), primary_key=True)
+    assertion_count: Mapped[int] = mapped_column(BigInteger)
+    specimen_count: Mapped[int] = mapped_column(BigInteger)
+    source_taxon_count: Mapped[int] = mapped_column(BigInteger)
+    older_ma: Mapped[Decimal | None] = mapped_column(Numeric())
+    younger_ma: Mapped[Decimal | None] = mapped_column(Numeric())
+    known_age_count: Mapped[int] = mapped_column(BigInteger)
+    unknown_age_count: Mapped[int] = mapped_column(BigInteger)

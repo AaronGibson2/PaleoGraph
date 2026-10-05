@@ -33,6 +33,8 @@ router = APIRouter(
 
 @router.get("/datasets/ufvp", response_model=DatasetStatus)
 def dataset_status(session: Annotated[Session, Depends(get_session)]) -> DatasetStatus:
+    from app.discovery.browse import revision
+
     dataset = session.get(SourceDataset, CANONICAL_DATASET_ID)
     run = session.scalar(
         select(IngestionRun)
@@ -65,6 +67,7 @@ def dataset_status(session: Annotated[Session, Depends(get_session)]) -> Dataset
         current_records=counts[0],
         mapped_records=counts[1],
         numeric_age_records=counts[2],
+        browse_revision=revision(session),
         latest_scope=run.scope if run else None,
         latest_status=run.status if run else None,
         creator=str(run.snapshot.get("creator"))

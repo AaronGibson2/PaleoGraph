@@ -85,6 +85,10 @@ pnpm dev
 Open http://localhost:3000/explore. API documentation: http://localhost:8000/docs.
 Health is process liveness; `app.db` actually verifies PostgreSQL/PostGIS.
 
+If the dev home page works but `/explore` returns 404, follow the
+[routing recovery and direct-link regression checks](docs/explore-routing-repair.md).
+Recover frontend-generated route state without reimporting or rebuilding museum data.
+
 ## Explore
 
 Search catalog numbers, specimen identifiers, source classifications, localities,

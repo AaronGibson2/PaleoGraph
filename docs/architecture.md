@@ -83,3 +83,21 @@ additive covering indexes support locality paging and current-source checks. No 
 projection, endpoint, or scientific model was introduced. Local development uses
 an explicit IPv4 database hostname to avoid the measured localhost address fallback.
 See [FAST-2 measurements and validation](browsing-performance.md#fast-2-server-and-database-browsing-performance).
+
+## FAST-3 browse projections
+
+Browse projections accelerate reads; they do not define scientific truth.
+
+The existing discovery transaction now also builds disposable locality payloads
+and taxon scalar summaries. A shared input revision and explicit derivation version
+authorize their reads. Statement-level invalidation tracks canonical/discovery input
+changes; atomic replacement publishes both tables together after validation. Failed
+builds retain prior rows and use live computation when the input revision is dirty.
+Application startup never rebuilds summaries.
+
+Unfiltered locality and Lineage reads use these summaries. Arbitrary locality/time/
+custody/text/geographic contexts still compute exact live results; hierarchy,
+geography, material pages, and source evidence retain their established authority.
+The client includes the projection revision in its existing cache revision observer.
+See [derivation, eligibility, setup and failure rules](browse-projections.md) and
+[FAST-3 validation](browsing-performance.md#fast-3-read-optimized-browse-projections).

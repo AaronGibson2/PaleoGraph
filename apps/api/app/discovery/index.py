@@ -30,6 +30,7 @@ TERM_FIELDS = (
 def rebuild(session: Session) -> dict[str, Any]:
     """Readers see the previous committed projection until the entire replacement commits."""
     started = time.perf_counter()
+    session.execute(text("SELECT pg_advisory_xact_lock(74003001)"))
     session.execute(text("SELECT pg_advisory_xact_lock(74003501)"))
     session.execute(text("DROP TABLE IF EXISTS pg_temp.discovery_work"))
     session.execute(text("DROP TABLE IF EXISTS pg_temp.age_rules"))
@@ -275,12 +276,16 @@ def rebuild(session: Session) -> dict[str, Any]:
     session.execute(text("ANALYZE catalog_entry"))
     session.execute(text("ANALYZE taxon_path"))
     session.execute(text("ANALYZE catalog_term"))
+    from app.discovery.browse import rebuild as rebuild_browse
+
+    browse_result = rebuild_browse(session)
     return {
         "records": session.scalar(text("SELECT count(*) FROM catalog_entry")),
         "derived_records": session.scalar(
             text("SELECT count(*) FROM catalog_entry WHERE age_basis = 'derived-interval'")
         ),
         "policy_version": POLICY_VERSION,
+        "browse": browse_result,
         "seconds": round(time.perf_counter() - started, 3),
     }
 

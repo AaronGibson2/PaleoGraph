@@ -7,6 +7,7 @@ import { contextQuery, discovery, type ExplorationContext } from "../../lib/api/
 import type { MapResponse } from "../../lib/api/types";
 import { initialWindow, occurrenceWindow } from "./occurrenceWindow";
 import { browseCache } from "./browseCache";
+import { datasetRevision } from "./datasetRevision";
 
 type LoadState<T> = { key: string; data?: T; error?: string };
 const message = (error: unknown) => error instanceof Error ? error.message : "Data could not be loaded.";
@@ -48,7 +49,7 @@ export function useDatasetStatus(retry: number) {
     const controller = new AbortController();
     let lastChecked=0;
     const check = () => { if(Date.now()-lastChecked<60_000)return; lastChecked=Date.now(); api.datasetStatus(controller.signal).then(
-      data => { if (!controller.signal.aborted) { browseCache.observeRevision(JSON.stringify([data.version,data.current_records,data.latest_scope,data.latest_status])); setResult({ key: String(retry), data }); } },
+      data => { if (!controller.signal.aborted) { browseCache.observeRevision(datasetRevision(data)); setResult({ key: String(retry), data }); } },
       error => { if (!controller.signal.aborted) setResult(previous=>({ ...previous,key: String(retry), error: message(error) })); },
     ); };
     check();

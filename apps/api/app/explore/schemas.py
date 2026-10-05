@@ -118,3 +118,4 @@ class DatasetStatus(BaseModel):
     latest_status: str | None
     numeric_age_records: int
     creator: str | None
+    browse_revision: str | None = None

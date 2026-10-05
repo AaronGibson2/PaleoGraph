@@ -31,7 +31,14 @@ def main() -> None:
         ):
             subprocess.run([*alembic, *args], cwd=ROOT, env=env, check=True)
         subprocess.run(
-            [sys.executable, "-m", "pytest", "apps/api/tests", "-m", "integration"],
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                *(sys.argv[1:] or ["apps/api/tests"]),
+                "-m",
+                "integration",
+            ],
             cwd=ROOT,
             env=env,
             check=True,
