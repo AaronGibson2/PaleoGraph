@@ -21,6 +21,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     func,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -133,6 +134,12 @@ class SourceRecord(Identity, Base):
             ["ingestion_run.id", "ingestion_run.source_dataset_id"],
         ),
         CheckConstraint("last_seen_at >= first_seen_at", name="seen_order"),
+        Index(
+            "ix_source_record_current_catalog",
+            "id",
+            postgresql_include=["content_hash", "source_dataset_id"],
+            postgresql_where=text("is_current"),
+        ),
     )
     source_dataset_id: Mapped[UUID] = mapped_column(ForeignKey("source_dataset.id"))
     ingestion_run_id: Mapped[UUID] = mapped_column()
@@ -388,6 +395,12 @@ class CatalogEntry(Base):
         ),
         Index("ix_catalog_entry_label", "label", postgresql_ops={"label": "text_pattern_ops"}),
         Index("ix_catalog_entry_age", "older_ma", "younger_ma"),
+        Index(
+            "ix_catalog_entry_locality_page",
+            "locality_id",
+            "occurrence_id",
+            postgresql_include=["source_record_id", "content_hash"],
+        ),
     )
 
 

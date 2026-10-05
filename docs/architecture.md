@@ -72,3 +72,14 @@ not additional scientific collections.
 See [data model](data-model.md), [continuity](explore-continuity.md),
 [ADR 0011](adr/0011-versioned-age-interpretations.md),
 [ADR 0012](adr/0012-source-scoped-discovery.md) and [validation](phase-3.5-validation.md).
+
+## FAST-2 browse execution
+
+Request sessions apply transaction-local JIT-off and custom-plan settings lazily on
+first database access. Ingestion sessions and server defaults retain their existing
+policy. Catalog selects eligible cursor page identities before expanding age/detail
+rows; current-source/hash/public guards remain mandatory before the limit. Two
+additive covering indexes support locality paging and current-source checks. No new
+projection, endpoint, or scientific model was introduced. Local development uses
+an explicit IPv4 database hostname to avoid the measured localhost address fallback.
+See [FAST-2 measurements and validation](browsing-performance.md#fast-2-server-and-database-browsing-performance).

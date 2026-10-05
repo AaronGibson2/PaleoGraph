@@ -165,9 +165,11 @@ def locality_summary(session: Session, identifier: UUID, query: ContextQuery) ->
         LEFT JOIN collection c ON c.id=ce.collection_id
         LEFT JOIN institution i ON i.id=ce.institution_id GROUP BY c.id,i.name
     ), related AS (
-        SELECT DISTINCT 'locality' kind,l.id,l.name label,'Shared source identification' subtitle
-        {JOINS} WHERE {other_where} AND ce.locality_id<>:focus_locality
-        AND ce.taxon_id IN (SELECT DISTINCT taxon_id FROM material) ORDER BY l.id LIMIT 12
+        SELECT 'locality' kind,l.id,l.name label,'Shared source identification' subtitle
+        FROM locality l WHERE l.id<>:focus_locality AND EXISTS (
+            SELECT 1 FROM catalog_entry ce WHERE ce.locality_id=l.id AND {other_where}
+            AND ce.taxon_id IN (SELECT DISTINCT taxon_id FROM material)
+        ) ORDER BY l.id LIMIT 12
     ), summary AS (
         SELECT {COUNTS},count(DISTINCT ce.collection_id) collection_count,
             count(DISTINCT ce.institution_id) institution_count FROM material ce

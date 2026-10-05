@@ -4,7 +4,7 @@ from uuid import uuid4
 import pytest
 from fastapi import HTTPException
 from fixtures.synthetic import seed_demo
-from sqlalchemy import func, select, text
+from sqlalchemy import event, func, select, text
 from sqlalchemy.orm import Session
 from test_ufvp import fixture_rows, make_archive
 
@@ -193,6 +193,71 @@ def test_dense_coordinates_keep_localities_and_exhaustive_material(
             break
         query.cursor = page.next_cursor
     assert len(collected) == 73
+
+
+@pytest.mark.integration
+def test_catalog_pages_filter_retired_assertions_before_limit_and_batch_metadata(
+    indexed: Session,
+) -> None:
+    original = catalog(indexed, ContextQuery(limit=100))
+    retired = original.items[0]
+    indexed.execute(
+        text("""UPDATE source_record SET is_current=false WHERE id=
+            (SELECT source_record_id FROM catalog_entry WHERE occurrence_id=:id)"""),
+        {"id": retired.id},
+    )
+    expected = {item.id: item.model_dump() for item in original.items[1:]}
+    statements: list[str] = []
+
+    def record(conn, cursor, statement, parameters, context, executemany):
+        statements.append(statement)
+
+    bind = indexed.get_bind()
+    event.listen(bind, "before_cursor_execute", record)
+    try:
+        query = ContextQuery(limit=2)
+        collected = {}
+        while True:
+            statements.clear()
+            page = catalog(indexed, query)
+            assert page.total == len(expected)
+            assert len(statements) == 3  # count, page, one classification batch
+            assert len(page.items) == min(2, len(expected) - len(collected))
+            assert not collected.keys() & {item.id for item in page.items}
+            collected.update({item.id: item.model_dump() for item in page.items})
+            if not page.next_cursor:
+                break
+            query = query.model_copy(update={"cursor": page.next_cursor})
+        assert collected == expected
+    finally:
+        event.remove(bind, "before_cursor_execute", record)
+
+
+@pytest.mark.integration
+def test_request_read_plan_policy_does_not_change_connection_defaults(db_session: Session) -> None:
+    from types import SimpleNamespace
+
+    from fastapi import Request
+
+    from app.db import get_session
+
+    engine = db_session.get_bind().engine
+    with engine.connect() as connection:
+        default = connection.scalar(text("SHOW jit"))
+        plan_default = connection.scalar(text("SHOW plan_cache_mode"))
+    request = Request(
+        {"type": "http", "app": SimpleNamespace(state=SimpleNamespace(db_engine=engine))}
+    )
+    resource = get_session(request)
+    try:
+        session = next(resource)
+        assert session.scalar(text("SHOW jit")) == "off"
+        assert session.scalar(text("SHOW plan_cache_mode")) == "force_custom_plan"
+    finally:
+        resource.close()
+    with engine.connect() as connection:
+        assert connection.scalar(text("SHOW jit")) == default
+        assert connection.scalar(text("SHOW plan_cache_mode")) == plan_default
 
 
 @pytest.mark.integration

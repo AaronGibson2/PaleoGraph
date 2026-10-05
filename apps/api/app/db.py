@@ -1,8 +1,8 @@
 from collections.abc import Iterator
 
 from fastapi import Request
-from sqlalchemy import Engine, MetaData, create_engine, text
-from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy import Connection, Engine, MetaData, create_engine, event, text
+from sqlalchemy.orm import DeclarativeBase, Session, SessionTransaction
 
 from app.config import Settings
 
@@ -39,8 +39,25 @@ def main() -> None:
         engine.dispose()
 
 
+class BrowseSession(Session):
+    """Lazy request sessions; validation does not require a database connection."""
+
+
+@event.listens_for(BrowseSession, "after_begin")
+def _browse_transaction(
+    session: BrowseSession, transaction: SessionTransaction, connection: Connection
+) -> None:
+    if transaction.nested:
+        return
+    # Request-local only: ingestion sessions and server defaults are untouched.
+    # Broad aggregates do not amortize JIT; skewed counts need actual parameters
+    # to select useful parallel work instead of an underestimated generic plan.
+    connection.exec_driver_sql("SET LOCAL jit = off")
+    connection.exec_driver_sql("SET LOCAL plan_cache_mode = force_custom_plan")
+
+
 def get_session(request: Request) -> Iterator[Session]:
-    with Session(request.app.state.db_engine) as session:
+    with BrowseSession(request.app.state.db_engine) as session:
         yield session
 
 

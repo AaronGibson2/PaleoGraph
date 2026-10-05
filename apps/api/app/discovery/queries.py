@@ -153,12 +153,18 @@ def catalog(session: Session, query: ContextQuery) -> CatalogPage:
     rows = (
         session.execute(
             text(f"""
+        WITH page AS MATERIALIZED (
+            SELECT ce.occurrence_id {JOINS} WHERE {where}
+            ORDER BY ce.occurrence_id LIMIT :limit
+        )
         SELECT ce.occurrence_id id, ce.specimen_id, ce.label, ce.scientific_name, ce.taxon_id,
             ce.locality_id, l.name locality_name,
             CASE WHEN NOT l.location_is_withheld THEN ST_X(l.geom) END longitude,
             CASE WHEN NOT l.location_is_withheld THEN ST_Y(l.geom) END latitude,
             ce.older_ma, ce.younger_ma, ce.age_basis, ai.source_label source_age_label
-        {JOINS}{AGE_JOIN} WHERE {where} ORDER BY ce.occurrence_id LIMIT :limit
+        FROM page JOIN catalog_entry ce ON ce.occurrence_id=page.occurrence_id
+        LEFT JOIN locality l ON l.id=ce.locality_id{AGE_JOIN}
+        ORDER BY ce.occurrence_id
         """),
             params,
         )
