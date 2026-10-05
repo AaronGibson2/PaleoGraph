@@ -1,26 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { discovery, type CatalogItem, type EntityRef, type Page } from "../../lib/api/discovery";
+import { discovery, type CatalogItem, type Page } from "../../lib/api/discovery";
 import { TaxonVisual } from "../taxon-visuals/TaxonVisual";
 import { resolveTaxonVisual } from "../taxon-visuals/resolve";
 import { useResource } from "./useResource";
+import { browseKey } from "./browseCache";
+import { prefetchEntity, type BrowseTarget } from "./browseIntent";
+import { IntentButton } from "./IntentButton";
 
-export function Catalog({ query, onSelect, onClose, retry }: { query: string; onSelect: (entity: EntityRef) => void; onClose: () => void; retry: number }) {
+export function Catalog({ query, open, onSelect, onClose, retry }: { query: string; open: boolean; onSelect: (entity: BrowseTarget) => void; onClose: () => void; retry: number }) {
   const [navigation, setNavigation] = useState<{ base: string; cursors: string[] }>({ base: "", cursors: [] });
   const cursors = navigation.base === query ? navigation.cursors : [];
   const pageQuery = `${query}&limit=30${cursors.length ? `&cursor=${encodeURIComponent(cursors.at(-1)!)}` : ""}`;
-  const result = useResource<Page<CatalogItem> & { offset: number }>(`${pageQuery}:retry:${retry}`, async signal => ({ ...await discovery.catalog(pageQuery, signal), offset: cursors.length * 30 }), 180);
+  const debounce = /(?:^|&)(?:locality_id|taxon_id)=/.test(query) ? 0 : 180;
+  const result = useResource<Page<CatalogItem> & { offset: number }>(open ? browseKey("/catalog",pageQuery) : null, async signal => ({ ...await discovery.catalog(pageQuery, signal), offset: cursors.length * 30 }), debounce, retry);
   const items = result.data?.items ?? [];
-  return <aside className="catalog-panel" aria-labelledby="results-heading" aria-busy={result.loading}>
+  return <aside hidden={!open} inert={!open} style={open ? undefined : { display: "none" }} className="catalog-panel" aria-labelledby="results-heading" aria-busy={result.loading}>
     <div className="panel-heading"><div><p className="eyebrow">The material record</p><h2 id="results-heading" tabIndex={-1}>Museum catalog</h2></div><button className="icon-button" aria-label="Close catalog" onClick={onClose}>×</button></div>
     <p className="result-count" role="status">{result.data ? `${result.data.total.toLocaleString("en-US")} assertions` : "Loading catalog…"}{result.loading && result.data ? " · Updating…" : ""}</p>
     <p className="continuity-note">{result.loading && result.data ? "Showing last loaded results." : result.error ?? "Catalog assertions can contain multiple pieces."}</p>
     <ol className="catalog-list occurrence-list" start={(result.data?.offset ?? 0) + 1}>
       {items.map(item => <li key={item.id}>
-        <button id={`result-${item.specimen_id}`} className="catalog-entry" disabled={result.loading && result.data === undefined} onClick={() => onSelect({ kind: "specimen", id: item.specimen_id, label: item.label, subtitle: item.scientific_name })}>
+        <IntentButton prepare={() => prefetchEntity({ kind:"specimen", id:item.specimen_id, label:item.label, subtitle:item.scientific_name, occurrence_id:item.id })} id={`result-${item.specimen_id}`} className="catalog-entry" disabled={result.loading && result.data === undefined} onClick={() => onSelect({ kind: "specimen", id: item.specimen_id, label: item.label, subtitle: item.scientific_name, occurrence_id:item.id, classification_path_ids:item.classification_path_ids })}>
           <TaxonVisual visual={resolveTaxonVisual({ id: item.taxon_id, classification_path_ids: item.classification_path_ids })} /><span><small className="catalog-label">{item.label}</small><strong><em>{item.scientific_name}</em></strong><span>{item.locality_name ?? "Location not supplied"}</span><span className="catalog-age">{item.source_age_label ?? "Geological age not supplied"}{item.age_basis === "derived-interval" ? " · interpreted" : ""}</span></span><span className="entry-arrow" aria-hidden="true">↗</span>
-        </button>
+        </IntentButton>
         <div className="entry-pivots"><button onClick={() => onSelect({ kind: "taxon", id: item.taxon_id, label: item.scientific_name, subtitle: "Source identification" })}>Taxon</button>{item.locality_id && <button onClick={() => onSelect({ kind: "locality", id: item.locality_id!, label: item.locality_name ?? "Locality", subtitle: null })}>Locality</button>}</div>
       </li>)}
     </ol>

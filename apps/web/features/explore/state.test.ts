@@ -21,6 +21,15 @@ test("lineage actions narrow ancestors and retain an active descendant context",
   assert.equal(lineageContext("species", null, []), "species");
 });
 
+test("material and inspector presentation restore with URL context and reject invalid flags",()=>{
+  const selected="de000000-0000-4000-8000-000600000001";
+  const state=parseExploreState(new URLSearchParams(`selected=${selected}&catalog=open&inspect=closed`));
+  const restored=parseExploreState(new URLSearchParams(serializeExploreState(state)));
+  assert.equal(restored.catalog,'open');assert.equal(restored.inspect,'closed');assert.equal(restored.selected,selected);
+  assert.equal(parseExploreState(new URLSearchParams('catalog=everything&inspect=open')).catalog,undefined);
+  assert.equal(parseExploreState(new URLSearchParams('inspect=everything')).inspect,undefined);
+});
+
 test("shareable state round-trips including selection and age zero", () => {
   const state = { ...DEFAULT_VIEW, selected: "de000000-0000-4000-8000-000600000001", older_ma: 2, younger_ma: 0 };
   assert.deepEqual(parseExploreState(new URLSearchParams(serializeExploreState(state))), state);

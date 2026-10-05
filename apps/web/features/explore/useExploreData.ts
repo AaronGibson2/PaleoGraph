@@ -6,6 +6,7 @@ import type { AgeRange, DatasetStatus, OccurrenceDetail, TimeConfiguration, View
 import { contextQuery, discovery, type ExplorationContext } from "../../lib/api/discovery";
 import type { MapResponse } from "../../lib/api/types";
 import { initialWindow, occurrenceWindow } from "./occurrenceWindow";
+import { browseCache } from "./browseCache";
 
 type LoadState<T> = { key: string; data?: T; error?: string };
 const message = (error: unknown) => error instanceof Error ? error.message : "Data could not be loaded.";
@@ -45,11 +46,15 @@ export function useDatasetStatus(retry: number) {
   const [result, setResult] = useState<LoadState<DatasetStatus>>({ key: "" });
   useEffect(() => {
     const controller = new AbortController();
-    api.datasetStatus(controller.signal).then(
-      data => { if (!controller.signal.aborted) setResult({ key: String(retry), data }); },
-      error => { if (!controller.signal.aborted) setResult({ key: String(retry), error: message(error) }); },
-    );
-    return () => controller.abort();
+    let lastChecked=0;
+    const check = () => { if(Date.now()-lastChecked<60_000)return; lastChecked=Date.now(); api.datasetStatus(controller.signal).then(
+      data => { if (!controller.signal.aborted) { browseCache.observeRevision(JSON.stringify([data.version,data.current_records,data.latest_scope,data.latest_status])); setResult({ key: String(retry), data }); } },
+      error => { if (!controller.signal.aborted) setResult(previous=>({ ...previous,key: String(retry), error: message(error) })); },
+    ); };
+    check();
+    const timer=setInterval(check,300_000);
+    window.addEventListener("focus",check);
+    return () => { clearInterval(timer); window.removeEventListener("focus",check); controller.abort(); };
   }, [retry]);
   return result;
 }

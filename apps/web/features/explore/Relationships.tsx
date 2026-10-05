@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { discovery, type EntityKind, type EntityRef, type GraphPage } from "../../lib/api/discovery";
 import { useResource } from "./useResource";
+import { browseKey } from "./browseCache";
 
 export function Relationships({ kind, id, context, onPivot, retry }: { kind: EntityKind; id: string; context: string; onPivot: (entity: EntityRef) => void; retry: number }) {
   const base = `${kind}:${id}:${context}:${retry}`;
   const [navigation, setNavigation] = useState<{ base: string; cursor: string | null; previous?: GraphPage }>({ base: "", cursor: null });
   const cursor = navigation.base === base ? navigation.cursor : null;
   const query = `${context}&limit=12${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`;
-  const result = useResource<GraphPage>(`${base}:${cursor}`, signal => discovery.graph(kind, id, query, signal));
+  const result = useResource<GraphPage>(browseKey(`/graph/${kind}/${id}`,query), signal => discovery.graph(kind, id, query, signal), 0, retry);
   const previous = navigation.base === base ? navigation.previous : undefined;
   const page = result.data;
   const data = page && previous ? { ...page,

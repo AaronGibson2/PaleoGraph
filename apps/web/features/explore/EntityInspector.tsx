@@ -8,16 +8,17 @@ import { SpecimenVisual } from "./ScientificVisual";
 import { TaxonVisual } from "../taxon-visuals/TaxonVisual";
 import { resolveTaxonVisual } from "../taxon-visuals/resolve";
 import { useResource } from "./useResource";
+import { entityKey, occurrenceKey, inspectionAssertion, type BrowseTarget } from "./browseIntent";
 
 const numeric = (value: unknown) => typeof value === "number" || typeof value === "string" ? Number(value).toLocaleString("en-US", { maximumFractionDigits: 4 }) : "unknown";
 const safeUrl = (value: string | null) => { try { const url = new URL(value ?? ""); return ["http:", "https:"].includes(url.protocol) ? url.href : undefined; } catch { return undefined; } };
 
-export function EntityInspector({ kind, id, context, viewport, onPivot, onClose, onGraph, onLocality, onLineage, onInterval, onPosition, retry }: { kind: EntityKind; id: string; context: string; viewport: Viewport; onPivot: (entity: EntityRef) => void; onClose: () => void; onGraph: () => void; onLocality: () => void; onLineage: () => void; onInterval: (interval: GeologicalInterval) => void; onPosition: (id: string, longitude: number, latitude: number) => void; retry: number }) {
-  const result = useResource<EntityDetail>(`${kind}:${id}:${context}:${retry}`, signal => discovery.entity(kind, id, context, signal));
-  const occurrenceId = result.data?.entity.id === id ? result.data.properties.occurrence_id : undefined;
-  const occurrence = useResource<OccurrenceDetail>(typeof occurrenceId === "string" ? `${occurrenceId}:${retry}` : null, signal => api.occurrence(String(occurrenceId), signal));
+export function EntityInspector({ kind, id, identity, context, viewport, onPivot, onClose, onGraph, onLocality, onLineage, onInterval, onPosition, retry }: { kind: EntityKind; id: string; identity?: BrowseTarget; context: string; viewport: Viewport; onPivot: (entity: EntityRef) => void; onClose: () => void; onGraph: () => void; onLocality: () => void; onLineage: () => void; onInterval: (interval: GeologicalInterval) => void; onPosition: (id: string, longitude: number, latitude: number) => void; retry: number }) {
+  const result = useResource<EntityDetail>(entityKey({kind,id}), signal => discovery.entity(kind, id, context, signal), 0, retry);
+  const occurrenceId = inspectionAssertion(kind,id,result.data,identity);
+  const occurrence = useResource<OccurrenceDetail>(typeof occurrenceId === "string" ? occurrenceKey(occurrenceId) : null, signal => api.occurrence(String(occurrenceId), signal), 0, retry);
   const data = result.data?.entity.id === id ? result.data : undefined;
-  const specimen = occurrence.data?.specimen?.id === id ? occurrence.data : undefined;
+  const specimen = occurrence.data && occurrence.data.id===occurrenceId && occurrence.data.specimen?.id === id ? occurrence.data : undefined;
   const longitude = specimen?.longitude;
   const latitude = specimen?.latitude;
   useEffect(() => {
@@ -25,14 +26,15 @@ export function EntityInspector({ kind, id, context, viewport, onPivot, onClose,
   }, [id, longitude, latitude, onPosition]);
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => { heading.current?.focus({ preventScroll: true }); }, [id, kind]);
+  const known = data?.entity ?? (identity?.id===id && identity.kind===kind ? identity : undefined);
   const p = data?.properties;
   const interval = p?.interval as GeologicalInterval | undefined;
   const outside = specimen?.longitude != null && specimen.latitude != null && (specimen.latitude < viewport.south || specimen.latitude > viewport.north || (viewport.west <= viewport.east ? specimen.longitude < viewport.west || specimen.longitude > viewport.east : specimen.longitude < viewport.west && specimen.longitude > viewport.east));
   const sourceLink = (value: string) => data?.related.find(entity => entity.label === value || entity.subtitle === value);
   return <aside className="inspector" aria-labelledby="inspection-heading" onKeyDown={event => { if (event.key === "Escape") onClose(); }}>
     <div className="inspector-top"><p className="eyebrow">{kind === "specimen" ? "Material / field label" : `${kind} / explorer`}</p><button className="icon-button" aria-label="Close occurrence inspection" onClick={onClose}>×</button></div>
-    <h2 id="inspection-heading" ref={heading} tabIndex={-1}>{data?.entity.label ?? "Reading the record…"}</h2>
-    {data?.entity.subtitle && <p className="inspector-subtitle inspection-taxon-cue">{(kind === "taxon" || kind === "specimen") && <TaxonVisual visual={resolveTaxonVisual(data.entity)} />}{data.entity.subtitle}</p>}
+    <h2 id="inspection-heading" ref={heading} tabIndex={-1}>{known?.label ?? "Reading the record…"}</h2>
+    {known?.subtitle && <p className="inspector-subtitle inspection-taxon-cue">{(kind === "taxon" || kind === "specimen") && <TaxonVisual visual={resolveTaxonVisual(known)} />}{known.subtitle}</p>}
     {!data && <p role="status">{result.error ?? "Loading scientific context…"}</p>}
     {data && <>
       {outside && <p className="uncertainty-label">Selected record is outside the current map results. Its source evidence remains available.</p>}

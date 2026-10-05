@@ -5,6 +5,10 @@ import { discovery, type EntityRef, type Page } from "../../lib/api/discovery";
 import { TaxonVisual } from "../taxon-visuals/TaxonVisual";
 import { resolveTaxonVisual } from "../taxon-visuals/resolve";
 import { useResource } from "./useResource";
+import { browseKey } from "./browseCache";
+import { prefetchEntity } from "./browseIntent";
+import { IntentButton } from "./IntentButton";
+const EMPTY_RESULTS: EntityRef[] = [];
 
 export function Search({ value, context, onChange, onSelect }: { value: string; context: string; onChange: (value: string) => void; onSelect: (entity: EntityRef) => void }) {
   const [open, setOpen] = useState(false);
@@ -12,11 +16,16 @@ export function Search({ value, context, onChange, onSelect }: { value: string; 
   const [pagination, setPagination] = useState<{ base: string; cursor: string } | null>(null);
   const base = `${context}&q=${encodeURIComponent(value)}`;
   const query = `${base}&limit=12${pagination?.base === base ? `&cursor=${encodeURIComponent(pagination.cursor)}` : ""}`;
-  const result = useResource<Page<EntityRef>>(value.trim() ? query : null, signal => discovery.search(query, signal), 180);
-  const items = result.data?.items ?? [];
+  const result = useResource<Page<EntityRef>>(open && value.trim() ? browseKey("/search",query) : null, signal => discovery.search(query, signal), 180);
+  const items = result.data?.items ?? EMPTY_RESULTS;
   useEffect(() => {
     if (open) document.getElementById(`search-option-${active}`)?.scrollIntoView({ block: "nearest" });
   }, [active, open, result.key]);
+  useEffect(() => {
+    if(!open || result.loading || !items[active])return;
+    const timer=setTimeout(()=>prefetchEntity(items[active]),100);
+    return ()=>clearTimeout(timer);
+  },[open,active,items,result.loading]);
   const select = (entity: EntityRef) => { onSelect(entity); setOpen(false); setActive(0); };
   return <div className="atlas-search" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}>
     <span className="search-symbol" aria-hidden="true">⌕</span>
@@ -36,7 +45,7 @@ export function Search({ value, context, onChange, onSelect }: { value: string; 
       <p className="search-meta" role="status">{result.loading ? "Searching the local catalog…" : result.error ?? `${result.data?.total.toLocaleString("en-US") ?? 0} matching entities`}</p>
       <ul role="listbox" id="search-results" aria-label="Museum search results" aria-busy={result.loading}>
         {items.map((entity, index) => <li key={`${entity.kind}:${entity.id}`} id={`search-option-${index}`} role="option" aria-selected={index === active}>
-          <button disabled={result.loading} tabIndex={-1} onMouseDown={event => event.preventDefault()} onClick={() => select(entity)}><span className="search-kind">{entity.kind}</span><strong>{(entity.kind === "taxon" || entity.kind === "specimen") && <TaxonVisual visual={resolveTaxonVisual(entity)} />}{entity.label}</strong><small>{entity.subtitle}</small></button>
+          <IntentButton prepare={() => prefetchEntity(entity)} disabled={result.loading} tabIndex={-1} onMouseDown={event => event.preventDefault()} onClick={() => select(entity)}><span className="search-kind">{entity.kind}</span><strong>{(entity.kind === "taxon" || entity.kind === "specimen") && <TaxonVisual visual={resolveTaxonVisual(entity)} />}{entity.label}</strong><small>{entity.subtitle}</small></IntentButton>
         </li>)}
       </ul>
       {!result.loading && !result.error && items.length === 0 && <p className="search-meta">No current material matches. Try a taxon, locality or accession.</p>}

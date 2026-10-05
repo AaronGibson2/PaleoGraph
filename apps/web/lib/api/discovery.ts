@@ -54,6 +54,7 @@ export const discovery = {
   catalog: (query: string, signal?: AbortSignal) => request<Page<CatalogItem>>(`/catalog?${query}`, signal),
   search: (query: string, signal?: AbortSignal) => request<Page<EntityRef>>(`/search?${query}`, signal),
   places: (query: string, signal?: AbortSignal) => request<PlacePage>(`/map/places?${query}`, signal),
-  entity: (kind: EntityKind, id: string, query = "", signal?: AbortSignal) => request<EntityDetail>(`/entities/${kind}/${encodeURIComponent(id)}?${query}`, signal),
+  // The API deliberately inspects the whole entity, independently of browse filters.
+  entity: (kind: EntityKind, id: string, query = "", signal?: AbortSignal) => { void query; return request<EntityDetail>(`/entities/${kind}/${encodeURIComponent(id)}`, signal); },
   graph: (kind: EntityKind, id: string, query = "", signal?: AbortSignal) => request<GraphPage>(`/graph/${kind}/${encodeURIComponent(id)}?${query}`, signal),
 };
