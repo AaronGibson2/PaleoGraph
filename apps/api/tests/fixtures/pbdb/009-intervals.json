@@ -1,0 +1,28 @@
+{
+"data_provider":"The Paleobiology Database",
+"data_source":"The Paleobiology Database",
+"data_license":"Creative Commons CC0",
+"license_url":"https://creativecommons.org/publicdomain/zero/1.0/",
+"documentation_url":"http://paleobiodb.org/data1.2/intervals/list_doc.html",
+"data_url":"http://paleobiodb.org/data1.2/intervals/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&name=Arikareean%2CChattian%2CHemingfordian%2CHemphillian%2CLate+Clarendonian%2CPriabonian&limit=all",
+"access_time":"Mon 2026-10-05 21:41:36 GMT",
+"title":"PBDB Data Service",
+"parameters":{
+"name":"Arikareean,Chattian,Hemingfordian,Hemphillian,Late Clarendonian,Priabonian",
+"limit":"all",
+"strict":"1",
+"extids":"1",
+"vocab":"pbdb"
+},
+"elapsed_time":0.000368,
+"records_found":6,
+"records_returned":6,
+"records": [
+{"interval_no":"int:224","scale_no":"tsc:70","interval_name":"Arikareean","type":"age","t_age":18.5,"b_age":29.5,"reference_no":"ref:87714"},
+{"interval_no":"int:104","scale_no":"tsc:1","interval_name":"Chattian","type":"age","parent_no":"int:36","color":"#FEE6AA","t_age":23.04,"b_age":27.3,"reference_no":"ref:87596"},
+{"interval_no":"int:223","scale_no":"tsc:70","interval_name":"Hemingfordian","type":"age","t_age":16.3,"b_age":18.5,"reference_no":"ref:87714"},
+{"interval_no":"int:220","scale_no":"tsc:70","interval_name":"Hemphillian","type":"age","t_age":4.7,"b_age":9.4,"reference_no":"ref:87714"},
+{"interval_no":"int:247","scale_no":"tsc:71","interval_name":"Late Clarendonian","type":"subage","t_age":9.4,"b_age":12.5,"reference_no":"ref:5959"},
+{"interval_no":"int:106","scale_no":"tsc:1","interval_name":"Priabonian","type":"age","parent_no":"int:37","color":"#FDCDA1","t_age":33.9,"b_age":37.71,"reference_no":"ref:87596"}
+]
+}

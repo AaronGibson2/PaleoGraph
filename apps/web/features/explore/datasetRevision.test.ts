@@ -26,3 +26,12 @@ test("unchanged projection metadata retains snapshots; unbuilt state changes the
   assert.ok(cache.snapshot("lineage"));
   assert.notEqual(datasetRevision(metadata), datasetRevision({ ...metadata, browse_revision: "1:live" }));
 });
+
+test("scientific policy changes invalidate snapshots even with the same dataset and dirty projection", async () => {
+  const cache = new BrowseCache();
+  const previous = { ...metadata, browse_revision: "1:live:ufvp-geology-v1:ics-2026-06" };
+  cache.observeRevision(datasetRevision(previous));
+  await cache.load("lineage", async () => ({ older_ma: 11.63, younger_ma: 5.333 }));
+  cache.observeRevision(datasetRevision({ ...previous, browse_revision: "1:live:test-next-policy" }));
+  assert.equal(cache.snapshot("lineage"), undefined);
+});

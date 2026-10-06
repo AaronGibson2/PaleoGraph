@@ -25,7 +25,7 @@ from app.discovery.schemas import (
     PlacePage,
     SearchPage,
 )
-from app.discovery.timescale import configuration
+from app.discovery.timescale import POLICY_VERSION, configuration
 
 JOINS = "FROM catalog_entry ce LEFT JOIN locality l ON l.id = ce.locality_id"
 AGE_JOIN = (
@@ -33,6 +33,9 @@ AGE_JOIN = (
     "AND ai.content_hash = ce.content_hash AND ai.policy_version = ce.policy_version"
 )
 PUBLIC = (
+    # A scientific-version change requires discovery repair before these rows
+    # can be interpreted using the deployed reference configuration.
+    f"ce.policy_version = '{POLICY_VERSION}' AND "
     "EXISTS (SELECT 1 FROM source_record sr JOIN source_dataset sd "
     "ON sd.id = sr.source_dataset_id WHERE sr.id = ce.source_record_id "
     "AND sr.is_current AND NOT sd.is_synthetic AND sr.content_hash = ce.content_hash)"
@@ -54,8 +57,8 @@ def safe_geography(description: Any, withheld: bool) -> dict[str, str]:
     }
 
 
-def matching(query: ContextQuery) -> tuple[str, dict[str, Any]]:
-    clauses = [PUBLIC]
+def matching(query: ContextQuery, *, eligibility: str | None = None) -> tuple[str, dict[str, Any]]:
+    clauses = [PUBLIC if eligibility is None else eligibility]
     params: dict[str, Any] = {}
     for key in ("locality_id", "collection_id", "institution_id"):
         value = getattr(query, key)

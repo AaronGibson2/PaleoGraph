@@ -1,0 +1,276 @@
+{
+  "format": "pbdb-adapter-v1",
+  "provider_dataset": "pbdb:public:florida:v1",
+  "retrieval_started": "2026-10-05T21:41:31.518199+00:00",
+  "retrieval_completed": "2026-10-05T21:41:37.983118+00:00",
+  "scope": {
+    "mode": "canary",
+    "complete_scope": false,
+    "cc": "US",
+    "state": "Florida",
+    "occurrence_ids": [
+      "44870",
+      "45198",
+      "148077",
+      "181311",
+      "187885",
+      "187888",
+      "188189",
+      "256655"
+    ],
+    "selection": "fixed IDs"
+  },
+  "responses": [
+    {
+      "kind": "histories",
+      "file": "000-histories.json",
+      "url": "https://paleobiodb.org/data1.2/occs/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&occ_id=44870%2C45198%2C148077%2C181311%2C187885%2C187888%2C188189%2C256655&limit=all&idtype=all&show=attr%2Cclass%2Cclassext%2Cabund%2Ccoords%2Ccoll%2Cloc%2Cstrat%2Cmethods%2Cident%2Crem%2Ccrmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "occ_id": "44870,45198,148077,181311,187885,187888,188189,256655",
+        "limit": "all",
+        "idtype": "all",
+        "show": "attr,class,classext,abund,coords,coll,loc,strat,methods,ident,rem,crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:32.079182+00:00",
+      "status": 200,
+      "bytes": 19670,
+      "sha256": "67d3f7e8c34556088f25664e5298652f9fde49686a27cb19e4d0be0d6e21b8d5"
+    },
+    {
+      "kind": "latest",
+      "file": "001-latest.json",
+      "url": "https://paleobiodb.org/data1.2/occs/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&occ_id=44870%2C45198%2C148077%2C181311%2C187885%2C187888%2C188189%2C256655&limit=all&idtype=latest&show=attr%2Cclass%2Cclassext%2Cabund%2Ccoords%2Ccoll%2Cloc%2Cstrat%2Cmethods%2Cident%2Crem%2Ccrmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "occ_id": "44870,45198,148077,181311,187885,187888,188189,256655",
+        "limit": "all",
+        "idtype": "latest",
+        "show": "attr,class,classext,abund,coords,coll,loc,strat,methods,ident,rem,crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:32.509171+00:00",
+      "status": 200,
+      "bytes": 12013,
+      "sha256": "1f316109d4fc23b0313c9b714efa99ee62adcb57e8eab46836520bc0888cc003"
+    },
+    {
+      "kind": "originals",
+      "file": "002-originals.json",
+      "url": "https://paleobiodb.org/data1.2/occs/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&occ_id=44870%2C45198%2C148077%2C181311%2C187885%2C187888%2C188189%2C256655&limit=all&idtype=orig&show=attr%2Cclass%2Cclassext%2Cabund%2Ccoords%2Ccoll%2Cloc%2Cstrat%2Cmethods%2Cident%2Crem%2Ccrmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "occ_id": "44870,45198,148077,181311,187885,187888,188189,256655",
+        "limit": "all",
+        "idtype": "orig",
+        "show": "attr,class,classext,abund,coords,coll,loc,strat,methods,ident,rem,crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:32.949638+00:00",
+      "status": 200,
+      "bytes": 11967,
+      "sha256": "c1824b87575eac3d7368628d503d004cd8bc0cf532b5dfe51d96804409e6d141"
+    },
+    {
+      "kind": "collections",
+      "file": "003-collections.json",
+      "url": "https://paleobiodb.org/data1.2/colls/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&coll_id=3535%2C3568%2C13074%2C17476%2C18554%2C18564%2C18597&limit=all&show=loc%2Cpaleoloc%2Cstrat%2Cstratext%2Cmethods%2Cages%2Crem%2Ccrmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "coll_id": "3535,3568,13074,17476,18554,18564,18597",
+        "limit": "all",
+        "show": "loc,paleoloc,strat,stratext,methods,ages,rem,crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:33.364750+00:00",
+      "status": 200,
+      "bytes": 8742,
+      "sha256": "315fb69f6bbec06570356f8c7a5ffb67a5029554fb3c8a671e5e78a584ed0071"
+    },
+    {
+      "kind": "materials",
+      "file": "004-materials.json",
+      "url": "https://paleobiodb.org/data1.2/specs/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&occ_id=44870%2C45198%2C148077%2C181311%2C187885%2C187888%2C188189%2C256655&limit=all&show=crmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "occ_id": "44870,45198,148077,181311,187885,187888,188189,256655",
+        "limit": "all",
+        "show": "crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:33.798640+00:00",
+      "status": 200,
+      "bytes": 4776,
+      "sha256": "5f3074f14645ad8f6e4e7dcedfced313b8b8461200a4de56e3d4b3f309b8a513"
+    },
+    {
+      "kind": "measurements",
+      "file": "005-measurements.json",
+      "url": "https://paleobiodb.org/data1.2/specs/measurements.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&spec_id=133%2C169%2C228%2C4635%2C4636%2C4637%2C4638%2C4639&limit=all",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "spec_id": "133,169,228,4635,4636,4637,4638,4639",
+        "limit": "all"
+      },
+      "retrieved_at": "2026-10-05T21:41:34.261080+00:00",
+      "status": 200,
+      "bytes": 2716,
+      "sha256": "18547ae028ba749443a7dc56c622fe3b8ced77e79a994c804aa33af4d43c2df0"
+    },
+    {
+      "kind": "taxon-resolution",
+      "file": "006-taxon-resolution.json",
+      "url": "https://paleobiodb.org/data1.2/taxa/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&id=txn%3A16870%2Ctxn%3A38423%2Ctxn%3A43247%2Cvar%3A43962%2Ctxn%3A44052%2Ctxn%3A44170%2Ctxn%3A46086%2Ctxn%3A51515%2Ctxn%3A51890%2Ctxn%3A65044%2Cvar%3A65044%2Ctxn%3A65045%2Ctxn%3A81313%2Cvar%3A81313%2Ctxn%3A96549%2Ctxn%3A110823%2Ctxn%3A110824%2Ctxn%3A114119%2Ctxn%3A155289&limit=all&rel=exact",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "id": "txn:16870,txn:38423,txn:43247,var:43962,txn:44052,txn:44170,txn:46086,txn:51515,txn:51890,txn:65044,var:65044,txn:65045,txn:81313,var:81313,txn:96549,txn:110823,txn:110824,txn:114119,txn:155289",
+        "limit": "all",
+        "rel": "exact"
+      },
+      "retrieved_at": "2026-10-05T21:41:34.684987+00:00",
+      "status": 200,
+      "bytes": 5782,
+      "sha256": "55abf22ed52527fb03b8668ba9551fa2c3723a40f1997cae8688018547feec24"
+    },
+    {
+      "kind": "taxa",
+      "file": "007-taxa.json",
+      "url": "https://paleobiodb.org/data1.2/taxa/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&id=txn%3A16870%2Ctxn%3A38423%2Ctxn%3A43247%2Ctxn%3A44052%2Ctxn%3A44170%2Ctxn%3A51515%2Ctxn%3A51890%2Ctxn%3A65044%2Ctxn%3A81313%2Ctxn%3A96549%2Ctxn%3A110823%2Ctxn%3A114119%2Ctxn%3A155289&limit=all&variant=all&rel=exact&show=attr%2Cparent%2Cclassext%2Cref%2Ccrmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "id": "txn:16870,txn:38423,txn:43247,txn:44052,txn:44170,txn:51515,txn:51890,txn:65044,txn:81313,txn:96549,txn:110823,txn:114119,txn:155289",
+        "limit": "all",
+        "variant": "all",
+        "rel": "exact",
+        "show": "attr,parent,classext,ref,crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:35.181912+00:00",
+      "status": 200,
+      "bytes": 18942,
+      "sha256": "445337d296a8e1b36bfc788c90a0dcf35887c328bfbcf53afc109e16135410a9"
+    },
+    {
+      "kind": "opinions",
+      "file": "008-opinions.json",
+      "url": "https://paleobiodb.org/data1.2/taxa/opinions.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&taxon_id=txn%3A16870%2Ctxn%3A38423%2Ctxn%3A43247%2Ctxn%3A44052%2Ctxn%3A44170%2Ctxn%3A51515%2Ctxn%3A51890%2Ctxn%3A65044%2Ctxn%3A81313%2Ctxn%3A96549%2Ctxn%3A110823%2Ctxn%3A114119%2Ctxn%3A155289&limit=all&rel=exact&show=ref%2Ccrmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "taxon_id": "txn:16870,txn:38423,txn:43247,txn:44052,txn:44170,txn:51515,txn:51890,txn:65044,txn:81313,txn:96549,txn:110823,txn:114119,txn:155289",
+        "limit": "all",
+        "rel": "exact",
+        "show": "ref,crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:35.773513+00:00",
+      "status": 200,
+      "bytes": 90072,
+      "sha256": "cbdbec51425b267556c83a24cd3e85a43244620795b69194eea00b945e631b86"
+    },
+    {
+      "kind": "intervals",
+      "file": "009-intervals.json",
+      "url": "https://paleobiodb.org/data1.2/intervals/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&name=Arikareean%2CChattian%2CHemingfordian%2CHemphillian%2CLate+Clarendonian%2CPriabonian&limit=all",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "name": "Arikareean,Chattian,Hemingfordian,Hemphillian,Late Clarendonian,Priabonian",
+        "limit": "all"
+      },
+      "retrieved_at": "2026-10-05T21:41:36.223384+00:00",
+      "status": 200,
+      "bytes": 1752,
+      "sha256": "9a8fa1bd9f93221199b6d785063fccd948991e8b0e26b5c42a452caa61e4e2c7"
+    },
+    {
+      "kind": "timescales",
+      "file": "010-timescales.json",
+      "url": "https://paleobiodb.org/data1.2/timescales/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&scale_id=1%2C70%2C71&limit=all",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "scale_id": "1,70,71",
+        "limit": "all"
+      },
+      "retrieved_at": "2026-10-05T21:41:36.680510+00:00",
+      "status": 200,
+      "bytes": 1136,
+      "sha256": "23b47994e5b890b841a18eb66f8c45f0c5e216850b9694c88f137f2b25c3e786"
+    },
+    {
+      "kind": "references",
+      "file": "011-references.json",
+      "url": "https://paleobiodb.org/data1.2/refs/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&ref_id=124%2C322%2C323%2C496%2C599%2C933%2C1504%2C1949%2C2202%2C2203%2C2351%2C2375%2C3107%2C3135%2C3235%2C3345%2C3432%2C3510%2C3581%2C4197%2C4229%2C4356%2C4783%2C5959%2C6024%2C6193%2C6226%2C6232%2C6294%2C6560%2C6930%2C7014%2C7411%2C7584%2C9181%2C10313%2C11141%2C11306%2C11706%2C11845%2C11859%2C12966%2C13352%2C13359%2C13413%2C14502%2C14562%2C14915%2C15348%2C16603%2C16985%2C17344%2C17529%2C17884%2C18693%2C19080%2C19331%2C19420%2C23585%2C23602%2C23690%2C23819%2C24412%2C24920%2C25376%2C25660%2C25710%2C25857%2C26174%2C26365%2C26368%2C26878%2C27815%2C28338%2C28388%2C29222%2C30891%2C31192%2C33050%2C33869%2C34158%2C34345%2C35363%2C35991%2C36564%2C37006%2C37012%2C37019%2C37063%2C37067%2C37116%2C37224%2C37601%2C38091%2C41121%2C44088%2C44671%2C46408%2C47336%2C47889&limit=all&show=both%2Ccrmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "ref_id": "124,322,323,496,599,933,1504,1949,2202,2203,2351,2375,3107,3135,3235,3345,3432,3510,3581,4197,4229,4356,4783,5959,6024,6193,6226,6232,6294,6560,6930,7014,7411,7584,9181,10313,11141,11306,11706,11845,11859,12966,13352,13359,13413,14502,14562,14915,15348,16603,16985,17344,17529,17884,18693,19080,19331,19420,23585,23602,23690,23819,24412,24920,25376,25660,25710,25857,26174,26365,26368,26878,27815,28338,28388,29222,30891,31192,33050,33869,34158,34345,35363,35991,36564,37006,37012,37019,37063,37067,37116,37224,37601,38091,41121,44088,44671,46408,47336,47889",
+        "limit": "all",
+        "show": "both,crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:37.274576+00:00",
+      "status": 200,
+      "bytes": 69009,
+      "sha256": "5373a9949c18cc794f207b2ee2b504a9b8f264ee5c925d6505bbd9b74dcd1a39"
+    },
+    {
+      "kind": "references",
+      "file": "012-references.json",
+      "url": "https://paleobiodb.org/data1.2/refs/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&ref_id=47897%2C50046%2C51111%2C51631%2C51726%2C54633%2C55414%2C58674%2C59124%2C59566%2C59807%2C59877%2C61666%2C62209%2C63268%2C63449%2C63487%2C63649%2C64712%2C64742%2C65963%2C66330%2C66335%2C68632%2C70554%2C70775%2C70884%2C71158%2C71195%2C71392%2C74149%2C75537%2C75603%2C78086%2C85058%2C85732%2C87596%2C87714%2C94663%2C94744&limit=all&show=both%2Ccrmod",
+      "parameters": {
+        "vocab": "pbdb",
+        "extids": "yes",
+        "datainfo": "yes",
+        "rowcount": "yes",
+        "strict": "yes",
+        "ref_id": "47897,50046,51111,51631,51726,54633,55414,58674,59124,59566,59807,59877,61666,62209,63268,63449,63487,63649,64712,64742,65963,66330,66335,68632,70554,70775,70884,71158,71195,71392,74149,75537,75603,78086,85058,85732,87596,87714,94663,94744",
+        "limit": "all",
+        "show": "both,crmod"
+      },
+      "retrieved_at": "2026-10-05T21:41:37.780532+00:00",
+      "status": 200,
+      "bytes": 29606,
+      "sha256": "f435da1696e514b8038e0c93c5fad50b92f5785a6d2d9c8581b5c84e7fc13fd8"
+    }
+  ],
+  "atomic_provider_snapshot": false
+}

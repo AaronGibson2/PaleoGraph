@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import type { AgeRange, TimeConfiguration } from "../../lib/api/types";
-import { ageLabel } from "../explore/state";
+import { ageLabel, formatMa } from "../explore/state";
 
 type Props = { age: AgeRange; configuration: TimeConfiguration; focus?: string; onFocus: (id: string) => void; onChange: (age: AgeRange, interval?: string) => void };
 type Boundary = "older_ma" | "younger_ma";
 type Drag = { pointer: number; x: number; value: number; maximum: number; width: number };
-const format = (value: number) => value.toLocaleString("en-US", { maximumFractionDigits: 4 });
+const format = formatMa;
 
 export function TimeControl({ age: committed, configuration, focus, onFocus, onChange }: Props) {
   const track = useRef<HTMLDivElement>(null);
@@ -89,7 +89,7 @@ export function TimeControl({ age: committed, configuration, focus, onFocus, onC
   return <section className="time-control" aria-labelledby="time-heading">
     <div className="time-title">
       <div><p className="eyebrow">Selected time</p><h2 id="time-heading">{allAges ? "All ages" : ageLabel(age)}</h2></div>
-      <p className="time-explanation">{draft ? "Previewing range · map updates when you finish." : allAges ? "All current material, including unresolved ages." : "Map shows overlapping known ages. Unresolved source ages excluded. Reference ranges are interpretations."}</p>
+      <p className="time-explanation" title="A complete material envelope overlaps the selected closed range when its younger bound is no older than the selection's older bound, and its older bound is no younger than the selection's younger bound. Equality counts; missing bounds are excluded only when filtering.">{draft ? "Previewing range · map updates when you finish." : allAges ? "All current material, including unresolved ages." : "Material envelopes overlapping this range, including boundary equality. Unresolved numeric ages excluded."}</p>
       <button className="quiet-button" aria-pressed={allAges} onClick={() => { choose({ older_ma: null, younger_ma: null }); }}>All ages</button>
     </div>
     <nav className="time-ancestry" aria-label="Timescale depth"><button onClick={() => onFocus("ics:2026-06:Phanerozoic")}>Deep time</button>{ancestry.map(unit => <button key={unit.id} aria-current={unit.id === focused.id ? "location" : undefined} onClick={() => onFocus(unit.id)}>{unit.name} <small>{unit.rank}</small></button>)}</nav>

@@ -1,0 +1,25 @@
+{
+"data_provider":"The Paleobiology Database",
+"data_source":"The Paleobiology Database",
+"data_license":"Creative Commons CC0",
+"license_url":"https://creativecommons.org/publicdomain/zero/1.0/",
+"documentation_url":"http://paleobiodb.org/data1.2/timescales/list_doc.html",
+"data_url":"http://paleobiodb.org/data1.2/timescales/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&scale_id=1%2C70%2C71&limit=all",
+"access_time":"Mon 2026-10-05 21:41:36 GMT",
+"title":"PBDB Data Service",
+"parameters":{
+"id":"tsc:1,tsc:70,tsc:71",
+"limit":"all",
+"strict":"1",
+"extids":"1",
+"vocab":"pbdb"
+},
+"elapsed_time":0.00018,
+"records_found":3,
+"records_returned":3,
+"records": [
+{"scale_no":"tsc:1","scale_name":"International Chronostratigraphic Timescale","t_age":0,"b_age":4567,"locality":"main","reference_no":"ref:87596"},
+{"scale_no":"tsc:70","scale_name":"North American Land Mammal Ages","t_age":0,"b_age":66,"locality":"North America","reference_no":"ref:87714"},
+{"scale_no":"tsc:71","scale_name":"North American Mammal Subages/Zones","t_age":0.0117,"b_age":66,"locality":"North America","reference_no":"ref:5959"}
+]
+}

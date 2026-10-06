@@ -11,6 +11,14 @@ Source data is CC BY-NC 4.0;
 geological reference data is ICS v2026/06, CC BY 4.0. Source ages, derived interval
 envelopes and research evidence remain visibly separate.
 
+Phase 4A profiles PBDB as a proposed second source without importing it. See the
+[official-source profile](docs/pbdb-source-profile.md),
+[adapter proposal and approval gates](docs/pbdb-adapter-proposal.md), and
+[bounded live profiling evidence](docs/source-data/pbdb-profile-2026-10-05.json).
+The [completion report](docs/phase-4a-report.md) summarizes the findings and validation.
+The application still serves UFVP only. Phase 4B's adapter and disposable canary
+preceded the [Phase 4C full Florida ingestion](docs/phase-4c-report.md).
+
 [Phase 3.5 completion and validation](docs/phase-3.5-validation.md) records actual
 checks, screenshots, measurements, limitations and all 48 requested report items.
 Historical reports: [Phase 2](docs/phase-2-validation.md), [Phase 3](docs/phase-3-validation.md).
@@ -26,11 +34,11 @@ glyphs are distinct from specimen-image placeholders; no unreliable remote previ
 is displayed. See [Phase 3.6 validation](docs/phase-3.6-validation.md),
 [visual provenance](docs/taxon-visuals.md) and [multimedia audit](docs/ufvp-multimedia-research.md).
 
-**Preserve the prepared full Florida database. Do not rerun its import or seed it.**
-For this phase, run only `alembic upgrade head` (additive `0005_classification`).
-It populates a small source-membership projection from existing paths without
-changing source assertions, specimens, derived ages or ingestion runs. This workspace
-has already applied it. No new environment variables are required.
+**Preserve the prepared full Florida database. Do not seed it or repeat the UFVP import.**
+The prepared database is at `0010_pbdb_evidence`, with independently retained
+UFVP and PBDB evidence and a verified Phase 4C restore checkpoint. Its migrations
+are already applied. Use the [checkpoint and PBDB replay workflow](docs/pbdb-adapter.md#full-florida-acquisition-and-publication-phase-4c)
+for deliberate backend validation. No new environment variables are required.
 
 ## Local setup
 
@@ -204,6 +212,21 @@ are documented separately. Unmocked visual captures use
 
 ## Limits
 
+TIME-1 audits and hardens the distinction between source geology, numeric source
+bounds, interpreted intervals, and observed material envelopes. See
+[geological-time semantics](docs/geological-time-semantics.md) and the
+[TIME-1 validation report](docs/time-1-validation.md). The pinned timescale remains
+ICS v2026/06. Phase 4A profiled PBDB; Phase 4B now provides a source-independent
+adapter and validated disposable 208-occurrence canary. See the
+[PBDB adapter](docs/pbdb-adapter.md) and [Phase 4B report](docs/phase-4b-report.md).
+PBDB occurrences remain internal evidence without placeholder Specimens.
+The normal database is at `0010_pbdb_evidence` with **462,280 UFVP assertions**
+and **18,915 independent PBDB occurrences**, across 1,118 PBDB collections.
+There are still **462,280 canonical Specimens**; PBDB creates none.
+Source-specific rights, age policies and taxonomic identities remain independent.
+See the [Phase 4C report](docs/phase-4c-report.md) for checkpoints, full evidence
+validation, exact rerun, source-aware internal queries and regression measurements.
+
 The import covers Florida rows in pinned UFVP v1.182, not later museum updates or
 non-Florida material. Published source taxonomy
 is incomplete; no accepted-name reconciliation occurs. Uncertain/mixed geological
@@ -211,8 +234,9 @@ labels stay unresolved; NALMA stays regional biochronology without invented nume
 correlation. Source records are evidence, not papers. Chromium checks are not a broad
 cross-browser or WCAG certification. Warm local measurements do not establish
 production throughput or cold-start behavior. Commercial UFVP use requires compatible permission.
-No second scientific occurrence source, auth, AI, new search service or deployment
-was introduced. Phase 4 has not begun.
+No PBDB product UI, cross-source reconciliation, auth, AI, new search service or
+deployment was introduced. Phase 4C stops for review before deterministic
+cross-source candidate reconciliation or PBDB product exposure.
 
 Docker Compose down retains the development volume. Changing credentials does not
 rewrite an existing volume. Do not use `down -v` to troubleshoot valuable data.

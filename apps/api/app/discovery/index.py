@@ -153,13 +153,24 @@ def rebuild(session: Session) -> dict[str, Any]:
         """),
         {"policy": POLICY_VERSION},
     )
-    session.execute(text("DELETE FROM catalog_term"))
-    session.execute(text("DELETE FROM catalog_entry"))
+    session.execute(
+        text("""DELETE FROM catalog_term WHERE occurrence_id IN (
+        SELECT ce.occurrence_id FROM catalog_entry ce
+        JOIN source_record sr ON sr.id=ce.source_record_id
+        WHERE sr.source_dataset_id=:dataset)"""),
+        {"dataset": CANONICAL_DATASET_ID},
+    )
+    session.execute(
+        text("""DELETE FROM catalog_entry WHERE source_record_id IN (
+        SELECT id FROM source_record WHERE source_dataset_id=:dataset)"""),
+        {"dataset": CANONICAL_DATASET_ID},
+    )
     session.execute(
         text("""
         INSERT INTO catalog_entry (occurrence_id, specimen_id, taxon_id, locality_id,
             collection_id, institution_id, source_record_id, content_hash, policy_version,
-            label, scientific_name, search_text, older_ma, younger_ma, age_basis)
+            label, scientific_name, search_text, older_ma, younger_ma, age_basis,
+            interpretation_policy_version)
         SELECT w.occurrence_id, w.specimen_id, w.taxon_id, w.locality_id, w.collection_id,
             w.institution_id, w.source_record_id, w.content_hash, :policy,
             w.label, w.scientific_name, lower(w.search_text),
@@ -169,7 +180,7 @@ def rebuild(session: Session) -> dict[str, Any]:
                  THEN w.source_younger ELSE a.younger_ma END,
             CASE WHEN w.source_older IS NOT NULL AND w.source_younger IS NOT NULL
                  THEN 'source-numeric' WHEN a.status = 'mapped' THEN 'derived-interval'
-                 ELSE a.status END
+                 ELSE a.status END, :policy
         FROM discovery_work w JOIN age_interpretation a
         ON a.source_record_id = w.source_record_id AND a.content_hash = w.content_hash
         AND a.policy_version = :policy
@@ -272,6 +283,9 @@ def rebuild(session: Session) -> dict[str, Any]:
         )
     session.execute(text("DELETE FROM classification_link"))
     session.execute(text("INSERT INTO classification_link " + LINK_SQL))
+    from app.discovery.pbdb import rebuild as rebuild_pbdb
+
+    rebuild_pbdb(session, summaries=False)
     session.execute(text("ANALYZE classification_link"))
     session.execute(text("ANALYZE catalog_entry"))
     session.execute(text("ANALYZE taxon_path"))

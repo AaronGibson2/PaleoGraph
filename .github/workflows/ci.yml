@@ -26,20 +26,20 @@ jobs:
   api:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql+psycopg://paleograph:paleograph_ci@localhost:5432/paleograph
-      TEST_DATABASE_URL: postgresql+psycopg://paleograph:paleograph_ci@localhost:5432/paleograph
+      DATABASE_URL: postgresql+psycopg://paleograph_test:paleograph_ci@localhost:5432/paleograph_test
+      TEST_DATABASE_URL: postgresql+psycopg://paleograph_test:paleograph_ci@localhost:5432/paleograph_test
     services:
       db:
         image: postgis/postgis:17-3.5
         env:
-          POSTGRES_DB: paleograph
-          POSTGRES_USER: paleograph
+          POSTGRES_DB: paleograph_test
+          POSTGRES_USER: paleograph_test
           POSTGRES_PASSWORD: paleograph_ci
         ports:
           - 5432:5432
         options: >-
           --shm-size=1g
-          --health-cmd "pg_isready -U paleograph -d paleograph"
+          --health-cmd "pg_isready -U paleograph_test -d paleograph_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10

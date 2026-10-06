@@ -74,8 +74,15 @@ export function normalizeViewport(west: number, south: number, east: number, nor
   };
 }
 
+export function formatMa(value: number): string {
+  // Reference calibration/filter precision, never a specimen measurement or midpoint.
+  // The pinned chart needs at most four decimals; do not round nonzero ages to present.
+  if (value > 0 && value < 0.0001) return Number(value.toPrecision(4)).toExponential();
+  return value.toLocaleString("en-US", { maximumFractionDigits: 4 });
+}
+
 export function ageLabel(age: AgeRange): string {
-  if (age.older_ma === null && age.younger_ma === null) return "Age unknown";
-  if (age.older_ma === null || age.younger_ma === null) return "Age partly known";
-  return `${age.older_ma.toLocaleString("en-US", { maximumFractionDigits: 4 })}–${age.younger_ma.toLocaleString("en-US", { maximumFractionDigits: 4 })} Ma`;
+  if (age.older_ma === null && age.younger_ma === null) return "No numeric envelope";
+  if (age.older_ma === null || age.younger_ma === null) return "Partial numeric bounds";
+  return `${formatMa(age.older_ma)}–${formatMa(age.younger_ma)} Ma`;
 }

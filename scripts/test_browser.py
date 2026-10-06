@@ -118,7 +118,7 @@ def main() -> None:
             processes.append(process)
             ready(url, process)
         subprocess.run(
-            [pnpm, "--filter", "@paleograph/web", "test:e2e"],
+            [pnpm, "--filter", "@paleograph/web", "test:e2e", *sys.argv[1:]],
             cwd=ROOT,
             env=env,
             check=True,

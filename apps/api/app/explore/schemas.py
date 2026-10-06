@@ -82,6 +82,11 @@ class SpecimenDetail(BaseModel):
 
 
 class OccurrenceDetail(BaseModel):
+    """Canonical source numeric bounds, independent of label interpretation.
+    Null/partial values remain unknown; source_values retains exact public geology.
+    Collecting eventDate is not the geological age of the fossil.
+    """
+
     id: UUID
     taxon_id: UUID
     scientific_name: str

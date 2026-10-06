@@ -16,8 +16,9 @@ from app.db import create_db_engine
 from app.discovery.queries import AGE_JOIN, JOINS, PUBLIC
 from app.discovery.schemas import ContextQuery
 from app.discovery.summary_sql import COUNTS, lineage_nodes
+from app.discovery.timescale import POLICY_VERSION
 
-VERSION = "browse-v1"
+VERSION = f"browse-v1:{POLICY_VERSION}"
 FRESH = """EXISTS (SELECT 1 FROM browse_projection_state WHERE id=1
     AND input_revision=built_revision AND projection_version=:browse_version)"""
 
@@ -73,8 +74,10 @@ def revision(session: Session) -> str:
     state = (
         VERSION
         if row["built_revision"] == row["input_revision"] and (row["projection_version"] == VERSION)
-        else "live"
+        else f"live:{POLICY_VERSION}"
     )
+    # Even an unbuilt/dirty generation must change the client token when the
+    # deployed scientific interpretation changes without a source-count change.
     return f"{row['input_revision']}:{state}"
 
 

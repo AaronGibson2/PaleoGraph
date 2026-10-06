@@ -3,7 +3,7 @@ import type { MapOccurrence } from "../../lib/api/types";
 
 type Feature = NonNullable<GeoJSONSourceDiff["add"]>[number];
 const sources = new WeakMap<GeoJSONSource, { items: MapOccurrence[]; features: Map<string, Feature>; selected: string | null; ready: Promise<void> }>();
-const feature = (item: MapOccurrence, coLocated: number): Feature => ({
+export const occurrenceFeature = (item: MapOccurrence, coLocated: number): Feature => ({
   type: "Feature", id: item.id,
   geometry: { type: "Point", coordinates: [item.longitude, item.latitude] },
   properties: { id: item.id, name: item.scientific_name, catalog: item.catalog_label ?? "", record_count: item.record_count ?? 1, locality_count: item.locality_count ?? 1, unknown: item.interpreted_count !== undefined ? item.interpreted_count === 0 : item.older_ma === null || item.younger_ma === null, generalized: item.location_is_generalized, coLocated: item.record_count ?? coLocated, glyph: (item.record_count ?? coLocated) > 1 ? "atlas-stack" : item.interpreted_count === 0 || item.interpreted_count === undefined && (item.older_ma === null || item.younger_ma === null) ? "atlas-unknown" : "atlas-record" },
@@ -12,7 +12,7 @@ const feature = (item: MapOccurrence, coLocated: number): Feature => ({
 function featuresFor(items: MapOccurrence[]) {
   const counts = new Map<string, number>();
   for (const item of items) { const key = `${item.longitude}:${item.latitude}`; counts.set(key, (counts.get(key) ?? 0) + 1); }
-  return new Map(items.map(item => [item.id, feature(item, counts.get(`${item.longitude}:${item.latitude}`) ?? 1)]));
+  return new Map(items.map(item => [item.id, occurrenceFeature(item, counts.get(`${item.longitude}:${item.latitude}`) ?? 1)]));
 }
 
 function addNotation(map: MapLibreMap, name: string, color: string, hollow: boolean, stack = false) {

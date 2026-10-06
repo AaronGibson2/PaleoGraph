@@ -1,0 +1,40 @@
+{
+"data_provider":"The Paleobiology Database",
+"data_source":"The Paleobiology Database",
+"data_license":"Creative Commons CC0",
+"license_url":"https://creativecommons.org/publicdomain/zero/1.0/",
+"documentation_url":"http://paleobiodb.org/data1.2/specs/measurements_doc.html",
+"data_url":"http://paleobiodb.org/data1.2/specs/measurements.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&spec_id=133%2C169%2C228%2C4635%2C4636%2C4637%2C4638%2C4639&limit=all",
+"access_time":"Mon 2026-10-05 21:41:34 GMT",
+"title":"PBDB Data Service",
+"parameters":{
+"spec_id":"spm:133,spm:169,spm:228,spm:4635,spm:4636,spm:4637,spm:4638,spm:4639",
+"timerule":"major",
+"taxon_status":"all",
+"limit":"all",
+"strict":"1",
+"extids":"1",
+"vocab":"pbdb"
+},
+"elapsed_time":0.00187,
+"records_found":16,
+"records_returned":16,
+"records": [
+{"measurement_no":"mea:265","specimen_no":"spm:133","n_measured":"4","measurement_type":"length","average":"115.5"},
+{"measurement_no":"mea:266","specimen_no":"spm:133","n_measured":"4","measurement_type":"width","average":"67.3"},
+{"measurement_no":"mea:337","specimen_no":"spm:169","n_measured":"2","measurement_type":"length","average":"20.55"},
+{"measurement_no":"mea:338","specimen_no":"spm:169","n_measured":"2","measurement_type":"width","average":"14.05"},
+{"measurement_no":"mea:455","specimen_no":"spm:228","n_measured":"25","measurement_type":"length","average":"42.2"},
+{"measurement_no":"mea:456","specimen_no":"spm:228","n_measured":"25","measurement_type":"width","average":"41.6"},
+{"measurement_no":"mea:9269","specimen_no":"spm:4635","n_measured":"1","measurement_type":"length","average":"21.4"},
+{"measurement_no":"mea:9270","specimen_no":"spm:4635","n_measured":"1","measurement_type":"width","average":"26.3"},
+{"measurement_no":"mea:9271","specimen_no":"spm:4636","n_measured":"1","measurement_type":"length","average":"20.9"},
+{"measurement_no":"mea:9272","specimen_no":"spm:4636","n_measured":"1","measurement_type":"width","average":"24.8"},
+{"measurement_no":"mea:9273","specimen_no":"spm:4637","n_measured":"1","measurement_type":"length","average":"21.3"},
+{"measurement_no":"mea:9274","specimen_no":"spm:4637","n_measured":"1","measurement_type":"width","average":"23.3"},
+{"measurement_no":"mea:9275","specimen_no":"spm:4638","n_measured":"3","measurement_type":"length","average":"20.0333"},
+{"measurement_no":"mea:9276","specimen_no":"spm:4638","n_measured":"3","measurement_type":"width","average":"14.2333"},
+{"measurement_no":"mea:9277","specimen_no":"spm:4639","n_measured":"3","measurement_type":"length","average":"20.7667"},
+{"measurement_no":"mea:9278","specimen_no":"spm:4639","n_measured":"3","measurement_type":"width","average":"14.5333"}
+]
+}

@@ -175,6 +175,160 @@ class SourceRecordRevision(Base):
     observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class NormalizedSourceRevision(Base):
+    """Retained source-specific normalization, including its exact dependency frame."""
+
+    __tablename__ = "normalized_source_revision"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    normalization_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    adapter_version: Mapped[str] = mapped_column(Text)
+    payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+    ingestion_run_id: Mapped[UUID] = mapped_column(ForeignKey("ingestion_run.id"))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+    )
+
+
+class SourceNormalizationCurrent(Base):
+    __tablename__ = "source_normalization_current"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64))
+    normalization_hash: Mapped[str] = mapped_column(String(64))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash", "normalization_hash"],
+            [
+                "normalized_source_revision.source_record_id",
+                "normalized_source_revision.content_hash",
+                "normalized_source_revision.normalization_hash",
+            ],
+        ),
+    )
+
+
+class SourceRecordDependency(Base):
+    """Versioned typed record dependencies, never name-similarity relationships."""
+
+    __tablename__ = "source_record_dependency"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    normalization_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    dependency_record_id: Mapped[UUID] = mapped_column(primary_key=True, index=True)
+    dependency_content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash", "normalization_hash"],
+            [
+                "normalized_source_revision.source_record_id",
+                "normalized_source_revision.content_hash",
+                "normalized_source_revision.normalization_hash",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["dependency_record_id", "dependency_content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+    )
+
+
+class ProviderAgeEvidence(Base):
+    """Provider-calibrated context envelope, distinct from local interpretation/determination."""
+
+    __tablename__ = "provider_age_evidence"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    policy_version: Mapped[str] = mapped_column(Text, primary_key=True)
+    older_ma: Mapped[Decimal | None] = mapped_column(Numeric())
+    younger_ma: Mapped[Decimal | None] = mapped_column(Numeric())
+    evidence: Mapped[dict[str, object]] = mapped_column(JSONB)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+        CheckConstraint(
+            "older_ma >= 0 AND older_ma < 'Infinity'::numeric AND "
+            "younger_ma >= 0 AND younger_ma < 'Infinity'::numeric AND "
+            "older_ma >= younger_ma",
+            name="bounds",
+        ),
+    )
+
+
+class ResearchReference(Identity, Base):
+    __tablename__ = "research_reference"
+    source_record_id: Mapped[UUID] = mapped_column(ForeignKey("source_record.id"), unique=True)
+    source_dataset_id: Mapped[UUID] = mapped_column(ForeignKey("source_dataset.id"))
+    title: Mapped[str | None] = mapped_column(Text)
+    doi: Mapped[str | None] = mapped_column(Text)
+    published_year: Mapped[str | None] = mapped_column(Text)
+    bibliography: Mapped[dict[str, object]] = mapped_column(JSONB)
+
+
+class IdentificationEvidence(Base):
+    __tablename__ = "identification_evidence"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    occurrence_id: Mapped[UUID] = mapped_column(ForeignKey("occurrence.id"), index=True)
+    reference_id: Mapped[UUID | None] = mapped_column(ForeignKey("research_reference.id"))
+    taxon_id: Mapped[UUID] = mapped_column(ForeignKey("taxon.id"))
+    provider_identification_id: Mapped[str] = mapped_column(Text)
+    evidence: Mapped[dict[str, object]] = mapped_column(JSONB)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+    )
+
+
+class MaterialEvidence(Base):
+    __tablename__ = "material_evidence"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    occurrence_id: Mapped[UUID | None] = mapped_column(ForeignKey("occurrence.id"), index=True)
+    reference_id: Mapped[UUID | None] = mapped_column(ForeignKey("research_reference.id"))
+    catalog_label: Mapped[str | None] = mapped_column(Text)
+    evidence: Mapped[dict[str, object]] = mapped_column(JSONB)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+    )
+
+
+class CollectionReferenceEvidence(Base):
+    __tablename__ = "collection_reference_evidence"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    collection_event_id: Mapped[UUID] = mapped_column(ForeignKey("collection_event.id"))
+    reference_id: Mapped[UUID] = mapped_column(ForeignKey("research_reference.id"))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+    )
+
+
+class OpinionReferenceEvidence(Base):
+    __tablename__ = "opinion_reference_evidence"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    reference_id: Mapped[UUID] = mapped_column(ForeignKey("research_reference.id"))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+    )
+
+
 class Institution(Identity, Base):
     __tablename__ = "institution"
     name: Mapped[str] = mapped_column(Text)
@@ -361,7 +515,7 @@ class CatalogEntry(Base):
 
     __tablename__ = "catalog_entry"
     occurrence_id: Mapped[UUID] = mapped_column(ForeignKey("occurrence.id"), primary_key=True)
-    specimen_id: Mapped[UUID] = mapped_column(ForeignKey("specimen.id"), index=True)
+    specimen_id: Mapped[UUID | None] = mapped_column(ForeignKey("specimen.id"), index=True)
     taxon_id: Mapped[UUID] = mapped_column(ForeignKey("taxon.id"), index=True)
     locality_id: Mapped[UUID | None] = mapped_column(ForeignKey("locality.id"), index=True)
     collection_id: Mapped[UUID | None] = mapped_column(ForeignKey("collection.id"), index=True)
@@ -369,6 +523,15 @@ class CatalogEntry(Base):
     source_record_id: Mapped[UUID] = mapped_column(ForeignKey("source_record.id"), unique=True)
     content_hash: Mapped[str] = mapped_column(String(64))
     policy_version: Mapped[str] = mapped_column(Text)
+    evidence_kind: Mapped[str] = mapped_column(Text, server_default="material")
+    material_evidence_count: Mapped[int] = mapped_column(server_default="0")
+    normalization_hash: Mapped[str | None] = mapped_column(String(64))
+    interpretation_policy_version: Mapped[str | None] = mapped_column(
+        Text, server_default="ufvp-geology-v1:ics-2026-06"
+    )
+    provider_age_source_record_id: Mapped[UUID | None] = mapped_column()
+    provider_age_content_hash: Mapped[str | None] = mapped_column(String(64))
+    provider_age_policy_version: Mapped[str | None] = mapped_column(Text)
     label: Mapped[str] = mapped_column(Text)
     scientific_name: Mapped[str] = mapped_column(Text)
     search_text: Mapped[str] = mapped_column(Text)
@@ -380,12 +543,62 @@ class CatalogEntry(Base):
     age_basis: Mapped[str] = mapped_column(Text)
     __table_args__ = (
         ForeignKeyConstraint(
-            ["source_record_id", "content_hash", "policy_version"],
+            ["source_record_id", "content_hash", "interpretation_policy_version"],
             [
                 "age_interpretation.source_record_id",
                 "age_interpretation.content_hash",
                 "age_interpretation.policy_version",
             ],
+        ),
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash", "normalization_hash"],
+            [
+                "normalized_source_revision.source_record_id",
+                "normalized_source_revision.content_hash",
+                "normalized_source_revision.normalization_hash",
+            ],
+        ),
+        ForeignKeyConstraint(
+            [
+                "provider_age_source_record_id",
+                "provider_age_content_hash",
+                "provider_age_policy_version",
+            ],
+            [
+                "provider_age_evidence.source_record_id",
+                "provider_age_evidence.content_hash",
+                "provider_age_evidence.policy_version",
+            ],
+        ),
+        CheckConstraint(
+            "(evidence_kind = 'material' AND specimen_id IS NOT NULL) OR "
+            "(evidence_kind = 'occurrence' AND specimen_id IS NULL)",
+            name="evidence_kind",
+        ),
+        CheckConstraint("material_evidence_count >= 0", name="material_evidence_count"),
+        CheckConstraint(
+            "interpretation_policy_version IS NULL OR "
+            "interpretation_policy_version = policy_version",
+            name="interpretation_policy",
+        ),
+        CheckConstraint(
+            "provider_age_policy_version IS NULL OR provider_age_policy_version = policy_version",
+            name="provider_policy",
+        ),
+        CheckConstraint(
+            "num_nonnulls(provider_age_source_record_id,provider_age_content_hash,"
+            "provider_age_policy_version) IN (0,3)",
+            name="provider_age_key",
+        ),
+        CheckConstraint(
+            "interpretation_policy_version IS NULL OR provider_age_policy_version IS NULL",
+            name="age_evidence_boundary",
+        ),
+        CheckConstraint(
+            "(evidence_kind = 'material' AND interpretation_policy_version IS NOT NULL) OR "
+            "(evidence_kind = 'occurrence' AND normalization_hash IS NOT NULL AND "
+            "provider_age_policy_version IS NOT NULL)",
+            name="age_proof",
         ),
         Index("ix_catalog_entry_search_vector", "search_vector", postgresql_using="gin"),
         Index(
@@ -400,7 +613,7 @@ class CatalogEntry(Base):
             "ix_catalog_entry_locality_page",
             "locality_id",
             "occurrence_id",
-            postgresql_include=["source_record_id", "content_hash"],
+            postgresql_include=["source_record_id", "content_hash", "policy_version"],
         ),
     )
 

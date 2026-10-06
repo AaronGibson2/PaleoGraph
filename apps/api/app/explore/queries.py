@@ -11,6 +11,7 @@ from app.explore.schemas import (
     OccurrenceDetail,
     SpecimenDetail,
 )
+from app.ingestion.ufvp import GEOLOGICAL_FIELDS
 from app.models import (
     Collection,
     CollectionEvent,
@@ -138,13 +139,7 @@ def occurrence_detail(session: Session, occurrence_id: UUID) -> OccurrenceDetail
                 "locality",
                 "geodeticDatum",
                 "coordinateUncertaintyInMeters",
-                "earliestEraOrLowestErathem",
-                "earliestPeriodOrLowestSystem",
-                "earliestEpochOrLowestSeries",
-                "lowestBiostratigraphicZone",
-                "group",
-                "formation",
-                "member",
+                *GEOLOGICAL_FIELDS,
                 "modified",
             )
             if raw.get(key)

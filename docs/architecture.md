@@ -99,5 +99,10 @@ Unfiltered locality and Lineage reads use these summaries. Arbitrary locality/ti
 custody/text/geographic contexts still compute exact live results; hierarchy,
 geography, material pages, and source evidence retain their established authority.
 The client includes the projection revision in its existing cache revision observer.
+TIME-1 binds summary generations and ready/live revision tokens to the active
+scientific policy, excludes obsolete catalog interpretations, and refreshes the
+time-control reference alongside material cache invalidation. Source numeric ages,
+label interpretations, and observed aggregates remain distinct; see
+[geological-time semantics](geological-time-semantics.md).
 See [derivation, eligibility, setup and failure rules](browse-projections.md) and
 [FAST-3 validation](browsing-performance.md#fast-3-read-optimized-browse-projections).

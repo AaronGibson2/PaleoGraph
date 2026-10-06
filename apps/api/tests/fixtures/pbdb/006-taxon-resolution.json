@@ -1,0 +1,39 @@
+{
+"data_provider":"The Paleobiology Database",
+"data_source":"The Paleobiology Database",
+"data_license":"Creative Commons CC0",
+"license_url":"https://creativecommons.org/publicdomain/zero/1.0/",
+"documentation_url":"http://paleobiodb.org/data1.2/taxa/list_doc.html",
+"data_url":"http://paleobiodb.org/data1.2/taxa/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&id=txn%3A16870%2Ctxn%3A38423%2Ctxn%3A43247%2Cvar%3A43962%2Ctxn%3A44052%2Ctxn%3A44170%2Ctxn%3A46086%2Ctxn%3A51515%2Ctxn%3A51890%2Ctxn%3A65044%2Cvar%3A65044%2Ctxn%3A65045%2Ctxn%3A81313%2Cvar%3A81313%2Ctxn%3A96549%2Ctxn%3A110823%2Ctxn%3A110824%2Ctxn%3A114119%2Ctxn%3A155289&limit=all&rel=exact",
+"access_time":"Mon 2026-10-05 21:41:34 GMT",
+"title":"PBDB Data Service",
+"parameters":{
+"taxon_id":"txn:16870,txn:38423,txn:43247,var:43962,txn:44052,txn:44170,txn:46086,txn:51515,txn:51890,txn:65044,var:65044,txn:65045,txn:81313,var:81313,txn:96549,txn:110823,txn:110824,txn:114119,txn:155289",
+"rel":"exact",
+"limit":"all",
+"strict":"1",
+"extids":"1",
+"vocab":"pbdb"
+},
+"elapsed_time":0.00579,
+"records_found":16,
+"records_returned":16,
+"records": [
+{"orig_no":"txn:65044","taxon_no":"var:65044","flags":"V","taxon_rank":"species","taxon_name":"Halitherium olseni","difference":"recombined as","accepted_no":"txn:65044","accepted_rank":"species","accepted_name":"Crenatosiren olseni","parent_no":"txn:65046","reference_no":"ref:23819","is_extant":"extinct","n_occs":11},
+{"orig_no":"txn:65044","taxon_no":"var:65045","taxon_rank":"species","taxon_name":"Crenatosiren olseni","accepted_no":"txn:65044","accepted_rank":"species","accepted_name":"Crenatosiren olseni","parent_no":"txn:65046","reference_no":"ref:23819","is_extant":"extinct","n_occs":11},
+{"orig_no":"txn:43247","taxon_no":"var:43247","taxon_rank":"genus","taxon_name":"Gomphotherium","accepted_no":"txn:43247","accepted_rank":"genus","accepted_name":"Gomphotherium","parent_no":"txn:43240","reference_no":"ref:33869","is_extant":"extinct","n_occs":269},
+{"orig_no":"txn:51515","taxon_no":"var:51515","taxon_rank":"species","taxon_name":"Serbelodon barbourensis","accepted_no":"txn:51515","accepted_rank":"species","accepted_name":"Serbelodon barbourensis","parent_no":"txn:43257","reference_no":"ref:63449","is_extant":"extinct","n_occs":3},
+{"orig_no":"txn:51515","taxon_no":"var:43962","flags":"V","taxon_rank":"species","taxon_name":"Amebelodon barbourensis","difference":"recombined as","accepted_no":"txn:51515","accepted_rank":"species","accepted_name":"Serbelodon barbourensis","parent_no":"txn:43257","reference_no":"ref:63449","is_extant":"extinct","n_occs":3},
+{"orig_no":"txn:44170","taxon_no":"var:44170","taxon_rank":"species","taxon_name":"Aphelops malacorhinus","accepted_no":"txn:44170","accepted_rank":"species","accepted_name":"Aphelops malacorhinus","parent_no":"txn:43190","reference_no":"ref:14502","is_extant":"extinct","n_occs":13},
+{"orig_no":"txn:44052","taxon_no":"var:44052","taxon_rank":"species","taxon_name":"Anchitherium clarencei","accepted_no":"txn:44052","accepted_rank":"species","accepted_name":"Anchitherium clarencei","parent_no":"txn:42987","reference_no":"ref:3135","is_extant":"extinct","n_occs":9},
+{"orig_no":"txn:51890","taxon_no":"var:46086","taxon_rank":"species","taxon_name":"Enhydrocyon pahinsintewakpa","accepted_no":"txn:51890","accepted_rank":"species","accepted_name":"Enhydrocyon pahinsintewakpa","parent_no":"txn:41211","reference_no":"ref:2351","is_extant":"extinct","n_occs":10},
+{"orig_no":"txn:38423","taxon_no":"var:38423","taxon_rank":"genus","taxon_name":"Alligator","accepted_no":"txn:38423","accepted_rank":"genus","accepted_name":"Alligator","parent_no":"txn:53992","reference_no":"ref:4783","is_extant":"extant","n_occs":123},
+{"orig_no":"txn:96549","taxon_no":"var:96549","taxon_rank":"species","taxon_name":"Alligator mefferdi","accepted_no":"txn:96549","accepted_rank":"species","accepted_name":"Alligator mefferdi","parent_no":"txn:38423","reference_no":"ref:23585","is_extant":"extinct","n_occs":2},
+{"orig_no":"txn:110823","taxon_no":"var:110824","taxon_rank":"species","taxon_name":"Alligator mississippiensis","accepted_no":"txn:110823","accepted_rank":"species","accepted_name":"Alligator mississippiensis","parent_no":"txn:38423","reference_no":"ref:25710","is_extant":"extant","n_occs":29},
+{"orig_no":"txn:16870","taxon_no":"var:16870","taxon_rank":"genus","taxon_name":"Ostrea","accepted_no":"txn:16870","accepted_rank":"genus","accepted_name":"Ostrea","parent_no":"txn:61529","reference_no":"ref:6930","is_extant":"extant","n_occs":2841},
+{"orig_no":"txn:81313","taxon_no":"var:81313","flags":"V","taxon_rank":"species","taxon_name":"Ostrea podagrina","difference":"recombined as","accepted_no":"txn:81313","accepted_rank":"species","accepted_name":"Ostrea (Ostrea) podagrina","parent_no":"txn:94289","reference_no":"ref:11845","is_extant":"extinct","n_occs":12},
+{"orig_no":"txn:81313","taxon_no":"var:102915","taxon_rank":"species","taxon_name":"Ostrea (Ostrea) podagrina","accepted_no":"txn:81313","accepted_rank":"species","accepted_name":"Ostrea (Ostrea) podagrina","parent_no":"txn:94289","reference_no":"ref:11845","is_extant":"extinct","n_occs":12},
+{"orig_no":"txn:114119","taxon_no":"var:114120","taxon_rank":"species","taxon_name":"Velates perversus","accepted_no":"txn:114119","accepted_rank":"species","accepted_name":"Velates perversus","parent_no":"txn:9369","reference_no":"ref:26174","is_extant":"extinct","n_occs":65},
+{"orig_no":"txn:155289","taxon_no":"var:155289","taxon_rank":"species","taxon_name":"Velates floridanus","difference":"subjective synonym of","accepted_no":"txn:114119","accepted_rank":"species","accepted_name":"Velates perversus","parent_no":"txn:9369","reference_no":"ref:11306","is_extant":"extinct","n_occs":65}
+]
+}

@@ -131,6 +131,13 @@ bounds. Active ranges exclude unresolved/partial ages; All ages includes them.
 The legacy `/map/occurrences` still filters source bounds only; interactive Explore
 uses `/map/places` and `/catalog` for derived filtering.
 
+[TIME-1 geological-time semantics](geological-time-semantics.md) inventories the
+source, normalized, derived, nullable, and versioned fields and public contracts.
+Current-public discovery requires the active scientific policy in addition to
+source currentness/hash. Browse generations and client revision tokens bind that
+policy explicitly; a policy change requires discovery repair before incompatible
+catalog interpretations can be served as current.
+
 ## Geography and queries
 
 Locality.geom is the normalized authority: nullable `geometry(Point,4326)` with
@@ -214,3 +221,32 @@ refresh use the existing source paths; neither rewrites canonical museum asserti
 Lineage counts pass current-public membership and context, deduplicating specimens
 across multiple identification assertions. Locality grouping uses canonical IDs;
 exact-coordinate presentation aggregates never merge those identities.
+
+## Independent PBDB evidence (Phase 4B)
+
+Migration `0010_pbdb_evidence` adds nine tables: NormalizedSourceRevision,
+SourceNormalizationCurrent, SourceRecordDependency, ProviderAgeEvidence,
+ResearchReference, IdentificationEvidence, MaterialEvidence,
+CollectionReferenceEvidence and OpinionReferenceEvidence. Immutable raw revisions
+and normalized dependency frames retain distinct provider assertions and their
+publication proofs. Bibliography now exists for PBDB's explicit references; the
+earlier UFVP core still supplies no inferred publication relationships.
+
+PBDB Occurrence does not require a Specimen. Explicit material evidence and
+measurement records do not imply physical-object cardinality, custody or canonical
+Specimen identity. CatalogEntry distinguishes material and occurrence evidence,
+permits the latter's NULL Specimen and tracks current explicit material membership.
+Typed normalization and provider-age foreign keys coexist with the separate UFVP
+interpretation proof; checks forbid mixed or incomplete proof keys.
+
+PBDB collection IDs scope CollectionEvent/context and Locality independently of
+museum collections. Latest entered identification supplies source-scoped navigation;
+original/reidentification, accepted concepts, variants and opinions remain separate
+evidence. Provider-calibrated envelopes use `pbdb-provider-envelope-v1`; determined
+date value/error/unit/method tuples are separate and unconverted. Modern positions
+with unverified datum yield no canonical geometry; paleopositions stay independent.
+No taxon/locality name merge or cross-source match is inferred.
+
+Only disposable databases received this migration. Normal UFVP remains at 0009;
+PBDB discovery is internal until later review. See [adapter design](pbdb-adapter.md)
+and [Phase 4B evidence](phase-4b-report.md) for lifecycle, transactions and validation.

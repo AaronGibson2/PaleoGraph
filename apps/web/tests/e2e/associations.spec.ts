@@ -82,7 +82,7 @@ test("classification keyboard focus traverses source ranks without asserting anc
   await page.keyboard.press("ArrowLeft");
   await expect.poll(() => new URL(page.url()).searchParams.get("lineage_focus")).toBeNull();
   await expect(page.locator(".scientific-caveat")).toContainText("Classification ≠ phylogeny");
-  await expect(page.locator(".lineage-span").first()).toContainText("known");
+  await expect(page.locator(".lineage-span").first()).toContainText("with numeric bounds");
   await expect(page.locator(".lineage-reference span").first()).toBeVisible();
   await expect(page.locator(".taxon-icon").first()).toBeVisible();
 });

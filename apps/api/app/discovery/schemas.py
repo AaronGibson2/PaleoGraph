@@ -68,8 +68,15 @@ class PlaceQuery(ContextQuery):
 
 
 class CatalogItem(BaseModel):
+    """Effective envelope; age_basis distinguishes complete source bounds from
+    separately derived reference bounds. source_age_label is trimmed evidence,
+    not the normalized interval name; exact wording remains in occurrence detail.
+    """
+
     id: UUID
-    specimen_id: UUID
+    specimen_id: UUID | None
+    evidence_kind: Literal["material", "occurrence"] = "material"
+    material_evidence_count: int = 0
     label: str
     scientific_name: str
     taxon_id: UUID
@@ -78,9 +85,15 @@ class CatalogItem(BaseModel):
     locality_name: str | None
     longitude: float | None
     latitude: float | None
-    older_ma: float | None
-    younger_ma: float | None
-    age_basis: str
+    older_ma: float | None = Field(
+        description="Older effective envelope bound in Ma, not a measured specimen date"
+    )
+    younger_ma: float | None = Field(
+        description="Younger effective envelope bound in Ma; zero means present, null unknown"
+    )
+    age_basis: str = Field(
+        description="source-numeric, derived-interval, absent, ambiguous, or unmapped"
+    )
     source_age_label: str | None
 
 
@@ -104,7 +117,10 @@ class Place(BaseModel):
     latitude: float
     record_count: int
     locality_count: int
-    interpreted_count: int
+    interpreted_count: int = Field(
+        description="Legacy name: assertions with complete effective numeric envelopes, "
+        "including source numeric ages"
+    )
     location_is_generalized: bool
 
 
@@ -143,6 +159,11 @@ class GraphPage(BaseModel):
 
 
 class AssociationItem(EntityRef):
+    """Outer envelope of complete material bounds in context, not biological duration.
+    Known counts include both source numeric and derived intervals; incomplete
+    assertions contribute to unknown counts and never to either envelope endpoint.
+    """
+
     assertion_count: int
     specimen_count: int
     source_taxon_count: int
@@ -160,6 +181,11 @@ class AssociationPage(BaseModel):
 
 
 class LocalitySummary(BaseModel):
+    """Material aggregate under the active context, not source-supplied locality age.
+    source_terms are source evidence; interpreted_intervals retain age_basis for
+    complete source bounds, interpreted label envelopes, and unresolved groups.
+    """
+
     entity: EntityRef
     assertion_count: int
     specimen_count: int

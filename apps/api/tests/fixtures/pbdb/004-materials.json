@@ -1,0 +1,33 @@
+{
+"data_provider":"The Paleobiology Database",
+"data_source":"The Paleobiology Database",
+"data_license":"Creative Commons CC0",
+"license_url":"https://creativecommons.org/publicdomain/zero/1.0/",
+"documentation_url":"http://paleobiodb.org/data1.2/specs/list_doc.html",
+"data_url":"http://paleobiodb.org/data1.2/specs/list.json?vocab=pbdb&extids=yes&datainfo=yes&rowcount=yes&strict=yes&occ_id=44870%2C45198%2C148077%2C181311%2C187885%2C187888%2C188189%2C256655&limit=all&show=crmod",
+"access_time":"Mon 2026-10-05 21:41:33 GMT",
+"title":"PBDB Data Service",
+"parameters":{
+"occ_id":"occ:44870,occ:45198,occ:148077,occ:181311,occ:187885,occ:187888,occ:188189,occ:256655",
+"timerule":"major",
+"taxon_status":"all",
+"show":"crmod",
+"limit":"all",
+"strict":"1",
+"extids":"1",
+"vocab":"pbdb"
+},
+"elapsed_time":0.00308,
+"records_found":8,
+"records_returned":8,
+"records": [
+{"specimen_no":"spm:133","occurrence_no":"occ:187885","reid_no":"rei:6473","collection_no":"col:18554","specimen_part":"m1","n_measured":4,"comments":"MacFadden and Hulbert 1990 (Love Bone Bed: both m1 and m2)","identified_name":"Gomphotherium","identified_rank":"genus","identified_no":"txn:43247","accepted_name":"Gomphotherium","accepted_rank":"genus","accepted_no":"txn:43247","max_ma":12.5,"min_ma":9.4,"reference_no":"ref:2375","created":"2005-08-09 16:18:34","modified":"2005-08-09 18:18:34"},
+{"specimen_no":"spm:169","occurrence_no":"occ:188189","collection_no":"col:18597","specimen_part":"m1","n_measured":2,"comments":"MacFadden 2001 (Thomas Farm: remeasured from Simpson 1932)","identified_name":"Anchitherium clarencei","identified_rank":"species","identified_no":"txn:44052","accepted_name":"Anchitherium clarencei","accepted_rank":"species","accepted_no":"txn:44052","max_ma":18.5,"min_ma":16.3,"reference_no":"ref:4197","created":"2005-08-09 16:18:34","modified":"2005-08-09 18:18:34"},
+{"specimen_no":"spm:228","occurrence_no":"occ:187888","collection_no":"col:18554","specimen_part":"m1","n_measured":25,"comments":"MacFadden and Hulbert 1990 (Love Bone Bed)","identified_name":"Aphelops malacorhinus","identified_rank":"species","identified_no":"txn:44170","accepted_name":"Aphelops malacorhinus","accepted_rank":"species","accepted_no":"txn:44170","max_ma":12.5,"min_ma":9.4,"reference_no":"ref:2375","created":"2005-08-09 16:18:34","modified":"2005-08-09 18:18:34"},
+{"specimen_no":"spm:4635","occurrence_no":"occ:188189","collection_no":"col:18597","specimen_part":"P3","n_measured":1,"comments":"MacFadden 2001 (Thomas Farm: M2 < P3)","identified_name":"Anchitherium clarencei","identified_rank":"species","identified_no":"txn:44052","accepted_name":"Anchitherium clarencei","accepted_rank":"species","accepted_no":"txn:44052","max_ma":18.5,"min_ma":16.3,"reference_no":"ref:4197","created":"2005-08-09 16:19:04","modified":"2005-08-09 18:19:04"},
+{"specimen_no":"spm:4636","occurrence_no":"occ:188189","collection_no":"col:18597","specimen_part":"P4","n_measured":1,"comments":"MacFadden 2001 (Thomas Farm: M2 < P3)","identified_name":"Anchitherium clarencei","identified_rank":"species","identified_no":"txn:44052","accepted_name":"Anchitherium clarencei","accepted_rank":"species","accepted_no":"txn:44052","max_ma":18.5,"min_ma":16.3,"reference_no":"ref:4197","created":"2005-08-09 16:19:04","modified":"2005-08-09 18:19:04"},
+{"specimen_no":"spm:4637","occurrence_no":"occ:188189","collection_no":"col:18597","specimen_part":"M1","n_measured":1,"comments":"MacFadden 2001 (Thomas Farm: M2 < P3)","identified_name":"Anchitherium clarencei","identified_rank":"species","identified_no":"txn:44052","accepted_name":"Anchitherium clarencei","accepted_rank":"species","accepted_no":"txn:44052","max_ma":18.5,"min_ma":16.3,"reference_no":"ref:4197","created":"2005-08-09 16:19:04","modified":"2005-08-09 18:19:04"},
+{"specimen_no":"spm:4638","occurrence_no":"occ:188189","collection_no":"col:18597","specimen_part":"p3","n_measured":3,"comments":"MacFadden 2001 (Thomas Farm: M2 < P3)","identified_name":"Anchitherium clarencei","identified_rank":"species","identified_no":"txn:44052","accepted_name":"Anchitherium clarencei","accepted_rank":"species","accepted_no":"txn:44052","max_ma":18.5,"min_ma":16.3,"reference_no":"ref:4197","created":"2005-08-09 16:19:04","modified":"2005-08-09 18:19:04"},
+{"specimen_no":"spm:4639","occurrence_no":"occ:188189","collection_no":"col:18597","specimen_part":"p4","n_measured":3,"comments":"MacFadden 2001 (Thomas Farm: M2 < P3)","identified_name":"Anchitherium clarencei","identified_rank":"species","identified_no":"txn:44052","accepted_name":"Anchitherium clarencei","accepted_rank":"species","accepted_no":"txn:44052","max_ma":18.5,"min_ma":16.3,"reference_no":"ref:4197","created":"2005-08-09 16:19:04","modified":"2005-08-09 18:19:04"}
+]
+}
