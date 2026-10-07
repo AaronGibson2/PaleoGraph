@@ -32,9 +32,11 @@ export function parseExploreState(params: URLSearchParams): ExploreState {
   const lat = numeric(params, "at_lat", NaN, -90, 90);
   if (Number.isFinite(lon) && Number.isFinite(lat)) { context.at_lon = lon; context.at_lat = lat; }
   const kind = params.get("selected_kind");
-  const kinds = ["specimen", "taxon", "locality", "collection", "institution", "term"];
+  const kinds = ["occurrence", "reference", "specimen", "taxon", "locality", "collection", "institution", "term"];
   return {
     ...context,
+    ...(["ufvp","pbdb","all"].includes(params.get("source") ?? "") ? {source: params.get("source") as ExplorationContext["source"]} : {}),
+    ...(uuid.test(params.get("reference_id") ?? "") ? {reference_id:params.get("reference_id")!} : {}),
     lat: numeric(params, "lat", DEFAULT_VIEW.lat, -85, 85),
     lng: numeric(params, "lng", DEFAULT_VIEW.lng, -180, 180),
     zoom: numeric(params, "zoom", DEFAULT_VIEW.zoom, 1, 18),

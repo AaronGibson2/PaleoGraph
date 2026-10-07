@@ -3,7 +3,7 @@ import { openCatalog, stubBasemap } from "./helpers";
 test.beforeEach(async({page})=>stubBasemap(page));
 
 test("global keyboard search pivots source-supported taxonomy and shares its URL",async({page})=>{
- await page.goto("/explore");const input=page.getByRole("combobox");await input.fill("Smilodon");
+ await page.goto("/explore");const input=page.getByRole("combobox",{name:/Search/});await input.fill("Smilodon");
  await expect(page.locator("#search-results [role=option]").first()).toBeVisible();
  await expect(page.locator(".search-meta")).toContainText("matching entities");await input.press("ArrowDown");await input.press("Home");await input.press("Enter");
  await expect(page.locator(".atlas-context")).toContainText("Smilodon");expect(new URL(page.url()).searchParams.get("taxon_id")).toBeTruthy();
@@ -43,7 +43,7 @@ test("large and laptop canvases use the viewport and expose authoritative time",
 });
 
 test("search opens a specimen, its geological interpretation filters, and supported higher ranks pivot",async({page})=>{
- await page.goto("/explore");const input=page.getByRole("combobox");await input.fill("TEST-000");
+ await page.goto("/explore");const input=page.getByRole("combobox",{name:/Search/});await input.fill("TEST-000");
  await expect(page.locator("#search-results [role=option]").first()).toContainText("specimen");await input.press("Enter");
  await expect(page.locator("#inspection-heading")).toContainText("TEST-000");
  await page.locator(".interpretation .scientific-link").click();await expect(page.locator("#time-heading")).toHaveText("11.63\u20135.333 Ma");
@@ -55,7 +55,7 @@ test("search opens a specimen, its geological interpretation filters, and suppor
 
 test("mobile keyboard search opens a locality and retains its context across map and graph",async({page})=>{
  await page.setViewportSize({width:390,height:844});await page.emulateMedia({reducedMotion:"reduce"});await page.goto("/explore");
- const input=page.getByRole("combobox");await input.fill("Fictional automated test locality 0");
+ const input=page.getByRole("combobox",{name:/Search/});await input.fill("Fictional automated test locality 0");
  await expect(page.locator("#search-results [role=option]").first()).toContainText("locality");await input.press("Enter");
  await expect(page.locator("#inspection-heading")).toHaveText("Fictional automated test locality 0");
  const id=new URL(page.url()).searchParams.get("locality_id");expect(id).toBeTruthy();

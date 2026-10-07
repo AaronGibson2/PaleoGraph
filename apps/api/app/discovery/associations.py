@@ -4,7 +4,8 @@ Time spans summarize indexed material. No temporal position describes an ancesto
 All aggregate membership passes the same current-public evidence guard as the atlas.
 """
 
-from typing import Any
+from collections.abc import Sequence
+from typing import Any, Literal
 from uuid import UUID
 
 from fastapi import HTTPException
@@ -88,7 +89,10 @@ def localities(session: Session, query: ContextQuery) -> AssociationPage:
     if query.q.strip():
         where += " AND lower(l.name) LIKE :label_filter"
         params["label_filter"] = _label_filter(query.q)
-    sql = f"""SELECT 'locality' kind, l.id, l.name label, 'Published locality' subtitle,
+    sql = f"""SELECT 'locality' kind, l.id, l.name label,
+        CASE WHEN bool_or(ce.evidence_kind='occurrence') THEN 'PBDB collection context' ELSE
+        'Published locality' END subtitle,
+        CASE WHEN bool_or(ce.evidence_kind='occurrence') THEN 'pbdb' ELSE 'ufvp' END source,
         {COUNTS} {JOINS} WHERE {where} AND l.id IS NOT NULL GROUP BY l.id"""
     return _page(session, query, sql, params, "localities")
 
@@ -99,6 +103,8 @@ def fauna(session: Session, query: ContextQuery) -> AssociationPage:
         where += " AND lower(t.scientific_name) LIKE :label_filter"
         params["label_filter"] = _label_filter(query.q)
     sql = f"""SELECT 'taxon' kind, t.id, t.scientific_name label, t.rank subtitle,
+        CASE WHEN t.source_dataset_id='595701ae-2293-4472-8be1-29db52630555' THEN 'pbdb' ELSE
+        'ufvp' END source,
         {COUNTS} {JOINS} JOIN taxon t ON t.id=ce.taxon_id
         WHERE {where} GROUP BY t.id"""
     return _page(session, query, sql, params, "fauna")
@@ -116,6 +122,9 @@ def locality_summary(session: Session, identifier: UUID, query: ContextQuery) ->
     row = (
         session.execute(
             text("""SELECT id, name label, description,
+        (SELECT sr.source_dataset_id FROM locality_evidence le JOIN source_record sr
+         ON sr.id=le.source_record_id WHERE le.locality_id=locality.id AND sr.is_current LIMIT 1)
+          source_dataset_id,
         coordinate_uncertainty_m, geodetic_datum, location_is_generalized, location_is_withheld,
         CASE WHEN NOT location_is_withheld THEN ST_X(geom) END longitude,
         CASE WHEN NOT location_is_withheld THEN ST_Y(geom) END latitude
@@ -194,8 +203,17 @@ def _locality_response(row: dict[str, Any], result: dict[str, Any]) -> LocalityS
         key: value for key, value in row.items() if key not in {"id", "label", "description"}
     }
     properties["geography"] = safe_geography(row["description"], row["location_is_withheld"])
+    from app.discovery.pbdb import DATASET_UUID
+
+    source: Literal["pbdb", "ufvp"] = "pbdb" if row["source_dataset_id"] == DATASET_UUID else "ufvp"
     return LocalitySummary(
-        entity=EntityRef(kind="locality", id=row["id"], label=row["label"]),
+        entity=EntityRef(
+            kind="locality",
+            id=row["id"],
+            label=row["label"],
+            source=source,
+            subtitle="PBDB collection context" if source == "pbdb" else "Published locality",
+        ),
         **result,
         properties=properties,
     )
@@ -235,18 +253,32 @@ def lineage(session: Session, query: ContextQuery, focus: UUID | None = None) ->
             raise HTTPException(422, "Invalid lineage cursor") from error
         seek = " AND (is_source_identification,id)>(:after_identification,:after)"
     candidates = [(live_nodes, False)]
-    if browse.global_context(query, taxon=focus) and browse.ready(session):
+    if (
+        query.source != "pbdb"
+        and browse.global_context(query.model_copy(update={"source": "ufvp"}), taxon=focus)
+        and browse.ready(session)
+    ):
         scope = (
             "p.parent_taxon_id IS NULL"
             if focus is None
             else ("n.id=:focus OR p.parent_taxon_id=:focus")
         )
+        extra = ""
+        if query.source == "all":
+            pbdb_where, pbdb_params = matching(query.model_copy(update={"source": "pbdb"}))
+            params.update(pbdb_params)
+            if focus:
+                pbdb_where += " AND ce.taxon_id=:focus"
+            extra = f""" UNION ALL SELECT ce.taxon_id id,{COUNTS}
+                {JOINS} WHERE {pbdb_where} GROUP BY ce.taxon_id"""
         candidates.insert(
             0,
             (
                 f"""nodes AS (
-            SELECT n.* FROM taxon_browse_summary n
-            LEFT JOIN classification_link p ON p.taxon_id=n.id WHERE {scope})""",
+            SELECT n.id,n.assertion_count,n.specimen_count,n.source_taxon_count,
+                n.older_ma,n.younger_ma,n.known_age_count,n.unknown_age_count
+            FROM taxon_browse_summary n
+            LEFT JOIN classification_link p ON p.taxon_id=n.id WHERE {scope}{extra})""",
                 True,
             ),
         )
@@ -264,7 +296,10 @@ def lineage(session: Session, query: ContextQuery, focus: UUID | None = None) ->
             session.execute(
                 text(f"""WITH RECURSIVE {PARENTS},{nodes}, branches AS (
         SELECT n.*,t.scientific_name label,t.rank subtitle,parents.parent_id,
-            'taxon' kind,EXISTS({children}) has_children,
+            'taxon' kind,
+            CASE WHEN t.source_dataset_id='595701ae-2293-4472-8be1-29db52630555' THEN 'pbdb'
+            ELSE 'ufvp' END source,
+            EXISTS({children}) has_children,
             EXISTS(SELECT 1 FROM taxon_path s WHERE s.taxon_id=n.id AND s.ancestor_id=n.id)
                 is_source_identification
         FROM nodes n JOIN taxon t ON t.id=n.id LEFT JOIN parents ON parents.id=n.id
@@ -287,13 +322,15 @@ def lineage(session: Session, query: ContextQuery, focus: UUID | None = None) ->
     total = response["total"]
     rows = response["items"]
     # Breadcrumbs describe the stable published parent path, not chronology.
-    crumbs = (
+    crumbs: Sequence[Any] = (
         session.execute(
             text(f"""WITH RECURSIVE {PARENTS}, trail AS (
         SELECT id,parent_id,0 depth FROM parents WHERE id=:focus UNION ALL
         SELECT p.id,p.parent_id,t.depth+1 FROM parents p JOIN trail t ON p.id=t.parent_id
         WHERE t.depth<10)
-        SELECT 'taxon' kind,t.id,t.scientific_name label,t.rank subtitle
+        SELECT 'taxon' kind,t.id,t.scientific_name label,t.rank subtitle,
+            CASE WHEN t.source_dataset_id='595701ae-2293-4472-8be1-29db52630555' THEN 'pbdb'
+            ELSE 'ufvp' END source
         FROM trail JOIN taxon t ON t.id=trail.id ORDER BY depth DESC"""),
             params,
         )
@@ -303,7 +340,12 @@ def lineage(session: Session, query: ContextQuery, focus: UUID | None = None) ->
         else []
     )
     if focus and not crumbs:
-        raise HTTPException(404, "Source classification not found")
+        from app.discovery.queries import entity_ref
+
+        ref = entity_ref(session, "taxon", focus)
+        if ref.source != "pbdb":
+            raise HTTPException(404, "Source classification not found")
+        crumbs = [ref.model_dump()]
     ids = [UUID(row["id"]) for row in rows[: query.limit]]
     classifications = classification_contexts(session, ids + [row["id"] for row in crumbs])
     items = [

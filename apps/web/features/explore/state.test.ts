@@ -2,6 +2,19 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { DEFAULT_VIEW, normalizeViewport, parseExploreState, serializeExploreState, lineageContext } from "./state.ts";
 import { occurrenceQuery } from "../../lib/api/client.ts";
+import { contextQuery } from "../../lib/api/discovery.ts";
+
+test("source and reference selection survive a shareable URL and constrain read keys", () => {
+  const id="de000000-0000-4000-8000-000600000001";
+  const state=parseExploreState(new URLSearchParams(`source=pbdb&reference_id=${id}&selected=${id}&selected_kind=occurrence`));
+  const restored=parseExploreState(new URLSearchParams(serializeExploreState(state)));
+  assert.equal(restored.source,"pbdb");
+  assert.equal(restored.reference_id,id);
+  assert.equal(restored.selected_kind,"occurrence");
+  assert.equal(contextQuery(state).get("source"),"pbdb");
+  assert.equal(contextQuery(state).get("reference_id"),id);
+  assert.equal(parseExploreState(new URLSearchParams("source=invalid")).source,undefined);
+});
 
 test("locality and lineage surfaces restore stable classification focus", () => {
   const id = "de000000-0000-4000-8000-000600000001";

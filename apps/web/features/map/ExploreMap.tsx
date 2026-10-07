@@ -69,7 +69,7 @@ export default function ExploreMap(props: Props) {
         // Co-located assertions remain individually selectable, without fake point jitter.
         const choices = document.createElement("div");
         const heading = document.createElement("strong");
-        heading.textContent = "Loaded assertions at this place";
+        heading.textContent = "Loaded evidence at this place";
         choices.append(heading);
         const popup = new Popup({ offset: 14 });
         for (const feature of features) {
@@ -94,7 +94,7 @@ export default function ExploreMap(props: Props) {
       map.on("mousemove", "occurrence-points", event => {
         map.getCanvas().style.cursor = "pointer";
         const count = event.features?.length ?? 0;
-        const label = count > 1 ? `${count} published positions · click to choose` : `${event.features?.[0]?.properties.record_count ?? 1} catalog assertions / ${event.features?.[0]?.properties.locality_count ?? 1} localities · click to browse all material`;
+        const label = count > 1 ? `${count} published positions · click to choose` : `${event.features?.[0]?.properties.record_count ?? 1} evidence records / ${event.features?.[0]?.properties.locality_count ?? 1} source place contexts · click to browse evidence`;
         hover.setLngLat(event.lngLat).setText(label).addTo(map);
       });
       map.on("mouseleave", "occurrence-points", () => { map.getCanvas().style.cursor = ""; hover.remove(); });

@@ -3,11 +3,15 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-EntityKind = Literal["specimen", "taxon", "locality", "collection", "institution", "term"]
+EntityKind = Literal[
+    "specimen", "occurrence", "reference", "taxon", "locality", "collection", "institution", "term"
+]
 
 
 class ContextQuery(BaseModel):
     model_config = ConfigDict(allow_inf_nan=False)
+    source: Literal["ufvp", "pbdb", "all"] = "ufvp"
+    reference_id: UUID | None = None
     taxon_id: UUID | None = None
     locality_id: UUID | None = None
     collection_id: UUID | None = None
@@ -43,6 +47,7 @@ class ContextQuery(BaseModel):
 
 
 class EntityRef(BaseModel):
+    source: Literal["ufvp", "pbdb"] | None = None
     kind: EntityKind
     id: UUID
     label: str
@@ -112,6 +117,8 @@ class SearchPage(BaseModel):
 
 
 class Place(BaseModel):
+    museum_material: int = 0
+    published_occurrences: int = 0
     id: UUID
     longitude: float
     latitude: float
@@ -125,6 +132,9 @@ class Place(BaseModel):
 
 
 class PlacePage(BaseModel):
+    museum_material: int = 0
+    published_occurrences: int = 0
+    unmapped_published_occurrences: int = 0
     items: list[Place]
     total_records: int
     total_places: int

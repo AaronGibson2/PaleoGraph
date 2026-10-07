@@ -30,6 +30,7 @@ class InternalPage(BaseModel):
     total: int
     next_cursor: str | None
     limit: int
+    counts: dict[str, int]
 
 
 def eligibility(source: str) -> str:
@@ -38,34 +39,64 @@ def eligibility(source: str) -> str:
     return ufvp if source == "ufvp" else pbdb if source == "pbdb" else f"({ufvp} OR {pbdb})"
 
 
-def occurrence_catalog(session: Session, query: InternalQuery) -> InternalPage:
+def occurrence_catalog(
+    session: Session, query: InternalQuery, *, projected: bool = False
+) -> InternalPage:
     """Reference filtering means explicit current identification-to-reference edges."""
-    where, params = matching(query, eligibility=eligibility(query.source))
-    params.update(parameters())
-    if query.reference_id:
-        params["reference"] = query.reference_id
-        where += """ AND EXISTS (SELECT 1 FROM identification_evidence ie
-          JOIN source_record ir ON ir.id=ie.source_record_id AND ir.content_hash=ie.content_hash
-          JOIN source_record_dependency frame ON frame.source_record_id=ce.source_record_id
-            AND frame.content_hash=ce.content_hash
-            AND frame.normalization_hash=ce.normalization_hash
-            AND frame.dependency_record_id=ir.id AND frame.dependency_content_hash=ir.content_hash
-          WHERE ie.occurrence_id=ce.occurrence_id AND ie.reference_id=:reference
-            AND ir.is_current)"""
-    total = int(session.scalar(text(f"SELECT count(*) {JOINS} WHERE {where}"), params) or 0)
+    if projected:
+        from app.discovery.occurrence_browse import (
+            eligibility as product_eligibility,
+        )
+        from app.discovery.occurrence_browse import (
+            query_parameters,
+        )
+
+        supplied = query_parameters()
+    else:
+        supplied = parameters()
+    # Keep each source's scientific guard as an independent plan. Source-scoped
+    # UUIDs make this union disjoint, without merging any canonical entities.
+    params = dict(supplied)
+    parts = []
+    for source in ("ufvp", "pbdb") if query.source == "all" else (query.source,):
+        predicate = product_eligibility(source) if projected else eligibility(source)
+        scoped = query.model_copy(update={"source": source})
+        where, context_params = matching(scoped, eligibility=predicate)
+        params.update(context_params)
+        if query.reference_id:
+            where += """ AND ce.occurrence_id IN (SELECT ie.occurrence_id
+              FROM identification_evidence ie JOIN source_record ir ON ir.id=ie.source_record_id
+              AND ir.content_hash=ie.content_hash AND ir.is_current
+              WHERE ie.reference_id=:reference_id)"""
+        parts.append(f"SELECT ce.occurrence_id,ce.evidence_kind {JOINS} WHERE {where}")
+    membership = " UNION ALL ".join(parts)
+    counts = dict(
+        session.execute(
+            text(f"""SELECT
+      count(*) FILTER (WHERE ce.evidence_kind='material') museum_material,
+      count(*) FILTER (WHERE ce.evidence_kind='occurrence') published_occurrences
+      FROM ({membership}) ce"""),
+            params,
+        )
+        .mappings()
+        .one()
+    )
+    total = sum(counts.values())
     namespace = "internal-multi-source-v1"
     cursor = decode_cursor(query, namespace)
+    seek = ""
     if cursor:
         try:
             params["after"] = UUID(cursor)
         except ValueError as error:
             raise HTTPException(422, "Invalid internal occurrence cursor") from error
-        where += " AND ce.occurrence_id > :after"
+        seek = "WHERE occurrence_id > :after"
     params["limit"] = query.limit + 1
     rows = (
         session.execute(
             text(f"""WITH page AS MATERIALIZED (
-          SELECT ce.occurrence_id {JOINS} WHERE {where} ORDER BY ce.occurrence_id LIMIT :limit)
+          SELECT occurrence_id FROM ({membership}) candidates {seek}
+          ORDER BY occurrence_id LIMIT :limit)
         SELECT ce.occurrence_id id,ce.specimen_id,ce.evidence_kind,ce.material_evidence_count,
           ce.label,ce.scientific_name,ce.taxon_id,ce.locality_id,l.name locality_name,
           CASE WHEN NOT l.location_is_withheld THEN ST_X(l.geom) END longitude,
@@ -93,6 +124,7 @@ def occurrence_catalog(session: Session, query: InternalQuery) -> InternalPage:
         items=items,
         total=total,
         limit=query.limit,
+        counts=counts,
         next_cursor=encode_cursor(query, namespace, str(items[-1].id))
         if len(rows) > query.limit
         else None,

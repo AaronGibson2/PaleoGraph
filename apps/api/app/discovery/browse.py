@@ -28,7 +28,9 @@ def global_context(
 ) -> bool:
     """Only the complete represented context; pagination does not change membership."""
     return (
-        query.locality_id in (None, locality)
+        query.source == "ufvp"
+        and query.reference_id is None
+        and query.locality_id in (None, locality)
         and query.taxon_id in (None, taxon)
         and not query.q.strip()
         and all(
@@ -211,6 +213,9 @@ def _rebuild(session: Session) -> dict[str, Any]:
     )
     session.execute(text("ANALYZE locality_browse_summary"))
     session.execute(text("ANALYZE taxon_browse_summary"))
+    from app.discovery.occurrence_browse import rebuild as rebuild_occurrences
+
+    rebuild_occurrences(session)
     return {
         "projection_version": VERSION,
         "input_revision": input_revision,

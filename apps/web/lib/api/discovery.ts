@@ -1,30 +1,33 @@
 import type { AgeRange, Viewport } from "./types.ts";
 import { request } from "./client.ts";
 
-export type EntityKind = "specimen" | "taxon" | "locality" | "collection" | "institution" | "term";
-export type EntityRef = { kind: EntityKind; id: string; label: string; subtitle: string | null; classification?: string[]; classification_path_ids?: string[] };
+export type EntityKind = "specimen" | "occurrence" | "reference" | "taxon" | "locality" | "collection" | "institution" | "term";
+export type SourceSelection = "ufvp" | "pbdb" | "all";
+export type EntityRef = { source?: "ufvp" | "pbdb" | null; kind: EntityKind; id: string; label: string; subtitle: string | null; classification?: string[]; classification_path_ids?: string[] };
 export type ExplorationContext = {
+  source?: SourceSelection; reference_id?: string | null;
   taxon_id?: string | null; locality_id?: string | null; collection_id?: string | null;
   institution_id?: string | null; term_id?: string | null; at_lon?: number | null; at_lat?: number | null;
   q?: string;
 };
 export type CatalogItem = AgeRange & {
-  id: string; specimen_id: string; label: string; scientific_name: string; taxon_id: string;
+  id: string; specimen_id: string | null; evidence_kind?: "material" | "occurrence"; source?: "ufvp" | "pbdb"; source_license?: string | null; label: string; scientific_name: string; taxon_id: string;
   /** Identification first, then nearest source-classification parents. */
   classification_path_ids?: string[];
   locality_id: string | null; locality_name: string | null; longitude: number | null;
   latitude: number | null; age_basis: string; source_age_label: string | null;
 };
-export type Page<T> = { items: T[]; total: number; next_cursor: string | null; limit: number };
-export type Place = {
+export type Page<T> = { counts?: {museum_material:number;published_occurrences:number}; items: T[]; total: number; next_cursor: string | null; limit: number };
+export type Place = { museum_material?:number;published_occurrences?:number;
   id: string; longitude: number; latitude: number; record_count: number; locality_count: number;
   interpreted_count: number; location_is_generalized: boolean;
 };
-export type PlacePage = { items: Place[]; total_records: number; total_places: number; unmapped_records: number; next_cursor: string | null; limit: number };
-export type EntityDetail = { entity: EntityRef; material_count: number; mapped_count: number; related: EntityRef[]; related_has_more: boolean; properties: Record<string, unknown>; research_note: string };
+export type PlacePage = { museum_material?: number; published_occurrences?: number; unmapped_published_occurrences?: number; items: Place[]; total_records: number; total_places: number; unmapped_records: number; next_cursor: string | null; limit: number };
+export type EntityDetail = { entity: EntityRef; material_count: number; mapped_count: number; related: EntityRef[]; related_has_more: boolean; properties: Record<string, unknown>; research_note: string; occurrence?: PublishedOccurrence | null; reference?: ReferenceItem | null };
 export type GraphPage = { root: EntityRef; nodes: EntityRef[]; edges: { source: string; target: string; label: string }[]; total_neighbors: number; next_cursor: string | null; limit: number };
 export type AssociationItem = EntityRef & AgeRange & { assertion_count: number; specimen_count: number; source_taxon_count: number; known_age_count: number; unknown_age_count: number };
 export type LocalitySummary = {
+  collection_context?: {external_id:string;source_record_id:string;content_hash:string;provider_age:PublishedOccurrence["provider_age"];modern_position:PublishedOccurrence["modern_position"]} | null;
   entity: EntityRef; assertion_count: number; specimen_count: number; source_taxon_count: number;
   collection_count: number; institution_count: number; known_age_count: number; unknown_age_count: number;
   older_ma: number | null; younger_ma: number | null; properties: Record<string, unknown>;
@@ -36,7 +39,7 @@ export type LocalitySummary = {
 export type LineageItem = AssociationItem & { parent_id: string | null; has_children: boolean; classification: string[]; is_source_identification: boolean };
 export type LineagePage = Page<LineageItem> & { focus: EntityRef | null; breadcrumbs: EntityRef[]; focal: LineageItem | null; relationship: string };
 
-export const contextKeys = ["taxon_id", "locality_id", "collection_id", "institution_id", "term_id", "at_lon", "at_lat"] as const;
+export const contextKeys = ["taxon_id", "locality_id", "collection_id", "institution_id", "term_id", "at_lon", "at_lat", "source", "reference_id"] as const;
 export function contextQuery(age: AgeRange & ExplorationContext, viewport?: Viewport): URLSearchParams {
   const params = new URLSearchParams();
   for (const key of [...contextKeys, "older_ma", "younger_ma"] as const) {
@@ -46,7 +49,16 @@ export function contextQuery(age: AgeRange & ExplorationContext, viewport?: View
   if (viewport) for (const [key, value] of Object.entries(viewport)) params.set(key, String(value));
   return params;
 }
+export type ReferenceItem = { id: string; external_id: string; title: string | null; doi: string | null; published_year: string | null; authors: string | null; publication: string | null; role: string; evidence_source_record_id: string; license: string };
+export type PublishedOccurrence = {
+ external_id: string; original_identification: Record<string,string | null>; latest_identification: Record<string,string | null>;
+ modern_position: { longitude: string | null; latitude: string | null; status: string; basis: string | null; precision: string | null };
+ provider_age: AgeRange & { policy: string; early_interval: string | null; late_interval: string | null; determined_dates: Record<string,{value: string | null; error: string | null; unit: string | null; method: string | null}> };
+ material_evidence_count: number; materials: {catalog_label: string | null;source_record_id: string}[]; materials_has_more: boolean;
+ content_hash: string; normalization_hash: string; license: string;
+};
 export const discovery = {
+  references: (kind: EntityKind, id: string, query: string, signal?: AbortSignal) => request<Page<ReferenceItem>>(`/entities/${kind}/${encodeURIComponent(id)}/references?${query}`,signal),
   localities: (query: string, signal?: AbortSignal) => request<Page<AssociationItem>>(`/localities?${query}`, signal),
   locality: (id: string, query: string, signal?: AbortSignal) => request<LocalitySummary>(`/localities/${encodeURIComponent(id)}?${query}`, signal),
   fauna: (id: string, query: string, signal?: AbortSignal) => request<Page<AssociationItem>>(`/localities/${encodeURIComponent(id)}/taxa?${query}`, signal),

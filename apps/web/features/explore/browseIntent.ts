@@ -9,12 +9,13 @@ export const occurrenceKey = (id: string) => browseKey(`/occurrences/${encodeURI
 export function inspectionAssertion(kind: EntityKind, id: string, detail?: EntityDetail, hint?: BrowseTarget): string | undefined {
   // The existing entity endpoint chooses its evidence-bearing assertion. A visible
   // row is an early loading hint, not permission to mix assertions for one specimen.
+  if(kind!=="specimen")return undefined;
   if(detail?.entity.id===id && detail.entity.kind===kind)return typeof detail.properties.occurrence_id==="string" ? detail.properties.occurrence_id : undefined;
   return kind==="specimen" && hint?.id===id && hint.kind===kind ? hint.occurrence_id : undefined;
 }
 export function prefetchEntity(entity: BrowseTarget) {
   browseCache.prefetch(entityKey(entity),signal=>discovery.entity(entity.kind,entity.id,"",signal));
-  if(entity.occurrence_id)browseCache.prefetch(occurrenceKey(entity.occurrence_id),signal=>api.occurrence(entity.occurrence_id!,signal));
+  if(entity.kind==="specimen" && entity.occurrence_id)browseCache.prefetch(occurrenceKey(entity.occurrence_id),signal=>api.occurrence(entity.occurrence_id!,signal));
 }
 export function prefetchLineage(context: string, focus?: string | null) {
   const query=`${context}&limit=12${focus?`&focus=${encodeURIComponent(focus)}`:""}`;
@@ -23,7 +24,7 @@ export function prefetchLineage(context: string, focus?: string | null) {
 export function pivotContext(context: string, entity: EntityRef) {
   const params=new URLSearchParams(context);
   params.delete("at_lon");params.delete("at_lat");
-  if(entity.kind!=="specimen")params.set(`${entity.kind}_id`,entity.id);
+  if(entity.kind!=="specimen" && entity.kind!=="occurrence")params.set(`${entity.kind}_id`,entity.id);
   return params.toString();
 }
 export function prefetchLocality(context: string, entity: EntityRef) {

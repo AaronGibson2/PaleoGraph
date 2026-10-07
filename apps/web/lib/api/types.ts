@@ -74,6 +74,7 @@ export type OccurrenceDetail = AgeRange & {
 };
 
 export type DatasetStatus = {
+  published_occurrences?: number; published_contexts?: number; published_mapped_occurrences?: number; pbdb_license?: string | null; pbdb_version?: string | null;
   title: string; dataset_url: string; license: string | null; version: string | null;
   current_records: number; mapped_records: number; numeric_age_records: number;
   latest_scope: string | null; latest_status: string | null;

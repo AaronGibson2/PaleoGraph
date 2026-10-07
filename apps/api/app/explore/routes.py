@@ -2,7 +2,7 @@ from typing import Annotated, Any
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
 from app.db import get_session
@@ -34,6 +34,8 @@ router = APIRouter(
 @router.get("/datasets/ufvp", response_model=DatasetStatus)
 def dataset_status(session: Annotated[Session, Depends(get_session)]) -> DatasetStatus:
     from app.discovery.browse import revision
+    from app.discovery.occurrence_browse import VERSION, eligibility, query_parameters
+    from app.discovery.pbdb import DATASET_UUID
 
     dataset = session.get(SourceDataset, CANONICAL_DATASET_ID)
     run = session.scalar(
@@ -59,7 +61,25 @@ def dataset_status(session: Annotated[Session, Depends(get_session)]) -> Dataset
         .outerjoin(CollectionEvent.locality)
         .where(evidence)
     ).one()
+    pbdb = session.get(SourceDataset, DATASET_UUID)
+    published = (
+        session.execute(
+            text(f"""SELECT count(*) occurrences,
+        count(DISTINCT ce.locality_id) contexts,
+        count(*) FILTER (WHERE l.geom IS NOT NULL AND NOT l.location_is_withheld) mapped
+        FROM catalog_entry ce LEFT JOIN locality l ON l.id=ce.locality_id
+        WHERE {eligibility("pbdb")}"""),
+            query_parameters(),
+        )
+        .mappings()
+        .one()
+    )
     return DatasetStatus(
+        published_occurrences=published["occurrences"],
+        published_contexts=published["contexts"],
+        published_mapped_occurrences=published["mapped"],
+        pbdb_license=pbdb.license if pbdb else None,
+        pbdb_version=pbdb.version if pbdb else None,
         title=dataset.title if dataset else "University of Florida Vertebrate Paleontology",
         dataset_url=RESOURCE_URL,
         license=dataset.license if dataset else None,
@@ -67,7 +87,7 @@ def dataset_status(session: Annotated[Session, Depends(get_session)]) -> Dataset
         current_records=counts[0],
         mapped_records=counts[1],
         numeric_age_records=counts[2],
-        browse_revision=revision(session),
+        browse_revision=f"{revision(session)}:{VERSION}",
         latest_scope=run.scope if run else None,
         latest_status=run.status if run else None,
         creator=str(run.snapshot.get("creator"))

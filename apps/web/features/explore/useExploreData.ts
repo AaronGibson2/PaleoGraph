@@ -14,7 +14,7 @@ const message = (error: unknown) => error instanceof Error ? error.message : "Da
 
 export function useOccurrences(viewport: Viewport, age: AgeRange & ExplorationContext, retry: number) {
   const { west, south, east, north } = viewport;
-  const contextKey = JSON.stringify({ older_ma: age.older_ma, younger_ma: age.younger_ma, taxon_id: age.taxon_id, locality_id: age.locality_id, collection_id: age.collection_id, institution_id: age.institution_id, term_id: age.term_id, at_lon: age.at_lon, at_lat: age.at_lat });
+  const contextKey = JSON.stringify({ source: age.source, reference_id: age.reference_id, older_ma: age.older_ma, younger_ma: age.younger_ma, taxon_id: age.taxon_id, locality_id: age.locality_id, collection_id: age.collection_id, institution_id: age.institution_id, term_id: age.term_id, at_lon: age.at_lon, at_lat: age.at_lat });
   const [state, dispatch] = useReducer(occurrenceWindow, { viewport, age, retry }, initialWindow);
   useEffect(() => {
     dispatch({ type: "intent", intent: { viewport: { west, south, east, north }, age: JSON.parse(contextKey) as AgeRange & ExplorationContext, retry } });
@@ -97,5 +97,5 @@ async function loadPlaces(bounds: Viewport, context: AgeRange & ExplorationConte
     page = await discovery.places(params.toString(), signal);
     places.push(...page.items);
   }
-  return { items: places.map(place => ({ ...place, scientific_name: `${place.record_count.toLocaleString("en-US")} catalog assertions`, locality_name: `${place.locality_count} published localities`, older_ma: null, younger_ma: null, is_synthetic: false })), returned: places.length, truncated: false, limit: places.length };
+  return { items: places.map(place => ({ ...place, scientific_name: `${place.record_count.toLocaleString("en-US")} evidence records`, locality_name: `${place.locality_count} source place contexts`, older_ma: null, younger_ma: null, is_synthetic: false })), returned: places.length, truncated: false, limit: places.length };
 }

@@ -43,7 +43,7 @@ test("focused material prepares detail and evidence; inspection and history pres
 test("keyboard search intent prepares its target without re-querying the closed search",async({page})=>{
   let searches=0;page.on('request',r=>{if(r.url().includes('/search?'))searches++;});
   await page.goto('/explore?surface=lineage');await expect(page.getByRole('treeitem').first()).toBeVisible();
-  const input=page.getByRole('combobox');await input.fill('Smilodon');await expect(page.locator('#search-results [role=option]').first()).toBeVisible();
+  const input=page.getByRole('combobox',{name:/Search/});await input.fill('Smilodon');await expect(page.locator('#search-results [role=option]').first()).toBeVisible();
   await expect.poll(()=>new URL(page.url()).searchParams.has('zoom')).toBe(true);
   const url=page.url();const evidence=page.waitForResponse(r=>r.url().includes('/entities/'));
   await input.press('Home');await evidence;expect(page.url()).toBe(url);expect(searches).toBe(1);

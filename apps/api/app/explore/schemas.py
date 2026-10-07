@@ -113,6 +113,11 @@ class OccurrenceDetail(BaseModel):
 
 
 class DatasetStatus(BaseModel):
+    published_occurrences: int = 0
+    published_contexts: int = 0
+    published_mapped_occurrences: int = 0
+    pbdb_license: str | None = None
+    pbdb_version: str | None = None
     title: str
     dataset_url: str
     license: str | None

@@ -110,7 +110,11 @@ def record_id(kind: str, external_id: str) -> UUID:
 def validate_disposable_target(
     name: str, host: str | None, port: int | None, user: str | None, *, ci: bool = False
 ) -> None:
-    allowed = {("paleograph_test", 55432), ("paleograph_pbdb_canary", 58432)}
+    allowed = {
+        ("paleograph_test", 55432),
+        ("paleograph_pbdb_canary", 58432),
+        ("paleograph_browser", 56432),
+    }
     if ci:
         allowed.add(("paleograph_test", 5432))
     if host not in {"localhost", "127.0.0.1"} or (name, port) not in allowed or user != name:

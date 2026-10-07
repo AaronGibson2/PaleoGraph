@@ -29,7 +29,7 @@ export function Search({ value, context, onChange, onSelect }: { value: string; 
   const select = (entity: EntityRef) => { onSelect(entity); setOpen(false); setActive(0); };
   return <div className="atlas-search" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}>
     <span className="search-symbol" aria-hidden="true">⌕</span>
-    <label className="sr-only" htmlFor="atlas-search">Search museum material, taxa and places</label>
+    <label className="sr-only" htmlFor="atlas-search">Search material, published occurrences, taxa, places and references</label>
     <input id="atlas-search" role="combobox" aria-autocomplete="list" aria-expanded={open && !!value.trim()} aria-controls="search-results" aria-activedescendant={open && items[active] ? `search-option-${active}` : undefined}
       placeholder="Search taxa, places, catalog numbers…" value={value} maxLength={160}
       onFocus={() => setOpen(true)} onChange={event => { onChange(event.target.value); setOpen(true); setActive(0); }}
@@ -43,9 +43,9 @@ export function Search({ value, context, onChange, onSelect }: { value: string; 
     {value && <button aria-label="Clear search" className="search-clear" onClick={() => { onChange(""); setOpen(false); }}>×</button>}
     {open && value.trim() && <div className="search-popover">
       <p className="search-meta" role="status">{result.loading ? "Searching the local catalog…" : result.error ?? `${result.data?.total.toLocaleString("en-US") ?? 0} matching entities`}</p>
-      <ul role="listbox" id="search-results" aria-label="Museum search results" aria-busy={result.loading}>
+      <ul role="listbox" id="search-results" aria-label="Evidence search results" aria-busy={result.loading}>
         {items.map((entity, index) => <li key={`${entity.kind}:${entity.id}`} id={`search-option-${index}`} role="option" aria-selected={index === active}>
-          <IntentButton prepare={() => prefetchEntity(entity)} disabled={result.loading} tabIndex={-1} onMouseDown={event => event.preventDefault()} onClick={() => select(entity)}><span className="search-kind">{entity.kind}</span><strong>{(entity.kind === "taxon" || entity.kind === "specimen") && <TaxonVisual visual={resolveTaxonVisual(entity)} />}{entity.label}</strong><small>{entity.subtitle}</small></IntentButton>
+          <IntentButton prepare={() => prefetchEntity(entity)} disabled={result.loading} tabIndex={-1} onMouseDown={event => event.preventDefault()} onClick={() => select(entity)}><span className="search-kind">{entity.kind === "occurrence" ? "Published occurrence" : entity.kind === "locality" && entity.source === "pbdb" ? "Collection context" : entity.kind}</span><strong>{(entity.kind === "taxon" || entity.kind === "specimen") && <TaxonVisual visual={resolveTaxonVisual(entity)} />}{entity.label}</strong><small>{entity.source?.toUpperCase()} · {entity.subtitle}</small></IntentButton>
         </li>)}
       </ul>
       {!result.loading && !result.error && items.length === 0 && <p className="search-meta">No current material matches. Try a taxon, locality or accession.</p>}

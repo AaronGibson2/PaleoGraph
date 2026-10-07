@@ -48,6 +48,12 @@ def main() -> None:
             )
             if run.status != "completed":
                 raise RuntimeError(run.error_summary)
+            from app.ingestion.import_pbdb import ingest_snapshot
+            from app.ingestion.pbdb import Snapshot
+
+            ingest_snapshot(
+                session, Snapshot.load(ROOT / "apps/api/tests/fixtures/pbdb")
+            )
             session.commit()
             print(
                 json.dumps({"isolated_browser_fixture_records": run.records_accepted})

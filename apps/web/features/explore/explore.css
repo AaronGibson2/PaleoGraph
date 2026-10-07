@@ -393,3 +393,25 @@ body:has(.explore-workspace) #main { outline: none; }
 .inspection-taxon-cue { display:flex; align-items:center; gap:10px; margin:12px 0; }
 .inspection-taxon-cue .taxon-visual { width:32px; height:32px; }
 .inspection-taxon-cue small { display:block; color:var(--provenance); font-size:11px; }
+
+/* Source evidence extends the existing neutral scientific visual language. */
+.source-filter select { max-width: 15rem; background: var(--paper, #f4f1e8); color: inherit; border: 1px solid #c9c5ba; padding: .35rem; font: inherit; font-size: .72rem; }
+.evidence-source { display:block; font-size:.67rem; letter-spacing:.035em; color:#66695e; margin:.25rem 0; }
+.unmapped-evidence { position:absolute; left:1rem; bottom:5rem; max-width:24rem; padding:.8rem 1rem; background:#f7f5eedf; border:1px solid #c9c5ba; font-size:.72rem; z-index:2; }
+.unmapped-evidence p { margin:.4rem 0; }
+.reference-evidence { border-top:1px solid #d3d0c5; padding:1rem 0; }
+.reference-evidence ol { list-style:none; padding:0; }
+.reference-evidence li { margin:1rem 0; padding-bottom:1rem; border-bottom:1px solid #d3d0c5; overflow-wrap:anywhere; }
+.provenance { overflow-wrap:anywhere; }
+@media(max-width:700px) { .source-filter select { max-width:12rem; } .unmapped-evidence { left:.6rem; bottom:5rem; max-width:calc(100% - 1.2rem); font-size:.66rem; } }
+
+.catalog-panel > .evidence-source, .catalog-scope { padding-inline: 18px; }
+.unmapped-evidence { left: auto; right: 4rem; }
+.map-workspace:has(.inspector) .unmapped-evidence { left:1rem;right:auto; }
+@media(min-width:701px) { .map-workspace:has(.catalog-panel:not([hidden])) .unmapped-evidence { left:370px;right:auto; } }
+@media(max-width:700px) {
+ .unmapped-evidence { left:.6rem;right:.6rem;bottom:6rem; }
+ .map-workspace:has(.inspector) .unmapped-evidence, .map-workspace:has(.catalog-panel:not([hidden])) .unmapped-evidence { display:none; }
+}
+
+@media(max-width:700px) { .unmapped-evidence { bottom:9.5rem;background:#f7f5ee; } }

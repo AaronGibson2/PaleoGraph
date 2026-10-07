@@ -4,7 +4,7 @@ import base64
 import hashlib
 import json
 import re
-from typing import Any
+from typing import Any, Literal
 from uuid import UUID
 
 from fastapi import HTTPException
@@ -58,8 +58,24 @@ def safe_geography(description: Any, withheld: bool) -> dict[str, str]:
 
 
 def matching(query: ContextQuery, *, eligibility: str | None = None) -> tuple[str, dict[str, Any]]:
-    clauses = [PUBLIC if eligibility is None else eligibility]
     params: dict[str, Any] = {}
+    if eligibility is None and query.source != "ufvp":
+        from app.discovery.occurrence_browse import eligibility as product_eligibility
+        from app.discovery.occurrence_browse import query_parameters
+
+        eligibility = product_eligibility(query.source)
+        params.update(query_parameters())
+    clauses = [PUBLIC if eligibility is None else eligibility]
+    if query.reference_id:
+        clauses.append("""EXISTS (SELECT 1 FROM identification_evidence ie
+            JOIN source_record ir ON ir.id=ie.source_record_id AND ir.is_current
+              AND ir.content_hash=ie.content_hash
+            JOIN source_record_dependency frame ON frame.source_record_id=ce.source_record_id
+              AND frame.content_hash=ce.content_hash
+              AND frame.normalization_hash=ce.normalization_hash
+              AND frame.dependency_record_id=ir.id AND frame.dependency_content_hash=ir.content_hash
+            WHERE ie.occurrence_id=ce.occurrence_id AND ie.reference_id=:reference_id)""")
+        params["reference_id"] = query.reference_id
     for key in ("locality_id", "collection_id", "institution_id"):
         value = getattr(query, key)
         if value is not None:
@@ -191,6 +207,28 @@ def catalog(session: Session, query: ContextQuery) -> CatalogPage:
 
 def places(session: Session, query: ContextQuery) -> PlacePage:
     where, params = matching(query)
+    membership = f"""SELECT ce.locality_id,count(*) record_count,
+        count(*) FILTER (WHERE ce.evidence_kind='material') museum_material,
+        count(*) FILTER (WHERE ce.evidence_kind='occurrence') published_occurrences,
+        count(*) FILTER (WHERE ce.older_ma IS NOT NULL AND ce.younger_ma IS NOT NULL)
+          interpreted_count {JOINS} WHERE {where} GROUP BY ce.locality_id"""
+    if query.source == "all":
+        # Independent source predicates allow PostgreSQL to use the existing UFVP
+        # semijoin plan, instead of turning its public guard into 462k subplan probes.
+        parts = []
+        for source in ("ufvp", "pbdb"):
+            source_where, source_params = matching(query.model_copy(update={"source": source}))
+            params.update(source_params)
+            parts.append(f"""SELECT ce.locality_id,count(*) record_count,
+                count(*) FILTER (WHERE ce.evidence_kind='material') museum_material,
+                count(*) FILTER (WHERE ce.evidence_kind='occurrence') published_occurrences,
+                count(*) FILTER (WHERE ce.older_ma IS NOT NULL AND ce.younger_ma IS NOT NULL)
+                  interpreted_count {JOINS} WHERE {source_where} GROUP BY ce.locality_id""")
+        membership = f"""SELECT locality_id,sum(record_count)::bigint record_count,
+            sum(museum_material)::bigint museum_material,
+            sum(published_occurrences)::bigint published_occurrences,
+            sum(interpreted_count)::bigint interpreted_count FROM
+            ({" UNION ALL ".join(parts)}) source_places GROUP BY locality_id"""
     cursor = decode_cursor(query, "places")
     seek = ""
     if cursor:
@@ -206,19 +244,22 @@ def places(session: Session, query: ContextQuery) -> PlacePage:
         session.execute(
             text(f"""
         WITH membership AS MATERIALIZED (
-            SELECT ce.locality_id, count(*) record_count,
-                count(*) FILTER (WHERE ce.older_ma IS NOT NULL AND ce.younger_ma IS NOT NULL)
-                    interpreted_count
-            {JOINS} WHERE {where} GROUP BY ce.locality_id
+            {membership}
         ), points AS MATERIALIZED (
             SELECT discovery_uuid(ST_AsEWKT(l.geom)) id, ST_X(l.geom) longitude,
                 ST_Y(l.geom) latitude, sum(m.record_count)::bigint record_count,
                 count(*) locality_count, sum(m.interpreted_count)::bigint interpreted_count,
+                sum(m.museum_material)::bigint museum_material,
+                sum(m.published_occurrences)::bigint published_occurrences,
                 bool_or(l.location_is_generalized) location_is_generalized
             FROM membership m JOIN locality l ON l.id=m.locality_id
             WHERE l.geom IS NOT NULL AND NOT l.location_is_withheld GROUP BY l.geom
         ), totals AS (
             SELECT coalesce(sum(m.record_count),0)::bigint total_records,
+                coalesce(sum(m.museum_material),0)::bigint museum_material,
+                coalesce(sum(m.published_occurrences),0)::bigint published_occurrences,
+                coalesce(sum(m.published_occurrences) FILTER (WHERE l.geom IS NULL OR
+                l.location_is_withheld),0)::bigint unmapped_published_occurrences,
                 coalesce(sum(m.record_count) FILTER (WHERE l.geom IS NULL OR
         l.location_is_withheld),0)::bigint unmapped_records
             FROM membership m LEFT JOIN locality l ON l.id=m.locality_id
@@ -236,6 +277,9 @@ def places(session: Session, query: ContextQuery) -> PlacePage:
     return PlacePage(
         items=items,
         total_records=row["total_records"],
+        museum_material=row["museum_material"],
+        published_occurrences=row["published_occurrences"],
+        unmapped_published_occurrences=row["unmapped_published_occurrences"],
         unmapped_records=row["unmapped_records"],
         total_places=row["total_places"],
         limit=query.limit,
@@ -248,8 +292,41 @@ def places(session: Session, query: ContextQuery) -> PlacePage:
 def search(session: Session, query: ContextQuery) -> SearchPage:
     if not query.q.strip():
         return SearchPage(items=[], total=0, limit=query.limit, next_cursor=None)
-    where, params = matching(query)
+    supplied_id = re.fullmatch(
+        r"(?:pbdb\s+)?(?:occ(?:urrence)?|col(?:lection)?|ref(?:erence)?)[\s:]+(\d+)",
+        query.q.strip(),
+        re.IGNORECASE,
+    )
+    lookup = (
+        query.model_copy(update={"q": supplied_id[1]})
+        if supplied_id and query.source != "ufvp"
+        else query
+    )
+    where, params = matching(lookup)
     # All kinds are scoped through actual current catalog membership and active context.
+    reference_candidates = ""
+    if query.source != "ufvp":
+        reference_where, reference_params = matching(query.model_copy(update={"q": ""}))
+        params.update(reference_params)
+        reference_candidates = f"""UNION ALL
+          SELECT 'reference',rr.id,coalesce(rr.title,'PBDB reference '||rs.source_record_id),
+            rr.published_year,NULL::uuid FROM research_reference rr
+          JOIN source_record rs ON rs.id=rr.source_record_id AND rs.is_current
+          WHERE lower(concat_ws(' ',rr.title,rr.doi,rs.source_record_id,
+            rr.bibliography->>'author1last',rr.bibliography->>'author2last',
+            rr.bibliography->>'otherauthors')) LIKE :partial
+          AND EXISTS (SELECT 1 {JOINS} JOIN source_record_dependency rf
+            ON rf.source_record_id=ce.source_record_id AND rf.content_hash=ce.content_hash
+            AND rf.normalization_hash=ce.normalization_hash AND rf.dependency_record_id=rs.id
+            AND rf.dependency_content_hash=rs.content_hash WHERE {reference_where})"""
+        reference_candidates += f""" UNION
+          SELECT 'locality',l.id,l.name,'PBDB collection context',NULL::uuid
+          FROM locality l JOIN locality_evidence le ON le.locality_id=l.id
+          JOIN source_record cs ON cs.id=le.source_record_id AND cs.is_current
+          WHERE cs.source_record_id=:needle AND cs.record_type='collection'
+            AND cs.source_dataset_id=:pbdb_dataset
+            AND EXISTS (SELECT 1 FROM catalog_entry ce WHERE ce.locality_id=l.id
+              AND {reference_where})"""
     union = f"""
         WITH material AS (SELECT ce.* {JOINS} WHERE {where}), candidates AS (
         SELECT DISTINCT 'taxon' kind, t.id, t.scientific_name label, t.rank subtitle,
@@ -268,11 +345,14 @@ def search(session: Session, query: ContextQuery) -> SearchPage:
         UNION ALL SELECT DISTINCT 'term', t.id, t.label, t.namespace || ' / ' || t.field, NULL::uuid
         FROM material m JOIN catalog_term ct ON ct.occurrence_id = m.occurrence_id
         JOIN context_term t ON t.id = ct.term_id WHERE t.search_text LIKE :partial
-        UNION ALL SELECT 'specimen', m.specimen_id, m.label, m.scientific_name, m.taxon_id
+        UNION ALL SELECT CASE WHEN m.specimen_id IS NULL THEN 'occurrence' ELSE 'specimen' END,
+            coalesce(m.specimen_id,m.occurrence_id),m.label,m.scientific_name,m.taxon_id
         FROM material m
+        {reference_candidates}
         ) SELECT *, CASE WHEN lower(label) = :needle OR
             (kind = 'specimen' AND (regexp_replace(lower(label),'[^[:alnum:]]','','g')
                 = :compact OR lower(split_part(label,' / ',2)) = :needle)) THEN 0
+            WHEN kind IN ('specimen','occurrence') THEN 3
             WHEN lower(label) LIKE :prefix THEN 1 ELSE 2 END ranking FROM candidates
         """
     total = int(session.scalar(text(f"SELECT count(*) FROM ({union}) results"), params) or 0)
@@ -306,6 +386,30 @@ def search(session: Session, query: ContextQuery) -> SearchPage:
         EntityRef.model_validate({**row, **classes.get(str(row["classification_taxon_id"]), {})})
         for row in rows[: query.limit]
     ]
+    # Batch source labels over the bounded result page; UUIDs stay source-scoped.
+    source_rows = (
+        session.execute(
+            text("""SELECT id,source_dataset_id FROM taxon WHERE id=ANY(:ids)
+        UNION ALL SELECT le.locality_id,sr.source_dataset_id FROM locality_evidence le
+          JOIN source_record sr ON sr.id=le.source_record_id WHERE le.locality_id=ANY(:ids)
+        UNION ALL SELECT id,source_dataset_id FROM context_term WHERE id=ANY(:ids)"""),
+            {"ids": [i.id for i in items]},
+        ).all()
+        if items
+        else []
+    )
+    from app.discovery.pbdb import DATASET_UUID
+
+    sources: dict[UUID, Literal["pbdb", "ufvp"]] = {
+        identifier: "pbdb" if dataset == DATASET_UUID else "ufvp"
+        for identifier, dataset in source_rows
+    }
+    for item in items:
+        item.source = (
+            "pbdb" if item.kind in ("occurrence", "reference") else sources.get(item.id, "ufvp")
+        )
+        if item.kind == "locality" and item.source == "pbdb":
+            item.subtitle = "PBDB collection context"
     last = rows[query.limit - 1] if len(rows) > query.limit else None
     return SearchPage(
         items=items,
@@ -336,6 +440,13 @@ def entity_context(kind: EntityKind, identifier: UUID, query: ContextQuery) -> C
 def entity_ref(session: Session, kind: EntityKind, identifier: UUID) -> EntityRef:
     tables = {
         "specimen": ("catalog_entry", "specimen_id", "label", "scientific_name"),
+        "occurrence": ("catalog_entry", "occurrence_id", "label", "scientific_name"),
+        "reference": (
+            "research_reference",
+            "id",
+            "coalesce(title,'PBDB reference')",
+            "published_year",
+        ),
         "taxon": ("taxon", "id", "scientific_name", "rank"),
         "locality": ("locality", "id", "name", "'Published locality'"),
         "collection": ("collection", "id", "coalesce(name,code)", "code"),
@@ -356,6 +467,23 @@ def entity_ref(session: Session, kind: EntityKind, identifier: UUID) -> EntityRe
     )
     if row is None:
         raise HTTPException(404, "Entity not found")
+    source = "ufvp"
+    if kind in ("taxon", "locality", "term", "reference"):
+        dataset_sql = (
+            (
+                "SELECT sr.source_dataset_id FROM locality_evidence le "
+                "JOIN source_record sr ON sr.id=le.source_record_id "
+                "WHERE le.locality_id=:id AND sr.is_current LIMIT 1"
+            )
+            if kind == "locality"
+            else f"SELECT source_dataset_id FROM {table} WHERE {key}=:id"
+        )
+        dataset = session.scalar(text(dataset_sql), {"id": identifier})
+        from app.discovery.pbdb import DATASET_UUID
+
+        source = "pbdb" if dataset == DATASET_UUID else "ufvp"
+    elif kind == "occurrence":
+        source = "pbdb"
     classification = {}
     if kind == "taxon":
         classification = classification_contexts(session, [identifier]).get(str(identifier), {})
@@ -376,7 +504,10 @@ def entity_ref(session: Session, kind: EntityKind, identifier: UUID) -> EntityRe
                 for taxon_id in ids
             ]
         )
-    return EntityRef.model_validate({"kind": kind, **row, **classification})
+    result = EntityRef.model_validate({"kind": kind, **row, **classification, "source": source})
+    if kind == "locality" and source == "pbdb":
+        result.subtitle = "PBDB collection context"
+    return result
 
 
 def related_sql(kind: EntityKind, identifier: UUID, where: str) -> str:

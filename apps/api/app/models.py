@@ -279,6 +279,7 @@ class IdentificationEvidence(Base):
     provider_identification_id: Mapped[str] = mapped_column(Text)
     evidence: Mapped[dict[str, object]] = mapped_column(JSONB)
     __table_args__ = (
+        Index("ix_identification_reference_occurrence", "reference_id", "occurrence_id"),
         ForeignKeyConstraint(
             ["source_record_id", "content_hash"],
             ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
@@ -299,6 +300,143 @@ class MaterialEvidence(Base):
             ["source_record_id", "content_hash"],
             ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
         ),
+    )
+
+
+class ReconciliationGeneration(Base):
+    """Atomic current-frame pointer; neither scientific dataset is republished."""
+
+    __tablename__ = "reconciliation_generation"
+    subject_dataset_id: Mapped[UUID] = mapped_column(
+        ForeignKey("source_dataset.id"), primary_key=True
+    )
+    target_dataset_id: Mapped[UUID] = mapped_column(
+        ForeignKey("source_dataset.id"), primary_key=True
+    )
+    policy_version: Mapped[str] = mapped_column(Text, primary_key=True)
+    input_digest: Mapped[str] = mapped_column(String(64))
+    source_state: Mapped[dict[str, object]] = mapped_column(JSONB)
+    published_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    __table_args__ = (
+        CheckConstraint("subject_dataset_id <> target_dataset_id", name="independent_sources"),
+    )
+
+
+class ReconciliationAssessment(Identity, Base):
+    """Versioned outcome, including unresolved and ambiguous material evidence."""
+
+    __tablename__ = "reconciliation_assessment"
+    subject_dataset_id: Mapped[UUID] = mapped_column(ForeignKey("source_dataset.id"))
+    target_dataset_id: Mapped[UUID] = mapped_column(ForeignKey("source_dataset.id"))
+    source_record_id: Mapped[UUID] = mapped_column(index=True)
+    content_hash: Mapped[str] = mapped_column(String(64))
+    normalization_hash: Mapped[str] = mapped_column(String(64))
+    occurrence_id: Mapped[UUID | None] = mapped_column(ForeignKey("occurrence.id"))
+    policy_version: Mapped[str] = mapped_column(Text)
+    input_digest: Mapped[str] = mapped_column(String(64))
+    creation_method: Mapped[str] = mapped_column(Text, server_default="automatic")
+    status: Mapped[str] = mapped_column(Text)
+    reason: Mapped[str] = mapped_column(Text)
+    normalized_identifier: Mapped[dict[str, object]] = mapped_column(JSONB)
+    original_values: Mapped[dict[str, object]] = mapped_column(JSONB)
+    evidence: Mapped[dict[str, object]] = mapped_column(JSONB)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash", "normalization_hash"],
+            [
+                "normalized_source_revision.source_record_id",
+                "normalized_source_revision.content_hash",
+                "normalized_source_revision.normalization_hash",
+            ],
+        ),
+        UniqueConstraint(
+            "source_record_id",
+            "content_hash",
+            "normalization_hash",
+            "target_dataset_id",
+            "policy_version",
+            "input_digest",
+            name="uq_reconciliation_assessment_frame",
+        ),
+        CheckConstraint("subject_dataset_id <> target_dataset_id", name="independent_sources"),
+        CheckConstraint(
+            "status IN ('deterministic','candidate','ambiguous',"
+            "'conflict','unresolved','rejected')",
+            name="status",
+        ),
+        CheckConstraint("creation_method IN ('automatic','manual')", name="creation_method"),
+        Index(
+            "ix_reconciliation_assessment_generation",
+            "subject_dataset_id",
+            "target_dataset_id",
+            "policy_version",
+            "input_digest",
+        ),
+    )
+
+
+class ReconciliationEdge(Identity, Base):
+    """Material evidence references material; never a generic same_as merge."""
+
+    __tablename__ = "reconciliation_edge"
+    assessment_id: Mapped[UUID] = mapped_column(
+        ForeignKey("reconciliation_assessment.id", ondelete="CASCADE"), index=True
+    )
+    target_specimen_id: Mapped[UUID] = mapped_column(index=True)
+    target_source_record_id: Mapped[UUID] = mapped_column(index=True)
+    target_content_hash: Mapped[str] = mapped_column(String(64))
+    relationship_type: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(Text)
+    diagnostics: Mapped[dict[str, object]] = mapped_column(JSONB)
+    supporting_reference_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("research_reference.id")
+    )
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["target_specimen_id", "target_source_record_id"],
+            ["specimen_evidence.specimen_id", "specimen_evidence.source_record_id"],
+            deferrable=True,
+            initially="DEFERRED",
+        ),
+        ForeignKeyConstraint(
+            ["target_source_record_id", "target_content_hash"],
+            ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
+        ),
+        UniqueConstraint(
+            "assessment_id",
+            "target_specimen_id",
+            "target_source_record_id",
+            "target_content_hash",
+            name="uq_reconciliation_edge_proof",
+        ),
+        CheckConstraint(
+            "relationship_type IN ('material_identifier_matches','candidate_same_specimen')",
+            name="type",
+        ),
+        CheckConstraint(
+            "(relationship_type='material_identifier_matches' AND status='deterministic') OR "
+            "(relationship_type='candidate_same_specimen' AND status IN ('candidate','ambiguous'))",
+            name="type_status",
+        ),
+    )
+
+
+class ReconciliationReview(Base):
+    """Review annotations survive automatic rebuild; acceptance never rewrites a source."""
+
+    __tablename__ = "reconciliation_review"
+    edge_id: Mapped[UUID] = mapped_column(ForeignKey("reconciliation_edge.id"), primary_key=True)
+    decision: Mapped[str] = mapped_column(Text)
+    reviewer: Mapped[str] = mapped_column(Text)
+    reason: Mapped[str] = mapped_column(Text)
+    reviewed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    __table_args__ = (
+        CheckConstraint("decision IN ('accept','reject','unresolved')", name="decision"),
+        CheckConstraint("btrim(reviewer) <> '' AND btrim(reason) <> ''", name="provenance"),
     )
 
 
@@ -346,6 +484,14 @@ class Collection(Identity, Base):
 
 class Specimen(Identity, Base):
     __tablename__ = "specimen"
+    __table_args__ = (
+        Index(
+            "ix_specimen_reconciliation_key",
+            "institution_code",
+            "catalog_number",
+            "collection_code",
+        ),
+    )
     collection_id: Mapped[UUID | None] = mapped_column(ForeignKey("collection.id"))
     institution_code: Mapped[str | None] = mapped_column(Text)
     collection_code: Mapped[str | None] = mapped_column(Text)
@@ -542,6 +688,17 @@ class CatalogEntry(Base):
     younger_ma: Mapped[Decimal | None] = mapped_column(Numeric())
     age_basis: Mapped[str] = mapped_column(Text)
     __table_args__ = (
+        Index(
+            "ix_catalog_occurrence_product_page",
+            "occurrence_id",
+            postgresql_include=[
+                "source_record_id",
+                "content_hash",
+                "normalization_hash",
+                "policy_version",
+            ],
+            postgresql_where=text("evidence_kind='occurrence'"),
+        ),
         ForeignKeyConstraint(
             ["source_record_id", "content_hash", "interpretation_policy_version"],
             [
@@ -653,6 +810,39 @@ class BrowseProjectionState(Base):
     projection_version: Mapped[str | None] = mapped_column(Text)
     built_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     __table_args__ = (CheckConstraint("id = 1", name="singleton"),)
+
+
+class OccurrenceBrowseState(Base):
+    """Versioned derived occurrence eligibility, invalidated by the shared input counter."""
+
+    __tablename__ = "occurrence_browse_state"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    built_revision: Mapped[int] = mapped_column(BigInteger)
+    projection_version: Mapped[str] = mapped_column(Text)
+    built_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (CheckConstraint("id = 1", name="singleton"),)
+
+
+class OccurrenceBrowseMember(Base):
+    """Disposable eligible membership; retained normalized evidence remains authoritative."""
+
+    __tablename__ = "occurrence_browse_member"
+    occurrence_id: Mapped[UUID] = mapped_column(
+        ForeignKey("catalog_entry.occurrence_id", ondelete="CASCADE"), primary_key=True
+    )
+    source_record_id: Mapped[UUID] = mapped_column()
+    content_hash: Mapped[str] = mapped_column(String(64))
+    normalization_hash: Mapped[str] = mapped_column(String(64))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash", "normalization_hash"],
+            [
+                "normalized_source_revision.source_record_id",
+                "normalized_source_revision.content_hash",
+                "normalized_source_revision.normalization_hash",
+            ],
+        ),
+    )
 
 
 class LocalityBrowseSummary(Base):

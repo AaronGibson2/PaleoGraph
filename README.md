@@ -1,13 +1,13 @@
 # PaleoGraph
 
-A Florida museum atlas for cataloged fossil material, published localities,
-geological interpretation and source-supported relationships. Phase 3.6 uses
-one scientific collection: Florida Museum of Natural History UFVP. It is not a
+A Florida paleobiology atlas for museum material, published occurrence evidence,
+source contexts, geological interpretation and source-supported relationships.
+Phase 4E exposes independently retained UFVP and PBDB evidence. It is not a
 universal taxonomy or occurrence authority. No public demo mode remains.
 
 The current local import is the **complete Florida scope: 462,280 UFVP v1.182
 assertions**, with 254,866 mapped assertions and 445,678 derived age envelopes.
-Source data is CC BY-NC 4.0;
+UFVP source data is CC BY-NC 4.0;
 geological reference data is ICS v2026/06, CC BY 4.0. Source ages, derived interval
 envelopes and research evidence remain visibly separate.
 
@@ -16,8 +16,17 @@ Phase 4A profiles PBDB as a proposed second source without importing it. See the
 [adapter proposal and approval gates](docs/pbdb-adapter-proposal.md), and
 [bounded live profiling evidence](docs/source-data/pbdb-profile-2026-10-05.json).
 The [completion report](docs/phase-4a-report.md) summarizes the findings and validation.
-The application still serves UFVP only. Phase 4B's adapter and disposable canary
+Phase 4B's adapter and disposable canary
 preceded the [Phase 4C full Florida ingestion](docs/phase-4c-report.md).
+
+[Phase 4E](docs/phase-4e-report.md) adds public multi-source exploration, with
+**18,915 PBDB published occurrences, 1,118 retained collections, and zero canonical
+PBDB specimens**. Museum material remains the rollout default; the shared evidence
+selector enables All evidence or Published occurrences across Atlas, Search,
+Localities and Lineage. PBDB coordinates currently have an unverified datum, so
+their evidence is discoverable through source contexts rather than fabricated map
+positions. Rights remain independent: PBDB CC0 1.0 does not apply to UFVP material.
+See [multi-source product semantics](docs/multi-source-product.md).
 
 [Phase 3.5 completion and validation](docs/phase-3.5-validation.md) records actual
 checks, screenshots, measurements, limitations and all 48 requested report items.
@@ -35,8 +44,8 @@ is displayed. See [Phase 3.6 validation](docs/phase-3.6-validation.md),
 [visual provenance](docs/taxon-visuals.md) and [multimedia audit](docs/ufvp-multimedia-research.md).
 
 **Preserve the prepared full Florida database. Do not seed it or repeat the UFVP import.**
-The prepared database is at `0010_pbdb_evidence`, with independently retained
-UFVP and PBDB evidence and a verified Phase 4C restore checkpoint. Its migrations
+The prepared database is at `0012_product_browse`, with independently retained
+UFVP and PBDB evidence and verified pre/post-4E restore checkpoints. Its migrations
 are already applied. Use the [checkpoint and PBDB replay workflow](docs/pbdb-adapter.md#full-florida-acquisition-and-publication-phase-4c)
 for deliberate backend validation. No new environment variables are required.
 
@@ -104,10 +113,13 @@ collections, institutions and source context. Select a result to inspect its evi
 and pivot the shared context. Individual context assertions can be removed. Selecting
 a specimen opens its catalog view; it does not restrict every result to one specimen.
 
-Map circles count catalog assertions, including client spatial clusters. Exact
+Map circles count mapped evidence records, including client spatial clusters. Exact
 coordinate stacks retain all distinct localities and lead to a fully paginated
 catalog. Counts are not counts of organisms or an assertion of locality equivalence.
-The catalog exposes true totals and 30-row pages. Generalization halos express
+The catalog exposes true totals, source breakdowns and 30-row pages. Published
+occurrences are distinct from museum specimens; selecting a PBDB occurrence opens
+its source taxonomy, provider age, material labels and optional reference roles.
+Generalization halos express
 status, not an uncertainty radius. Missing/withheld positions never become 0,0;
 search and nonspatial entity views still expose eligible material.
 
@@ -219,13 +231,19 @@ bounds, interpreted intervals, and observed material envelopes. See
 ICS v2026/06. Phase 4A profiled PBDB; Phase 4B now provides a source-independent
 adapter and validated disposable 208-occurrence canary. See the
 [PBDB adapter](docs/pbdb-adapter.md) and [Phase 4B report](docs/phase-4b-report.md).
-PBDB occurrences remain internal evidence without placeholder Specimens.
-The normal database is at `0010_pbdb_evidence` with **462,280 UFVP assertions**
+PBDB occurrences remain source-specific evidence without placeholder Specimens.
+The normal database is at `0012_product_browse` with **462,280 UFVP assertions**
 and **18,915 independent PBDB occurrences**, across 1,118 PBDB collections.
 There are still **462,280 canonical Specimens**; PBDB creates none.
 Source-specific rights, age policies and taxonomic identities remain independent.
 See the [Phase 4C report](docs/phase-4c-report.md) for checkpoints, full evidence
 validation, exact rerun, source-aware internal queries and regression measurements.
+Phase 4D adds a reversible internal material reconciliation layer: 326 assessments,
+117 candidate edges, and **zero deterministic links** because PBDB's UF labels lack
+collection codes. Source records and scientific evidence remain unchanged. See the
+[reconciliation policy](docs/cross-source-reconciliation.md) and
+[Phase 4D report](docs/phase-4d-report.md) for the complete census, provenance,
+replay/rebuild validation and checkpoints.
 
 The import covers Florida rows in pinned UFVP v1.182, not later museum updates or
 non-Florida material. Published source taxonomy
@@ -234,9 +252,23 @@ labels stay unresolved; NALMA stays regional biochronology without invented nume
 correlation. Source records are evidence, not papers. Chromium checks are not a broad
 cross-browser or WCAG certification. Warm local measurements do not establish
 production throughput or cold-start behavior. Commercial UFVP use requires compatible permission.
-No PBDB product UI, cross-source reconciliation, auth, AI, new search service or
-deployment was introduced. Phase 4C stops for review before deterministic
-cross-source candidate reconciliation or PBDB product exposure.
+Phase 4E provides shared source-filtered discovery, PBDB occurrence detail and
+publication/reference presentation. See the [Phase 4E report](docs/phase-4e-report.md).
+PBDB geography remains withheld from Atlas while modern datum is unverified.
+Phase 5A profiles global PBDB access, coordinates and disposable scale benchmarks:
+the coordinate gate is RED and global ingestion readiness is YELLOW pending
+engineering validation. See the [global expansion design](docs/pbdb-global-expansion.md)
+and [Phase 5A report](docs/phase-5a-report.md). No global import, new infrastructure
+or deployment was performed; Phase 5A stops for review before Phase 5B.
+
+Phase 5B0 measures the storage footprint and compares three disposable designs.
+The recommended compact proof/archive design projects **46.04 GiB live PostgreSQL**
+plus **3.09 GiB external raw archives**, versus 120.32 GiB for the measured current
+layout extrapolation. These are global forecasts; the normal 6.68 GiB database
+and scientific records remain unchanged. Storage readiness is **YELLOW** pending
+production archive/migration/dirty-query integration; coordinates remain **RED**.
+See the [storage architecture](docs/global-storage-architecture.md) and
+[Phase 5B0 report](docs/phase-5b0-report.md). No global import or next phase started.
 
 Docker Compose down retains the development volume. Changing credentials does not
 rewrite an existing volume. Do not use `down -v` to troubleshoot valuable data.
