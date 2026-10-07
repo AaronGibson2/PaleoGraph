@@ -1,6 +1,6 @@
 import type { AnimalArchetype } from "./types.ts";
 
-/** Reviewed source UUIDs from docs/animal-archetype-plan.md. Labels are documentation only. */
+/** Reviewed source classification UUIDs. Labels are documentation only; see docs/scientific-semantics.md. */
 export type TaxonomicVisualRule = { id: string; label: string } & ({ archetype: AnimalArchetype; inherit: boolean } | { neutral: true });
 export const taxonomicVisualRules: readonly TaxonomicVisualRule[] = [
   {
