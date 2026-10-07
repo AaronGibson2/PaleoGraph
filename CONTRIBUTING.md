@@ -2,6 +2,8 @@
 
 Use the [README](README.md) for locked dependencies, local setup and checks. Discuss substantial model, adapter or scientific-policy changes before implementation. Pull requests should describe concrete behavior and relevant validation.
 
+Contributions to original PaleoGraph software are made under the project's [AGPL-3.0-only license](LICENSE) unless the contribution policy changes. Third-party data and media retain their own terms.
+
 ## Scientific requirements
 
 - Preserve source identity, raw revisions, exact dependency proofs and rights.

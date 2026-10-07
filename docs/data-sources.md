@@ -24,7 +24,7 @@ The global archive-first pipeline is implemented and scale-tested. Actual global
 
 The reference is pinned to **ICS 2026/06**: 178 chart units and eight separately cited subepoch compositions. The transcription retains RDF commit, source SHA-256, PDF hash, uncertainty, hierarchy, citations and two documented official-PDF-supported corrections.
 
-[Reference artifact](source-data/ics-2026-06.json), [official chart](https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf), [ICS model and terms](https://stratigraphy.org/pages/models/vis.html). Retained reference metadata specifies **CC BY 4.0**; transcription and chart-detail crops are attributed adaptations. Copyright International Commission on Stratigraphy, 2026; colors credited to CGMW. Citation: Cohen, Harper, Gibbard and Car, *The ICS international chronostratigraphic chart this decade*, Episodes 48 (2025), 105â€“115, [DOI](https://doi.org/10.18814/epiiugs/2025/025001). Reference calibrations are not measured specimen ages.
+[Reference artifact](source-data/ics-2026-06.json), [official chart](https://stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf), [ICS model and terms](https://stratigraphy.org/pages/models/vis.html). Retained reference metadata specifies **CC BY 4.0**; transcription and chart-detail crops are attributed adaptations. Copyright International Commission on Stratigraphy, 2026; colors credited to CGMW. Citation: Cohen, Harper, Gibbard and Car, *The ICS international chronostratigraphic chart this decade*, Episodes 48 (2025), 105–115, [DOI](https://doi.org/10.18814/epiiugs/2025/025001). Reference calibrations are not measured specimen ages.
 
 ## Interface artwork, screenshots and maps
 

@@ -44,7 +44,7 @@ Lineage shows observed source-supported material and occurrence evidence through
 
 ## Performance
 
-Representative local database paths improved from approximately 2.4 s to 136 ms for cold locality browsing, 191 ms to 17 ms warm, 525 ms to 14 ms for warm taxonomy browsing, and 4.18 s to 66â€“71 ms for the Florida PBDB catalog. Scale-fixture occurrence detail/reference reads measured approximately 6/14 ms warm. These are development measurements, not network latency or production SLAs; broad fixture discovery remains slower. [Measurement scope](docs/performance.md) explains the datasets and limits.
+Representative local database paths improved from approximately 2.4 s to 136 ms for cold locality browsing, 191 ms to 17 ms warm, 525 ms to 14 ms for warm taxonomy browsing, and 4.18 s to 66–71 ms for the Florida PBDB catalog. Scale-fixture occurrence detail/reference reads measured approximately 6/14 ms warm. These are development measurements, not network latency or production SLAs; broad fixture discovery remains slower. [Measurement scope](docs/performance.md) explains the datasets and limits.
 
 ## Technology stack
 

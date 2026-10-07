@@ -1,5 +1,6 @@
 {
   "name": "paleograph",
+  "license": "AGPL-3.0-only",
   "private": true,
   "packageManager": "pnpm@10.34.6",
   "engines": { "node": ">=24 <25" },
