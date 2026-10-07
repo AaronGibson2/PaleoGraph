@@ -1,5 +1,6 @@
 """Internal, bounded PBDB discovery. No public routes or cross-source reconciliation."""
 
+from itertools import islice
 from typing import Any, cast
 from uuid import UUID
 
@@ -20,13 +21,9 @@ ELIGIBLE = """ce.evidence_kind='occurrence' AND ce.specimen_id IS NULL
         AND sr.is_current AND NOT sd.is_synthetic AND sr.content_hash=ce.content_hash
         AND nc.content_hash=ce.content_hash AND nc.normalization_hash=ce.normalization_hash)
     AND NOT EXISTS (
-      SELECT 1 FROM source_record_dependency d
-      JOIN source_record dep ON dep.id=d.dependency_record_id
-      JOIN source_dataset ds ON ds.id=dep.source_dataset_id
-      WHERE d.source_record_id=ce.source_record_id AND d.content_hash=ce.content_hash
-        AND d.normalization_hash=ce.normalization_hash
-        AND (NOT dep.is_current OR ds.is_synthetic
-          OR dep.content_hash<>d.dependency_content_hash))"""
+      SELECT 1 FROM source_normalization_invalid i
+      WHERE i.source_record_id=ce.source_record_id AND i.content_hash=ce.content_hash
+        AND i.normalization_hash=ce.normalization_hash)"""
 
 
 def parameters() -> dict[str, Any]:
@@ -81,7 +78,7 @@ def rebuild(session: Session, *, summaries: bool = True) -> dict[str, Any]:
         JOIN source_record mr ON mr.id=me.source_record_id AND mr.content_hash=me.content_hash
         JOIN occurrence_evidence mo ON mo.occurrence_id=me.occurrence_id
         JOIN source_normalization_current mc ON mc.source_record_id=mo.source_record_id
-        JOIN source_record_dependency md ON md.source_record_id=mc.source_record_id
+        JOIN source_dependency_frame md ON md.source_record_id=mc.source_record_id
           AND md.content_hash=mc.content_hash AND md.normalization_hash=mc.normalization_hash
           AND md.dependency_record_id=mr.id AND md.dependency_content_hash=mr.content_hash
         WHERE mr.is_current GROUP BY me.occurrence_id) material ON material.occurrence_id=o.id
@@ -105,40 +102,47 @@ def rebuild(session: Session, *, summaries: bool = True) -> dict[str, Any]:
           AND pa.policy_version=ce.provider_age_policy_version
         WHERE {ELIGIBLE}"""),
             params,
+            execution_options={"yield_per": 500},
         )
         .mappings()
-        .all()
+        .yield_per(500)
     )
     from app.ingestion.import_pbdb import upsert
     from app.models import CatalogTerm, ContextTerm
 
-    terms, links = [], []
-    for row in contexts:
-        for field in ("formation", "stratgroup", "member", "early_interval", "late_interval"):
-            label = row["raw"].get(field)
-            if not label:
-                continue
-            term_id = stable_id("term", digest({"field": field, "label": label}))
-            terms.append(
-                {
-                    "id": term_id,
-                    "source_dataset_id": DATASET_UUID,
-                    "field": field,
-                    "namespace": "PBDB-provider-interval"
-                    if field.endswith("interval")
-                    else "PBDB-stratigraphy",
-                    "label": label,
-                    "search_text": str(label).lower(),
-                }
-            )
-            links.append({"occurrence_id": row["occurrence_id"], "term_id": term_id})
-    upsert(session, cast(Table, ContextTerm.__table__), terms, immutable=True)
-    upsert(session, cast(Table, CatalogTerm.__table__), links, immutable=True)
+    occurrence_count = 0
+    while batch := list(islice(contexts, 500)):
+        occurrence_count += len(batch)
+        terms, links = [], []
+        for row in batch:
+            for field in ("formation", "stratgroup", "member", "early_interval", "late_interval"):
+                label = row["raw"].get(field)
+                if not label:
+                    continue
+                term_id = stable_id("term", digest({"field": field, "label": label}))
+                terms.append(
+                    {
+                        "id": term_id,
+                        "source_dataset_id": DATASET_UUID,
+                        "field": field,
+                        "namespace": "PBDB-provider-interval"
+                        if field.endswith("interval")
+                        else "PBDB-stratigraphy",
+                        "label": label,
+                        "search_text": str(label).lower(),
+                    }
+                )
+                links.append({"occurrence_id": row["occurrence_id"], "term_id": term_id})
+        upsert(session, cast(Table, ContextTerm.__table__), terms, immutable=True)
+        upsert(session, cast(Table, CatalogTerm.__table__), links, immutable=True)
     if summaries:
         from app.discovery.browse import rebuild as rebuild_browse
 
         rebuild_browse(session)
-    return {"occurrences": len(contexts), "terms": len({term["id"] for term in terms})}
+    term_count = session.scalar(
+        text("SELECT count(*) FROM context_term WHERE source_dataset_id=:pbdb_dataset"), params
+    )
+    return {"occurrences": occurrence_count, "terms": int(term_count or 0)}
 
 
 def occurrence_catalog(session: Session, query: ContextQuery) -> CatalogPage:
@@ -209,19 +213,21 @@ def inspect_occurrence(session: Session, occurrence_id: UUID) -> dict[str, Any]:
     )
     if row is None:
         raise HTTPException(404, "No current complete PBDB occurrence evidence")
+    frame_params = {
+        "source": row["source_record_id"],
+        "hash": row["content_hash"],
+        "normalization": row["normalization_hash"],
+    }
     references = (
         session.execute(
             text("""SELECT d.dependency_record_id source_record_id,
         d.dependency_content_hash content_hash,rr.id reference_id,rr.bibliography
-        FROM source_record_dependency d
+        FROM source_dependency_frame d
         JOIN research_reference rr ON rr.source_record_id=d.dependency_record_id
         WHERE d.source_record_id=:source AND d.content_hash=:hash
-          AND d.normalization_hash=:normalization"""),
-            {
-                "source": row["source_record_id"],
-                "hash": row["content_hash"],
-                "normalization": row["normalization_hash"],
-            },
+          AND d.normalization_hash=:normalization
+        ORDER BY d.dependency_record_id,d.dependency_content_hash"""),
+            frame_params,
         )
         .mappings()
         .all()
@@ -232,11 +238,13 @@ def inspect_occurrence(session: Session, occurrence_id: UUID) -> dict[str, Any]:
         me.source_record_id,me.content_hash FROM material_evidence me JOIN source_record sr
         ON sr.id=me.source_record_id AND sr.content_hash=me.content_hash
         JOIN catalog_entry ce ON ce.occurrence_id=me.occurrence_id
-        JOIN source_record_dependency d ON d.source_record_id=ce.source_record_id
+        JOIN source_dependency_frame d ON d.source_record_id=ce.source_record_id
           AND d.content_hash=ce.content_hash AND d.normalization_hash=ce.normalization_hash
           AND d.dependency_record_id=sr.id AND d.dependency_content_hash=sr.content_hash
-        WHERE me.occurrence_id=:occurrence AND sr.is_current"""),
-            params,
+        WHERE me.occurrence_id=:occurrence AND sr.is_current
+          AND d.source_record_id=:source AND d.content_hash=:hash
+          AND d.normalization_hash=:normalization"""),
+            {**params, **frame_params},
         )
         .mappings()
         .all()

@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-URL = "postgresql+psycopg://paleograph_test:paleograph_test@localhost:55432/paleograph_test"
+URL = "postgresql+psycopg://paleograph_test:paleograph_test@127.0.0.1:55432/paleograph_test"
 
 
 def main() -> None:

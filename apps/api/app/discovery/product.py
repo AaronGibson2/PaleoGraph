@@ -127,7 +127,13 @@ def references(
     sql = f"""WITH evidence AS MATERIALIZED (
         SELECT
         ce.occurrence_id,ce.locality_id,ce.source_record_id,ce.content_hash,ce.normalization_hash
-        {queries.JOINS} WHERE {where}), roles AS (
+        {queries.JOINS} WHERE {where}), frames AS MATERIALIZED (
+        SELECT e.occurrence_id,d.dependency_record_id,d.dependency_content_hash
+        FROM evidence e CROSS JOIN LATERAL (
+          SELECT dependency_record_id,dependency_content_hash FROM source_dependency_frame f
+          WHERE f.source_record_id=e.source_record_id AND f.content_hash=e.content_hash
+            AND f.normalization_hash=e.normalization_hash OFFSET 0
+        ) d), roles AS (
         SELECT ie.source_record_id,ie.content_hash,ie.reference_id,'identification' role,
           ie.occurrence_id FROM identification_evidence ie
         WHERE ie.occurrence_id IN (SELECT occurrence_id FROM evidence)
@@ -137,8 +143,7 @@ def references(
           FROM evidence)
         UNION ALL SELECT op.source_record_id,op.content_hash,op.reference_id,
           'taxonomic opinion',e.occurrence_id
-          FROM evidence e JOIN source_record_dependency d ON d.source_record_id=e.source_record_id
-          AND d.content_hash=e.content_hash AND d.normalization_hash=e.normalization_hash
+          FROM evidence e JOIN frames d ON d.occurrence_id=e.occurrence_id
           JOIN opinion_reference_evidence op ON op.source_record_id=d.dependency_record_id
           AND op.content_hash=d.dependency_content_hash
         UNION ALL SELECT
@@ -150,14 +155,12 @@ def references(
         FROM roles r JOIN evidence e ON e.occurrence_id=r.occurrence_id
         JOIN source_record origin ON origin.id=r.source_record_id AND origin.is_current
           AND origin.content_hash=r.content_hash
-        JOIN source_record_dependency frame ON frame.source_record_id=e.source_record_id
-          AND frame.content_hash=e.content_hash AND frame.normalization_hash=e.normalization_hash
+        JOIN frames frame ON frame.occurrence_id=e.occurrence_id
           AND frame.dependency_record_id=origin.id AND
           frame.dependency_content_hash=origin.content_hash
         JOIN research_reference rr ON rr.id=r.reference_id
         JOIN source_record rs ON rs.id=rr.source_record_id AND rs.is_current
-        JOIN source_record_dependency rf ON rf.source_record_id=e.source_record_id
-          AND rf.content_hash=e.content_hash AND rf.normalization_hash=e.normalization_hash
+        JOIN frames rf ON rf.occurrence_id=e.occurrence_id
           AND rf.dependency_record_id=rs.id AND rf.dependency_content_hash=rs.content_hash
         )"""
     namespace = f"references:{kind}:{identifier}"
@@ -259,7 +262,7 @@ def detail(
                 text("""SELECT me.catalog_label,me.source_record_id
             FROM material_evidence me JOIN source_record sr ON sr.id=me.source_record_id
             AND sr.content_hash=me.content_hash AND sr.is_current
-            JOIN source_record_dependency d ON d.source_record_id=:source AND d.content_hash=:hash
+            JOIN source_dependency_frame d ON d.source_record_id=:source AND d.content_hash=:hash
               AND d.normalization_hash=:normalization AND d.dependency_record_id=sr.id
               AND d.dependency_content_hash=sr.content_hash
             WHERE me.occurrence_id=:id ORDER BY me.source_record_id LIMIT 11"""),

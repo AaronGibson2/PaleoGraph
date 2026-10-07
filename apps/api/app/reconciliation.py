@@ -306,16 +306,21 @@ def preview_reconciliation(
         for row in session.execute(
             text("""SELECT
       sr.id source_record_id,sr.content_hash,nc.normalization_hash,me.occurrence_id,me.reference_id,
-      me.catalog_label,sr.raw_payload,ce.locality_id,ce.scientific_name,ce.older_ma,ce.younger_ma,
+      me.catalog_label,coalesce(sr.raw_payload,mn.payload#>'{evidence,raw}') raw_payload,
+      ce.locality_id,ce.scientific_name,ce.older_ma,ce.younger_ma,
       ce.policy_version,os.id occurrence_source_record_id,os.content_hash occurrence_content_hash,
       oc.normalization_hash occurrence_normalization_hash,
       nr.payload->'evidence'->'original_identification' original_identification,
-      loc.location_is_generalized,context.raw_payload collection_context FROM material_evidence me
+      loc.location_is_generalized,
+      coalesce(context.raw_payload,cn.payload#>'{evidence,raw}') collection_context
+      FROM material_evidence me
       JOIN source_record sr ON sr.id=me.source_record_id
         AND sr.content_hash=me.content_hash AND sr.is_current
       JOIN source_dataset sd ON sd.id=sr.source_dataset_id AND NOT sd.is_synthetic
       JOIN source_normalization_current nc ON nc.source_record_id=sr.id
         AND nc.content_hash=sr.content_hash
+      JOIN normalized_source_revision mn ON mn.source_record_id=sr.id
+        AND mn.content_hash=sr.content_hash AND mn.normalization_hash=nc.normalization_hash
       JOIN catalog_entry ce ON ce.occurrence_id=me.occurrence_id AND ce.evidence_kind='occurrence'
       JOIN source_record os ON os.id=ce.source_record_id
         AND os.is_current AND os.content_hash=ce.content_hash
@@ -324,20 +329,23 @@ def preview_reconciliation(
       JOIN normalized_source_revision nr ON nr.source_record_id=os.id
         AND nr.content_hash=os.content_hash AND nr.normalization_hash=oc.normalization_hash
       LEFT JOIN locality loc ON loc.id=ce.locality_id
-      JOIN source_record_dependency membership ON membership.source_record_id=os.id
+      JOIN source_dependency_frame membership ON membership.source_record_id=os.id
         AND membership.content_hash=os.content_hash
         AND membership.normalization_hash=oc.normalization_hash
         AND membership.dependency_record_id=sr.id
         AND membership.dependency_content_hash=sr.content_hash
       JOIN source_record context ON context.id=ce.provider_age_source_record_id
+      JOIN source_normalization_current cc ON cc.source_record_id=context.id
+        AND cc.content_hash=context.content_hash
+      JOIN normalized_source_revision cn ON cn.source_record_id=context.id
+        AND cn.content_hash=cc.content_hash AND cn.normalization_hash=cc.normalization_hash
       WHERE sr.source_dataset_id=:subject AND os.source_dataset_id=:subject
-      AND NOT EXISTS (SELECT 1 FROM source_record_dependency d
-        JOIN source_record dep ON dep.id=d.dependency_record_id
-        WHERE ((d.source_record_id=sr.id AND d.content_hash=sr.content_hash
-          AND d.normalization_hash=nc.normalization_hash)
-          OR (d.source_record_id=os.id AND d.content_hash=os.content_hash
-          AND d.normalization_hash=oc.normalization_hash))
-          AND (NOT dep.is_current OR dep.content_hash<>d.dependency_content_hash))
+      AND NOT EXISTS (SELECT 1 FROM source_normalization_invalid i
+        WHERE i.source_record_id=sr.id AND i.content_hash=sr.content_hash
+          AND i.normalization_hash=nc.normalization_hash)
+      AND NOT EXISTS (SELECT 1 FROM source_normalization_invalid i
+        WHERE i.source_record_id=os.id AND i.content_hash=os.content_hash
+          AND i.normalization_hash=oc.normalization_hash)
       ORDER BY sr.id"""),
             {"subject": subject_dataset_id},
         ).mappings()

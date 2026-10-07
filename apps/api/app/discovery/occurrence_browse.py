@@ -19,17 +19,22 @@ FRESH = """coalesce((SELECT p.built_revision=s.input_revision
     AND p.projection_version=:occurrence_browse_version
     FROM occurrence_browse_state p CROSS JOIN browse_projection_state s
     WHERE p.id=1 AND s.id=1),false)"""
+VALIDATED = """coalesce((SELECT projection_version=:occurrence_browse_version
+    FROM occurrence_browse_state WHERE id=1),false)"""
 MEMBER = """EXISTS (SELECT 1 FROM occurrence_browse_member m
     WHERE m.occurrence_id=ce.occurrence_id AND m.source_record_id=ce.source_record_id
       AND m.content_hash=ce.content_hash AND m.normalization_hash=ce.normalization_hash)"""
+CURRENT = """NOT EXISTS (SELECT 1 FROM source_normalization_invalid i
+    WHERE i.source_record_id=ce.source_record_id AND i.content_hash=ce.content_hash
+      AND i.normalization_hash=ce.normalization_hash)"""
 
 
 def eligibility(source: str) -> str:
     """Each SELECT independently checks the generation and falls back to exact authority."""
     pbdb = (
         f"(ce.evidence_kind='occurrence' AND ce.specimen_id IS NULL "
-        f"AND ce.policy_version=:pbdb_policy AND (({FRESH} AND {MEMBER}) "
-        f"OR (NOT {FRESH} AND ({ELIGIBLE}))))"
+        f"AND ce.policy_version=:pbdb_policy AND (({VALIDATED} AND {MEMBER} AND {CURRENT}) "
+        f"OR (NOT {VALIDATED} AND ({ELIGIBLE}))))"
     )
     ufvp = f"(ce.evidence_kind='material' AND {PUBLIC})"
     return ufvp if source == "ufvp" else pbdb if source == "pbdb" else f"({ufvp} OR {pbdb})"

@@ -17,6 +17,9 @@ class Settings(BaseSettings):
 
     database_url: PostgresDsn
     cors_origins: list[str] = ["http://localhost:3000"]
+    paleograph_data_root: Path = REPO_ROOT / "data"
+    paleograph_postgres_storage_path: Path | None = None
+    paleograph_heavy_work_paused: bool = False
 
     @field_validator("database_url")
     @classmethod

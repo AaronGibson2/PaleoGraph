@@ -136,6 +136,17 @@ def test_preview_keeps_exact_material_identity_despite_context_conflicts(db_sess
     assert matched[0].diagnostics[0]["temporal_disagreement"] is True
     assert matched[0].references
     assert preview.counts["deterministic_material_records"] == 1
+    # Design C removes this duplicate source cache; authenticated normalized
+    # evidence must retain exactly the same proposals and context diagnostics.
+    from sqlalchemy import text
+
+    db_session.execute(
+        text("UPDATE source_record SET raw_payload=NULL WHERE source_dataset_id=:id"),
+        {"id": DATASET_UUID},
+    )
+    cold = preview_reconciliation(db_session, DATASET_UUID, result.source_dataset_id)
+    assert cold.input_digest == preview.input_digest
+    assert cold.counts == preview.counts
 
 
 @pytest.mark.integration

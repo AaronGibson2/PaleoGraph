@@ -70,7 +70,7 @@ def matching(query: ContextQuery, *, eligibility: str | None = None) -> tuple[st
         clauses.append("""EXISTS (SELECT 1 FROM identification_evidence ie
             JOIN source_record ir ON ir.id=ie.source_record_id AND ir.is_current
               AND ir.content_hash=ie.content_hash
-            JOIN source_record_dependency frame ON frame.source_record_id=ce.source_record_id
+            JOIN source_dependency_frame frame ON frame.source_record_id=ce.source_record_id
               AND frame.content_hash=ce.content_hash
               AND frame.normalization_hash=ce.normalization_hash
               AND frame.dependency_record_id=ir.id AND frame.dependency_content_hash=ir.content_hash
@@ -315,7 +315,7 @@ def search(session: Session, query: ContextQuery) -> SearchPage:
           WHERE lower(concat_ws(' ',rr.title,rr.doi,rs.source_record_id,
             rr.bibliography->>'author1last',rr.bibliography->>'author2last',
             rr.bibliography->>'otherauthors')) LIKE :partial
-          AND EXISTS (SELECT 1 {JOINS} JOIN source_record_dependency rf
+          AND EXISTS (SELECT 1 {JOINS} JOIN source_dependency_frame rf
             ON rf.source_record_id=ce.source_record_id AND rf.content_hash=ce.content_hash
             AND rf.normalization_hash=ce.normalization_hash AND rf.dependency_record_id=rs.id
             AND rf.dependency_content_hash=rs.content_hash WHERE {reference_where})"""

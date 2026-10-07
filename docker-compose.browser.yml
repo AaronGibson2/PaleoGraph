@@ -12,7 +12,7 @@ services:
     tmpfs:
       - /var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U paleograph_browser -d paleograph_browser"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U paleograph_browser -d paleograph_browser"]
       interval: 2s
       timeout: 5s
       retries: 20

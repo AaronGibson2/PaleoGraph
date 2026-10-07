@@ -24,6 +24,9 @@ from sqlalchemy import (
     func,
     text,
 )
+from sqlalchemy import (
+    Identity as DatabaseIdentity,
+)
 from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -94,6 +97,7 @@ class SourceDataset(Identity, Base):
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     retrieved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     is_synthetic: Mapped[bool] = mapped_column(Boolean, server_default="false")
+    publication_archive_id: Mapped[UUID | None] = mapped_column(ForeignKey("source_archive.id"))
     source: Mapped[Source] = relationship()
 
 
@@ -164,6 +168,102 @@ class SourceRecord(Identity, Base):
     run: Mapped[IngestionRun] = relationship(viewonly=True)
 
 
+class SourceArchive(Identity, Base):
+    """Provider-neutral, immutable verified source export and its deterministic manifest."""
+
+    __tablename__ = "source_archive"
+    provider: Mapped[str] = mapped_column(Text)
+    snapshot_hash: Mapped[str] = mapped_column(String(64))
+    manifest_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    retrieved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    scope: Mapped[dict[str, object]] = mapped_column(JSONB)
+    adapter_version: Mapped[str] = mapped_column(Text)
+    policy_version: Mapped[str] = mapped_column(Text)
+    rights: Mapped[str] = mapped_column(Text)
+    storage_reference: Mapped[str] = mapped_column(Text)
+    compression: Mapped[str] = mapped_column(Text, server_default="'gzip'")
+    byte_size: Mapped[int] = mapped_column(BigInteger)
+    state: Mapped[str] = mapped_column(Text)
+    manifest: Mapped[dict[str, object]] = mapped_column(JSONB)
+    __table_args__ = (
+        CheckConstraint("state IN ('writing','verifying','ready')", name="state"),
+        CheckConstraint("byte_size >= 0 AND compression='gzip'", name="format"),
+    )
+
+
+class SourceArchiveObject(Base):
+    __tablename__ = "source_archive_object"
+    id: Mapped[int] = mapped_column(BigInteger, DatabaseIdentity(), primary_key=True)
+    archive_id: Mapped[UUID] = mapped_column(ForeignKey("source_archive.id"), index=True)
+    object_hash: Mapped[str] = mapped_column(String(64))
+    original_hash: Mapped[str] = mapped_column(String(64))
+    compressed_bytes: Mapped[int] = mapped_column(BigInteger)
+    original_bytes: Mapped[int] = mapped_column(BigInteger)
+    record_count: Mapped[int] = mapped_column()
+    kind: Mapped[str] = mapped_column(Text)
+    __table_args__ = (
+        UniqueConstraint("archive_id", "object_hash"),
+        CheckConstraint(
+            "compressed_bytes >= 0 AND original_bytes >= 0 AND record_count >= 0",
+            name="sizes",
+        ),
+    )
+
+
+class GlobalIngestionJob(Identity, Base):
+    """Durable disposable/production run checkpoints; never a published scientific revision."""
+
+    __tablename__ = "global_ingestion_job"
+    dataset_id: Mapped[UUID] = mapped_column(ForeignKey("source_dataset.id"))
+    snapshot_hash: Mapped[str] = mapped_column(String(64))
+    archive_id: Mapped[UUID | None] = mapped_column(ForeignKey("source_archive.id"))
+    state: Mapped[str] = mapped_column(Text)
+    staging_schema: Mapped[str] = mapped_column(Text, unique=True)
+    checkpoint: Mapped[dict[str, object]] = mapped_column(JSONB)
+    metrics: Mapped[dict[str, object]] = mapped_column(JSONB)
+    error: Mapped[str | None] = mapped_column(Text)
+    __table_args__ = (
+        UniqueConstraint("dataset_id", "snapshot_hash"),
+        CheckConstraint(
+            "state IN ('archiving','staging','normalizing','validated',"
+            "'publishing','ready','failed')",
+            name="state",
+        ),
+    )
+
+
+class SourceProofEdge(Base):
+    """Full flattened version proof; original UUID/SHA identities remain on the nodes."""
+
+    __tablename__ = "source_proof_edge"
+    normalization_key: Mapped[int] = mapped_column(
+        BigInteger, ForeignKey("normalized_source_revision.normalization_key"), primary_key=True
+    )
+    revision_key: Mapped[int] = mapped_column(
+        BigInteger, ForeignKey("source_record_revision.revision_key"), primary_key=True, index=True
+    )
+
+
+class SourceNormalizationInvalid(Base):
+    """Derived exact invalidity, refreshed at writes; avoids traversing proofs in each read."""
+
+    __tablename__ = "source_normalization_invalid"
+    source_record_id: Mapped[UUID] = mapped_column(primary_key=True)
+    content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    normalization_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["source_record_id", "content_hash", "normalization_hash"],
+            [
+                "normalized_source_revision.source_record_id",
+                "normalized_source_revision.content_hash",
+                "normalized_source_revision.normalization_hash",
+            ],
+            ondelete="CASCADE",
+        ),
+    )
+
+
 class SourceRecordRevision(Base):
     """Immutable changed content; unchanged observations are tracked by the run snapshot."""
 
@@ -171,8 +271,20 @@ class SourceRecordRevision(Base):
     source_record_id: Mapped[UUID] = mapped_column(ForeignKey("source_record.id"), primary_key=True)
     content_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
     ingestion_run_id: Mapped[UUID] = mapped_column(ForeignKey("ingestion_run.id"))
-    raw_payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+    raw_payload: Mapped[dict[str, object] | None] = mapped_column(JSONB)
+    revision_key: Mapped[int] = mapped_column(BigInteger, DatabaseIdentity(), unique=True)
+    archive_object_id: Mapped[int | None] = mapped_column(
+        ForeignKey("source_archive_object.id"), index=True
+    )
+    archive_row: Mapped[int | None] = mapped_column()
     observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    __table_args__ = (
+        CheckConstraint(
+            "raw_payload IS NOT NULL OR (archive_object_id IS NOT NULL "
+            "AND archive_row IS NOT NULL AND archive_row >= 0)",
+            name="raw_evidence_retained",
+        ),
+    )
 
 
 class NormalizedSourceRevision(Base):
@@ -185,11 +297,14 @@ class NormalizedSourceRevision(Base):
     adapter_version: Mapped[str] = mapped_column(Text)
     payload: Mapped[dict[str, object]] = mapped_column(JSONB)
     ingestion_run_id: Mapped[UUID] = mapped_column(ForeignKey("ingestion_run.id"))
+    normalization_key: Mapped[int] = mapped_column(BigInteger, DatabaseIdentity(), unique=True)
+    frame_format: Mapped[str] = mapped_column(Text, server_default="'full'")
     __table_args__ = (
         ForeignKeyConstraint(
             ["source_record_id", "content_hash"],
             ["source_record_revision.source_record_id", "source_record_revision.content_hash"],
         ),
+        CheckConstraint("frame_format IN ('full','compact')", name="frame_format"),
     )
 
 

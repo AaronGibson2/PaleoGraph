@@ -44,12 +44,21 @@ is displayed. See [Phase 3.6 validation](docs/phase-3.6-validation.md),
 [visual provenance](docs/taxon-visuals.md) and [multimedia audit](docs/ufvp-multimedia-research.md).
 
 **Preserve the prepared full Florida database. Do not seed it or repeat the UFVP import.**
-The prepared database is at `0012_product_browse`, with independently retained
-UFVP and PBDB evidence and verified pre/post-4E restore checkpoints. Its migrations
-are already applied. Use the [checkpoint and PBDB replay workflow](docs/pbdb-adapter.md#full-florida-acquisition-and-publication-phase-4c)
-for deliberate backend validation. No new environment variables are required.
+The prepared database is at `0014_design_c_native_cache`, with independently
+retained UFVP and PBDB evidence and unchanged scientific fingerprints. Design C
+upgrades are additive; normal raw evidence has not been converted. Use the
+[checkpoint and PBDB replay workflow](docs/pbdb-adapter.md#full-florida-acquisition-and-publication-phase-4c)
+for deliberate backend validation and the [Phase 5B1 report](docs/phase-5b1-report.md)
+for the current production-ingestion readiness gate.
 
 ## Local setup
+
+The Phase 5B1 storage pause was cleared after retained-state health verification.
+Bulk data and Docker's host disk image reside on E:, with old filesystem paths
+preserved through verified junctions. Physical-drive capacity checks and bounded
+profiler spill/timeouts remain active. See the
+[storage incident report](docs/phase-5b1-storage-emergency.md) and
+[production ingestion runbook](docs/pbdb-global-production-ingestion.md).
 
 Requirements: Node version in `.node-version`, pnpm 10.34.6, uv/Python 3.12 and
 Docker Compose with PostGIS. Run these commands from the repository root.

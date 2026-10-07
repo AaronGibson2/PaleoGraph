@@ -9,7 +9,7 @@ from pathlib import Path
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
-URL = "postgresql+psycopg://paleograph_browser:paleograph_browser@localhost:56432/paleograph_browser"
+URL = "postgresql+psycopg://paleograph_browser:paleograph_browser@127.0.0.1:56432/paleograph_browser"
 
 
 def ready(url: str, process: subprocess.Popen[bytes]) -> None:

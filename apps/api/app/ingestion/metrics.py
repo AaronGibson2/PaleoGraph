@@ -3,7 +3,7 @@
 import sys
 
 
-def peak_memory_bytes() -> int:
+def memory_bytes(*, peak: bool = True) -> int:
     if sys.platform == "win32":
         import ctypes
         from ctypes import wintypes
@@ -32,9 +32,19 @@ def peak_memory_bytes() -> int:
             kernel.GetCurrentProcess(), ctypes.byref(counters), counters.cb
         ):
             raise OSError(ctypes.get_last_error(), "Unable to measure ingestion working set")
-        return int(counters.PeakWorkingSetSize)
+        return int(counters.PeakWorkingSetSize if peak else counters.WorkingSetSize)
+    if not peak and sys.platform.startswith("linux"):
+        from pathlib import Path
+
+        for line in Path("/proc/self/status").read_text().splitlines():
+            if line.startswith("VmRSS:"):
+                return int(line.split()[1]) * 1024
     import resource
 
     return int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss) * (
         1 if sys.platform == "darwin" else 1024
     )
+
+
+def peak_memory_bytes() -> int:
+    return memory_bytes()

@@ -12,7 +12,7 @@ from app.ingestion.import_ufvp import ingest
 from sqlalchemy.orm import Session
 
 ROOT = Path(__file__).resolve().parents[1]
-URL = "postgresql+psycopg://paleograph_browser:paleograph_browser@localhost:56432/paleograph_browser"
+URL = "postgresql+psycopg://paleograph_browser:paleograph_browser@127.0.0.1:56432/paleograph_browser"
 
 
 def main() -> None:

@@ -341,33 +341,14 @@ def plan(
     return records, dependencies
 
 
-def persist(session: Session, snapshot: Snapshot, run_id: UUID, now: datetime) -> dict[str, Any]:
-    started = time.perf_counter()
-    records, dependencies = plan(snapshot)
-    normalization_seconds = time.perf_counter() - started
-    full = snapshot.manifest["scope"]["mode"] == "full-florida"
-    if full:
-        print(
-            json.dumps(
-                {
-                    "stage": "normalized",
-                    "records": len(records),
-                    "seconds": normalization_seconds,
-                    "dependencies": sum(len(frame) for frame in dependencies.values()),
-                    "peak_memory_bytes": peak_memory_bytes(),
-                }
-            ),
-            flush=True,
-        )
-    persistence_started = time.perf_counter()
-    previous: dict[UUID, str | None] = {
-        source_id: content_hash
-        for source_id, content_hash in session.execute(
-            select(SourceRecord.id, SourceRecord.content_hash).where(
-                SourceRecord.source_dataset_id == DATASET_UUID
-            )
-        ).all()
-    }
+def build_rows(
+    records: dict[tuple[str, str], dict[str, Any]],
+    dependencies: dict[tuple[str, str], set[tuple[str, str]]],
+    occurrences: Iterable[Any],
+    run_id: UUID,
+    now: datetime,
+) -> dict[str, list[dict[str, Any]]]:
+    """Pure, shared evidence/canonical assembly for bounded and staged writers."""
     rows: dict[str, list[dict[str, Any]]] = {
         name: []
         for name in (
@@ -392,15 +373,11 @@ def persist(session: Session, snapshot: Snapshot, run_id: UUID, now: datetime) -
             "occurrence_link",
         )
     }
-    inserted = updated = 0
     identity = {"created_at": now, "updated_at": now}
-    occurrences = snapshot.occurrences()
     for key, value in records.items():
         kind, external = key
         source_id = record_id(kind, external)
         raw, content_hash = value["raw"], value["hash"]
-        inserted += source_id not in previous
-        updated += source_id in previous and previous[source_id] != content_hash
         frame = sorted((str(record_id(*dep)), records[dep]["hash"]) for dep in dependencies[key])
         normalized_payload = {
             "record_type": kind,
@@ -599,6 +576,43 @@ def persist(session: Session, snapshot: Snapshot, run_id: UUID, now: datetime) -
         rows["occurrence_link"].append(
             {"occurrence_id": occ_id, "source_record_id": record_id("occurrence", occurrence.id)}
         )
+    return rows
+
+
+def persist(session: Session, snapshot: Snapshot, run_id: UUID, now: datetime) -> dict[str, Any]:
+    started = time.perf_counter()
+    records, dependencies = plan(snapshot)
+    normalization_seconds = time.perf_counter() - started
+    full = snapshot.manifest["scope"]["mode"] == "full-florida"
+    if full:
+        print(
+            json.dumps(
+                {
+                    "stage": "normalized",
+                    "records": len(records),
+                    "seconds": normalization_seconds,
+                    "dependencies": sum(len(frame) for frame in dependencies.values()),
+                    "peak_memory_bytes": peak_memory_bytes(),
+                }
+            ),
+            flush=True,
+        )
+    persistence_started = time.perf_counter()
+    previous: dict[UUID, str | None] = {
+        source_id: content_hash
+        for source_id, content_hash in session.execute(
+            select(SourceRecord.id, SourceRecord.content_hash).where(
+                SourceRecord.source_dataset_id == DATASET_UUID
+            )
+        ).all()
+    }
+    occurrences = snapshot.occurrences()
+    rows = build_rows(records, dependencies, occurrences, run_id, now)
+    inserted = sum(record_id(*key) not in previous for key in records)
+    updated = sum(
+        record_id(*key) in previous and previous[record_id(*key)] != value["hash"]
+        for key, value in records.items()
+    )
     tables = [
         ("source", SourceRecord),
         ("revision", SourceRecordRevision),
