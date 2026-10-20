@@ -3,23 +3,24 @@ import { apiBase, openCatalog, stubBasemap } from "./helpers";
 
 test.beforeEach(async({page})=>stubBasemap(page));
 
-test("hover and keyboard focus prepare only the intended branch without changing URL or shell",async({page,request})=>{
-  const root=(await (await request.get(`${apiBase}/lineage?limit=12`)).json()).items.find((item:{label:string})=>item.label==='Animalia');
+test("hover prepares only the intended taxonomy branch and cached reopen preserves the shell",async({page,request})=>{
+  const root=(await (await request.get(`${apiBase}/taxonomy/roots`)).json()).items.find((item:{name:string})=>item.name==='Animalia');
   await page.goto('/explore?surface=lineage');
   const button=page.getByRole('button',{name:'Expand Animalia',exact:true});await expect(button).toBeEnabled();
   await expect.poll(()=>new URL(page.url()).searchParams.has('zoom')).toBe(true);
   const shell=await page.locator('.atlas-bar').elementHandle();
   const url=page.url();const historyLength=await page.evaluate(()=>window.history.length);
   let prepared=0;
-  page.on('request',r=>{const u=new URL(r.url());if(u.pathname.endsWith('/lineage')&&u.searchParams.get('focus')===root.id)prepared++;});
-  const response=page.waitForResponse(r=>{const u=new URL(r.url());return u.pathname.endsWith('/lineage')&&u.searchParams.get('focus')===root.id;});
+  page.on('request',r=>{if(new URL(r.url()).pathname.endsWith(`/taxonomy/nodes/${root.id}/children`))prepared++;});
+  const response=page.waitForResponse(r=>new URL(r.url()).pathname.endsWith(`/taxonomy/nodes/${root.id}/children`));
   await button.hover();await response;
   expect(page.url()).toBe(url);expect(await page.evaluate(()=>window.history.length)).toBe(historyLength);expect(prepared).toBe(1);
-  await button.focus();await button.press('Enter');await expect(page.locator('.surface-introduction h2')).toHaveText('Animalia');
+  await button.click();await expect(page.getByRole('treeitem').filter({hasText:'Chordata'})).toBeVisible();
   expect(prepared).toBe(1);expect(await shell?.evaluate(node=>node.isConnected)).toBe(true);
-  await page.goBack();await expect(page.locator('.surface-introduction h2')).toHaveText('The source taxonomic hierarchy');
+  await page.getByRole('button',{name:'Collapse Animalia',exact:true}).click();
   const row=page.getByRole('treeitem').filter({hasText:'Animalia'});await row.focus();
-  await row.press('ArrowRight');await expect(page.locator('.surface-introduction h2')).toHaveText('Animalia');expect(prepared).toBe(1);
+  await row.press('ArrowRight');await expect(page.getByRole('treeitem').filter({hasText:'Chordata'})).toBeVisible();expect(prepared).toBe(1);
+  await expect(page.locator('.surface-introduction h2')).toHaveText('Florida Taxonomy');
 });
 
 test("focused material prepares detail and evidence; inspection and history preserve camera and rows",async({page})=>{
@@ -70,10 +71,10 @@ test("cached classification survives a failed stale refresh, and explicit retry 
   const labels=await page.getByRole('treeitem').allTextContents();
   await page.getByRole('button',{name:'Localities',exact:true}).click();await expect(page.locator('.association-rows li').first()).toBeVisible();
   await page.evaluate(()=>Reflect.set(window,'cacheTestTime',Reflect.get(window,'cacheTestTime')+61000));
-  await page.route('**/api/v1/lineage?**',route=>route.fulfill({status:503,json:{error:{message:'Refresh temporarily unavailable'}}}));
+  await page.route('**/api/v1/taxonomy/roots?**',route=>route.fulfill({status:503,json:{error:{message:'Refresh temporarily unavailable'}}}));
   await page.getByRole('button',{name:'Lineage',exact:true}).click();
   await expect(page.locator('.snapshot-status')).toContainText('Refresh temporarily unavailable');expect(await page.getByRole('treeitem').allTextContents()).toEqual(labels);
-  await page.unroute('**/api/v1/lineage?**');await page.getByRole('button',{name:'Retry lineage',exact:true}).click();await expect(page.locator('.snapshot-status')).toHaveCount(0);
+  await page.unroute('**/api/v1/taxonomy/roots?**');await page.getByRole('button',{name:'Retry taxonomy',exact:true}).click();await expect(page.locator('.snapshot-status')).toHaveCount(0);
 });
 
 test("closing and reopening material preserves pagination without another request",async({page})=>{

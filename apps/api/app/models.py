@@ -980,3 +980,103 @@ class TaxonBrowseSummary(Base):
     younger_ma: Mapped[Decimal | None] = mapped_column(Numeric())
     known_age_count: Mapped[int] = mapped_column(BigInteger)
     unknown_age_count: Mapped[int] = mapped_column(BigInteger)
+
+
+class TaxonomyBrowseState(Base):
+    __tablename__ = "taxonomy_browse_state"
+    scope: Mapped[str] = mapped_column(Text, primary_key=True)
+    built_revision: Mapped[int] = mapped_column(BigInteger)
+    projection_version: Mapped[str] = mapped_column(Text)
+    input_hash: Mapped[str] = mapped_column(String(64))
+    built_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class TaxonomyBrowseNode(Base):
+    __tablename__ = "taxonomy_browse_node"
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    scope: Mapped[str] = mapped_column(Text, index=True)
+    parent_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("taxonomy_browse_node.id", deferrable=True, initially="DEFERRED"), index=True
+    )
+    name: Mapped[str] = mapped_column(Text)
+    rank: Mapped[str | None] = mapped_column(Text)
+    search_name: Mapped[str] = mapped_column(Text, index=True)
+    placement: Mapped[str] = mapped_column(Text)
+    path: Mapped[list[dict[str, object]]] = mapped_column(JSONB)
+    ufvp_count: Mapped[int] = mapped_column(BigInteger)
+    pbdb_count: Mapped[int] = mapped_column(BigInteger)
+    summary: Mapped[dict[str, object]] = mapped_column(JSONB)
+
+
+class TaxonomyBrowseConcept(Base):
+    __tablename__ = "taxonomy_browse_concept"
+    node_id: Mapped[UUID] = mapped_column(ForeignKey("taxonomy_browse_node.id"), primary_key=True)
+    source: Mapped[str] = mapped_column(Text, primary_key=True)
+    concept_key: Mapped[str] = mapped_column(Text, primary_key=True)
+    taxon_id: Mapped[UUID | None] = mapped_column(ForeignKey("taxon.id"), index=True)
+    details: Mapped[dict[str, object]] = mapped_column(JSONB)
+
+
+class TaxonomyBrowsePath(Base):
+    __tablename__ = "taxonomy_browse_path"
+    ancestor_id: Mapped[UUID] = mapped_column(
+        ForeignKey("taxonomy_browse_node.id"), primary_key=True
+    )
+    node_id: Mapped[UUID] = mapped_column(ForeignKey("taxonomy_browse_node.id"), primary_key=True)
+    depth: Mapped[int] = mapped_column()
+    __table_args__ = (Index("ix_taxonomy_path_node", "node_id", "ancestor_id"),)
+
+
+class TaxonomyBrowseMember(Base):
+    __tablename__ = "taxonomy_browse_member"
+    occurrence_id: Mapped[UUID] = mapped_column(
+        ForeignKey("catalog_entry.occurrence_id", ondelete="CASCADE"), primary_key=True
+    )
+    node_id: Mapped[UUID] = mapped_column(ForeignKey("taxonomy_browse_node.id"), index=True)
+    source: Mapped[str] = mapped_column(Text)
+
+
+class PbdbTaxonomySnapshot(Base):
+    """Immutable additive source taxonomy; occurrence snapshots are never rewritten."""
+
+    __tablename__ = "pbdb_taxonomy_snapshot"
+    hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    manifest_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    storage_reference: Mapped[str] = mapped_column(Text)
+    manifest: Mapped[dict[str, object]] = mapped_column(JSONB)
+
+
+class PbdbTaxonomyHead(Base):
+    __tablename__ = "pbdb_taxonomy_head"
+    scope: Mapped[str] = mapped_column(Text, primary_key=True)
+    snapshot_hash: Mapped[str] = mapped_column(ForeignKey("pbdb_taxonomy_snapshot.hash"))
+
+
+class PbdbTaxonomyRecord(Base):
+    __tablename__ = "pbdb_taxonomy_record"
+    snapshot_hash: Mapped[str] = mapped_column(
+        ForeignKey("pbdb_taxonomy_snapshot.hash"), primary_key=True
+    )
+    selector: Mapped[str] = mapped_column(Text, primary_key=True)
+    concept_id: Mapped[str] = mapped_column(Text, index=True)
+    payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+
+
+class PbdbTaxonomyDependency(Base):
+    __tablename__ = "pbdb_taxonomy_dependency"
+    snapshot_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    selector: Mapped[str] = mapped_column(Text, primary_key=True)
+    relationship: Mapped[str] = mapped_column(Text, primary_key=True)
+    target: Mapped[str] = mapped_column(Text, primary_key=True)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["snapshot_hash", "selector"],
+            ["pbdb_taxonomy_record.snapshot_hash", "pbdb_taxonomy_record.selector"],
+            name="fk_pbdb_taxonomy_dependency_child",
+        ),
+        ForeignKeyConstraint(
+            ["snapshot_hash", "target"],
+            ["pbdb_taxonomy_record.snapshot_hash", "pbdb_taxonomy_record.selector"],
+            name="fk_pbdb_taxonomy_dependency_target",
+        ),
+    )

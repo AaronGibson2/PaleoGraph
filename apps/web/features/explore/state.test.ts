@@ -34,6 +34,13 @@ test("lineage actions narrow ancestors and retain an active descendant context",
   assert.equal(lineageContext("species", null, []), "species");
 });
 
+test("an explicit Atlas surface survives URLs whose route defaults to Lineage", () => {
+  const state = { ...DEFAULT_VIEW, selected: null, older_ma: null, younger_ma: null, surface: "map" as const };
+  const params = new URLSearchParams(serializeExploreState(state));
+  assert.equal(params.get("surface"), "map");
+  assert.equal(parseExploreState(params).surface, "map");
+});
+
 test("material and inspector presentation restore with URL context and reject invalid flags",()=>{
   const selected="de000000-0000-4000-8000-000600000001";
   const state=parseExploreState(new URLSearchParams(`selected=${selected}&catalog=open&inspect=closed`));

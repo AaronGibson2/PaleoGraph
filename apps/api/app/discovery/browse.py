@@ -216,8 +216,12 @@ def _rebuild(session: Session) -> dict[str, Any]:
     from app.discovery.occurrence_browse import rebuild as rebuild_occurrences
 
     rebuild_occurrences(session)
+    from app.taxonomy.build import rebuild as rebuild_taxonomy
+
+    taxonomy_result = rebuild_taxonomy(session)
     return {
         "projection_version": VERSION,
+        "taxonomy": taxonomy_result,
         "input_revision": input_revision,
         "localities": session.scalar(text("SELECT count(*) FROM locality_browse_summary")),
         "taxa": session.scalar(text("SELECT count(*) FROM taxon_browse_summary")),

@@ -623,10 +623,12 @@ def ingest_global(
             with Session(engine) as session, session.begin():
                 if session.scalar(text("SELECT current_database()")) != engine.url.database:
                     raise ValueError("Connected database differs from guarded target")
-                if (
-                    session.scalar(text("SELECT version_num FROM alembic_version"))
-                    != "0014_design_c_native_cache"
-                ):
+                # Later browse/additive taxonomy tables preserve the validated Design C schema.
+                if session.scalar(text("SELECT version_num FROM alembic_version")) not in {
+                    "0014_design_c_native_cache",
+                    "0015_taxonomy_browse",
+                    "0016_pbdb_taxonomy_hierarchy",
+                }:
                     raise ValueError(
                         "Design C ingestion requires the validated 0013/0014 migrations"
                     )

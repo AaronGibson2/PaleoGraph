@@ -25,6 +25,7 @@ Not every assertion becomes a canonical entity. Bibliography, opinions, measurem
 | `apps/web/features/explore` | URL state, catalog, search, inspection and relationships |
 | `apps/web/features/map`, `features/timeline` | Persistent map, buffered coverage and time selection |
 | `apps/api/app/explore`, `app/discovery` | Evidence reads, policy and indexed discovery |
+| `apps/api/app/taxonomy` | Deterministic Florida classification placement, projection build and bounded reads |
 | `apps/api/app/ingestion` | UFVP/PBDB adapters, archives, staging and publication |
 | `apps/api/app/reconciliation.py` | Reversible material assessments |
 | `apps/api/app/models.py`, `apps/api/migrations` | Relational model and schema |
@@ -43,6 +44,8 @@ The pipeline has been exercised with retained and explicitly synthetic scale fix
 Search uses PostgreSQL full-text search, `pg_trgm`, and indexed exact/prefix access. Catalog pages select eligible identities before expanding details. B-tree and GiST indexes support relational and spatial access. There is no OpenSearch, Neo4j, Redis or Kafka requirement.
 
 Catalog membership, source-current pointers, policy IDs, revision hashes and complete dependency proofs determine eligibility. Native authority tables accelerate indexed point/catalog reads without expanding every proof. Dirty browse generations use live guarded derivation; ready summaries are versioned, rebuildable projections. Readers recheck validity within their SQL snapshot. Publication and discovery repair preserve transactional coherence.
+
+The taxonomy explorer materializes compatible classification paths, source-concept associations, evidence membership, ancestor closure and source-specific summaries in PostgreSQL. Its version and input revision must match before serving reads; a stale projection returns a recoverable 503. Interactive traversal never rebuilds the hierarchy or walks dependency proofs. Ingestion's existing atomic browse rebuild also refreshes taxonomy; a projection-only rebuild leaves source/scientific tables untouched. See [taxonomy explorer](taxonomy-explorer.md).
 
 Pagination is bounded and filter-fingerprinted. Relationships use typed joins and named evidence roles, not inferred biological connections. Raw provider JSON is not an unrestricted public API payload.
 

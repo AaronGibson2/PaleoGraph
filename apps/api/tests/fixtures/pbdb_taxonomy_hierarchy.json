@@ -1,0 +1,1657 @@
+{
+  "snapshot_hash": "540f5fd38152eb7fc8d5a8169b4c7917bec18d5eab14c36e2c4d183a786075f9",
+  "note": "PBDB CC0 source fields; proof hashes reference the retained immutable snapshot. No coordinates.",
+  "records": {
+    "var:47802": {
+      "orig_no": "txn:233974",
+      "taxon_no": "var:47802",
+      "taxon_name": "Lutra canadensis",
+      "taxon_rank": "species",
+      "parent_no": "txn:41121",
+      "parent_name": "Lontra",
+      "accepted_no": "txn:233974",
+      "accepted_name": "Lontra canadensis",
+      "accepted_rank": "species",
+      "difference": "recombined as",
+      "reference_no": "ref:7009",
+      "proof": {
+        "object": "a61f341bc5f12220ec872331a1e941dd81eb60a251c5a902c8abadfe434f4253",
+        "ordinal": 65,
+        "request": "cf4443579fc8c3029e40b2df4efc9bd93a719409a1f0b402807b6013fcf79d2a",
+        "row_hash": "b77d32087f21792c145743a1f561e7408242113e293c332fbae4e6bb79209ffd"
+      }
+    },
+    "txn:41121": {
+      "orig_no": "txn:41121",
+      "taxon_no": "var:41121",
+      "taxon_name": "Lontra",
+      "taxon_rank": "genus",
+      "parent_no": "txn:54982",
+      "parent_name": "Lutrinae",
+      "accepted_no": "txn:41121",
+      "accepted_name": "Lontra",
+      "accepted_rank": "genus",
+      "reference_no": "ref:7008",
+      "proof": {
+        "object": "ffb497ace598435b72997f15ba664daf27ad652c0c0d5e50f4ba67cdaec2250e",
+        "ordinal": 10,
+        "request": "12149f31d74ef8ead6e8d14d0d54e72ae3e79a315008d5840ce04bc075f2e75f",
+        "row_hash": "7011460c72082f235d04e9489f007718d2644e7eba72488110387719629d7c6f"
+      }
+    },
+    "txn:54982": {
+      "orig_no": "txn:54982",
+      "taxon_no": "var:54982",
+      "taxon_name": "Lutrinae",
+      "taxon_rank": "subfamily",
+      "parent_no": "txn:41086",
+      "parent_name": "Mustelidae",
+      "accepted_no": "txn:54982",
+      "accepted_name": "Lutrinae",
+      "accepted_rank": "subfamily",
+      "reference_no": "ref:9276",
+      "proof": {
+        "object": "d993a60d3459ac0b601ddf1b0619b3977b6b61aea9c119080bd2414e6057461a",
+        "ordinal": 46,
+        "request": "b8cd9c912608c6916981971e2f49ab2b7a2648cce5bfd7286fa8fec7fc1b3115",
+        "row_hash": "cc806f0ca8e18f5ea8cd08bba4096f379dd2c7fd859aa9b203da6e3f969bea9f"
+      }
+    },
+    "txn:41086": {
+      "orig_no": "txn:41086",
+      "taxon_no": "var:41086",
+      "taxon_name": "Mustelidae",
+      "taxon_rank": "family",
+      "parent_no": "txn:67878",
+      "parent_name": "Mustelida",
+      "accepted_no": "txn:41086",
+      "accepted_name": "Mustelidae",
+      "accepted_rank": "family",
+      "reference_no": "ref:4783",
+      "proof": {
+        "object": "7552f56ab87c3a63606d5ebf6b92e2f3235b05e3cf6b347e12880432aebd980d",
+        "ordinal": 16,
+        "request": "16ee5b5798f751b4d22af01731ad76bec8a160622933ab16efffeecaac44fb04",
+        "row_hash": "c7ef42f97a5271872eb3f7f47375f11808fe6d59f35cfdf4b182d16faac37a59"
+      }
+    },
+    "txn:67878": {
+      "orig_no": "txn:67878",
+      "taxon_no": "var:67878",
+      "taxon_name": "Mustelida",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:41085",
+      "parent_name": "Arctoidea",
+      "accepted_no": "txn:67878",
+      "accepted_name": "Mustelida",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:16807",
+      "proof": {
+        "object": "7404058a5322f7aa2ed0e338daffd338bb1eb319779a8dd4ebbaf49f8b64c451",
+        "ordinal": 49,
+        "request": "3f60dd10942bb06b85cfbd3b2e6f8b55913e6d9457a727d04a7067dda07e92dd",
+        "row_hash": "08b5ee18c4d9e308b9d99a1c74350d578515de92707187e8796c838aedc10bf2"
+      }
+    },
+    "txn:41085": {
+      "orig_no": "txn:41085",
+      "taxon_no": "var:41085",
+      "taxon_name": "Arctoidea",
+      "taxon_rank": "superfamily",
+      "parent_no": "txn:71870",
+      "parent_name": "Canoidea",
+      "accepted_no": "txn:41085",
+      "accepted_name": "Arctoidea",
+      "accepted_rank": "superfamily",
+      "reference_no": "ref:4783",
+      "proof": {
+        "object": "656c6c591cd4b0955423c5681cda0c94ba97f8409dd1a0611cdee48a1060c5bb",
+        "ordinal": 50,
+        "request": "5cf1de2b15100987955a6442081044f3337512124f1272ccffaafc4cee9b5743",
+        "row_hash": "1059e32b51d45ededb61b06652b2140769b1c19db50f483655057c18351272b0"
+      }
+    },
+    "txn:71870": {
+      "orig_no": "txn:71870",
+      "taxon_no": "var:472025",
+      "taxon_name": "Canoidea",
+      "taxon_rank": "infraorder",
+      "parent_no": "txn:54044",
+      "parent_name": "Caniformia",
+      "accepted_no": "txn:71870",
+      "accepted_name": "Canoidea",
+      "accepted_rank": "infraorder",
+      "reference_no": "ref:62151",
+      "proof": {
+        "object": "2db7a7f56321620dcd994ce8a7f8e36ae7a4fd34a40828f24eb56802c416b981",
+        "ordinal": 56,
+        "request": "cc79e992b9d6e2647735cafd38f7c8bb6eee51af447e7397d29d536a0558a0bb",
+        "row_hash": "5599b40abffc5b6572aba8e84cf3c67cbf210de23f981a7aee6a7c3a3b8b9a28"
+      }
+    },
+    "txn:54044": {
+      "orig_no": "txn:54044",
+      "taxon_no": "var:54044",
+      "taxon_name": "Caniformia",
+      "taxon_rank": "suborder",
+      "parent_no": "txn:36905",
+      "parent_name": "Carnivora",
+      "accepted_no": "txn:54044",
+      "accepted_name": "Caniformia",
+      "accepted_rank": "suborder",
+      "reference_no": "ref:8936",
+      "proof": {
+        "object": "6861a072740175d893259c823b7120e08539c0026e9365efb03292b4e62b1d65",
+        "ordinal": 68,
+        "request": "4686daf36d6c9e60281d6c1755ab283b527143197dfe9cefed1d6eccd23a8d08",
+        "row_hash": "77ff1f48e157b03d525d5c068e7dcce4d4e74b8b782568011c4b329be4e5f23a"
+      }
+    },
+    "txn:36905": {
+      "orig_no": "txn:36905",
+      "taxon_no": "var:36905",
+      "taxon_name": "Carnivora",
+      "taxon_rank": "order",
+      "parent_no": "txn:336920",
+      "parent_name": "Carnivoraformes",
+      "accepted_no": "txn:36905",
+      "accepted_name": "Carnivora",
+      "accepted_rank": "order",
+      "reference_no": "ref:87636",
+      "proof": {
+        "object": "576e03a1f234bd96be7b68f2659d58a8d9a885db0f32f3886b29f4b396fb00b7",
+        "ordinal": 15,
+        "request": "91eb6f7f289a22c1be24cbc021482288400235a9f1b6b8c995b2c68937e31462",
+        "row_hash": "d78b8a3bdac4835161ca1c80bdca598e81a125036f7f39552a53233d3460873f"
+      }
+    },
+    "txn:336920": {
+      "orig_no": "txn:336920",
+      "taxon_no": "var:336920",
+      "taxon_name": "Carnivoraformes",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:136662",
+      "parent_name": "Carnivoramorpha",
+      "accepted_no": "txn:336920",
+      "accepted_name": "Carnivoraformes",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:58181",
+      "proof": {
+        "object": "f4bcefd2b20ba0ac37e72f10e5a42ed9b90dce4537d304755bd1c77b7f00d426",
+        "ordinal": 34,
+        "request": "4520550be83eda6805f6751b90b0dc7530a47da4ab85a4631a43d1eb73ec4475",
+        "row_hash": "7a237416e66afd27b9e3c62aedc3863002d6db9254fd9e4b613a85441b434000"
+      }
+    },
+    "txn:136662": {
+      "orig_no": "txn:136662",
+      "taxon_no": "var:136662",
+      "taxon_name": "Carnivoramorpha",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:509476",
+      "parent_name": "Pancarnivora",
+      "accepted_no": "txn:136662",
+      "accepted_name": "Carnivoramorpha",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:28566",
+      "proof": {
+        "object": "43942797db4efebc8bb6ddfb29d419669f0255446497199f762af490f8c5bd3f",
+        "ordinal": 50,
+        "request": "bcbf41cd08192ee60e6671f75066910e5e86b8f4248e644215a617fe37fcd57f",
+        "row_hash": "d916c4ec89e3e053a690506af515757e8851d42159cf1145eef44174df144f90"
+      }
+    },
+    "txn:509476": {
+      "orig_no": "txn:509476",
+      "taxon_no": "var:509476",
+      "taxon_name": "Pancarnivora",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:72264",
+      "parent_name": "Ferae",
+      "accepted_no": "txn:509476",
+      "accepted_name": "Pancarnivora",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:92249",
+      "proof": {
+        "object": "38b3a1d8a6a2ce6197a6d93a8a9ab5b190ef08d64d3d26823414915409754945",
+        "ordinal": 26,
+        "request": "be50e975af7086a7a72d8a705c9ea505089c425cbae7bf9394e8d16378bafde4",
+        "row_hash": "e5cbed58ba7adbe339333fdc8293461e9bbe43a1392d75add9584e74dc4553dc"
+      }
+    },
+    "txn:72264": {
+      "orig_no": "txn:72264",
+      "taxon_no": "var:159623",
+      "taxon_name": "Ferae",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:192307",
+      "parent_name": "Scrotifera",
+      "accepted_no": "txn:72264",
+      "accepted_name": "Ferae",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:12782",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 52,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "9e84193dfb8d0bcce6b071c4ba8cf4c03deccaa2e20726f0559d62f2601820e2"
+      }
+    },
+    "txn:192307": {
+      "orig_no": "txn:192307",
+      "taxon_no": "var:192307",
+      "taxon_name": "Scrotifera",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:92585",
+      "parent_name": "Laurasiatheria",
+      "accepted_no": "txn:192307",
+      "accepted_name": "Scrotifera",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:16715",
+      "proof": {
+        "object": "3b8b610c1df1ef9fa8468470a40c0c31ea570f7e5dfccea6a53fc94cfc3a5b45",
+        "ordinal": 57,
+        "request": "e36968bd3d87db7f234ae461a5e731c8735d8ae7c15a45943f4fdb4fcb52d4c0",
+        "row_hash": "f115cddd126694503a06e4155beb747cb957962ec73410aeaa5c0efbb2536226"
+      }
+    },
+    "txn:92585": {
+      "orig_no": "txn:92585",
+      "taxon_no": "var:92585",
+      "taxon_name": "Laurasiatheria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:192313",
+      "parent_name": "Boreoeutheria",
+      "accepted_no": "txn:92585",
+      "accepted_name": "Laurasiatheria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:16715",
+      "proof": {
+        "object": "3b8b610c1df1ef9fa8468470a40c0c31ea570f7e5dfccea6a53fc94cfc3a5b45",
+        "ordinal": 56,
+        "request": "e36968bd3d87db7f234ae461a5e731c8735d8ae7c15a45943f4fdb4fcb52d4c0",
+        "row_hash": "9eae0aaef26703ae99f8d9bd703c56cd13ac92c7d07c9cbc84f5730f867ba564"
+      }
+    },
+    "txn:192313": {
+      "orig_no": "txn:192313",
+      "taxon_no": "var:192313",
+      "taxon_name": "Boreoeutheria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:91965",
+      "parent_name": "Placentalia",
+      "accepted_no": "txn:192313",
+      "accepted_name": "Boreoeutheria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:36733",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 50,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "6f4cf72e82939a574c32033a67502c93bc846d36afe7f78cb3d2a8f4d36724f7"
+      }
+    },
+    "txn:91965": {
+      "orig_no": "txn:91965",
+      "taxon_no": "var:91965",
+      "taxon_name": "Placentalia",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:182911",
+      "parent_name": "Eutheria",
+      "accepted_no": "txn:91965",
+      "accepted_name": "Placentalia",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:36731",
+      "proof": {
+        "object": "be9213abd0e6e57574e26acd2f572f1eff93ea3b05573f83d2907f7edb4d54f0",
+        "ordinal": 76,
+        "request": "b86e89693e13dd62af342e6eeae1a810bf565b4483f64c201d7a9eac19d54798",
+        "row_hash": "65a95107c452863955518f963bb2a1deb9e2e33d7c83f9e41c1ec3235b73f308"
+      }
+    },
+    "txn:182911": {
+      "orig_no": "txn:182911",
+      "taxon_no": "var:137726",
+      "taxon_name": "Eutheria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:39860",
+      "parent_name": "Theria",
+      "accepted_no": "txn:182911",
+      "accepted_name": "Eutheria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:32625",
+      "proof": {
+        "object": "43942797db4efebc8bb6ddfb29d419669f0255446497199f762af490f8c5bd3f",
+        "ordinal": 46,
+        "request": "bcbf41cd08192ee60e6671f75066910e5e86b8f4248e644215a617fe37fcd57f",
+        "row_hash": "0fc456cd3b9eb6639d194bc1d08479a77fad0a612b2699a903247e4d488eabf8"
+      }
+    },
+    "txn:39860": {
+      "orig_no": "txn:39860",
+      "taxon_no": "var:39860",
+      "taxon_name": "Theria",
+      "taxon_rank": "subclass",
+      "parent_no": "txn:97116",
+      "parent_name": "Tribosphenida",
+      "immpar_no": "txn:67561",
+      "immpar_name": "Boreosphenida",
+      "accepted_no": "txn:39860",
+      "accepted_name": "Theria",
+      "accepted_rank": "subclass",
+      "reference_no": "ref:32549",
+      "proof": {
+        "object": "2db7a7f56321620dcd994ce8a7f8e36ae7a4fd34a40828f24eb56802c416b981",
+        "ordinal": 49,
+        "request": "cc79e992b9d6e2647735cafd38f7c8bb6eee51af447e7397d29d536a0558a0bb",
+        "row_hash": "95ce85427c5917ab722ecbd1c1cf2b521f63f67781d2a1bbbc3feed9dd667764"
+      }
+    },
+    "txn:67561": {
+      "orig_no": "txn:67561",
+      "taxon_no": "var:183661",
+      "taxon_name": "Boreosphenida",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:155048",
+      "parent_name": "Zatheria",
+      "accepted_no": "txn:97116",
+      "accepted_name": "Tribosphenida",
+      "accepted_rank": "subclass",
+      "difference": "objective synonym of",
+      "reference_no": "ref:14381",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 49,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "26a8313f4fd9bfe509c184165d279c38a26ec5a1457d0e2fed2b90c7f756b53b"
+      }
+    },
+    "txn:155048": {
+      "orig_no": "txn:155048",
+      "taxon_no": "var:155048",
+      "taxon_name": "Zatheria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:57710",
+      "parent_name": "Cladotheria",
+      "accepted_no": "txn:155048",
+      "accepted_name": "Zatheria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:10470",
+      "proof": {
+        "object": "1a09748924adf34960c2581eaa9265e711bfb8de93f86e2eee1986d8266a434c",
+        "ordinal": 27,
+        "request": "90909f8458224b78a0487c6f7da65cf113dc658f95905e21e428105fcdcb6363",
+        "row_hash": "1e15d6fd8a73529d681df8f0d19f3db43c77725aa1502fc3bb7437318a71e356"
+      }
+    },
+    "txn:57710": {
+      "orig_no": "txn:57710",
+      "taxon_no": "var:57710",
+      "taxon_name": "Cladotheria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:36651",
+      "parent_name": "Mammalia",
+      "accepted_no": "txn:57710",
+      "accepted_name": "Cladotheria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:10470",
+      "proof": {
+        "object": "d789322182f48d852aa8a872d94c603bef66288dc9f3da32bb178276888ee0c5",
+        "ordinal": 10,
+        "request": "de1599cdff18f01e78b3240c438e60742e6c3b998f207922aede50ecb2ff6ac3",
+        "row_hash": "b2f2df78ccdbf628059161dff2022a82c7134d3bb0d81bb71868a043857a5819"
+      }
+    },
+    "txn:36651": {
+      "orig_no": "txn:36651",
+      "taxon_no": "var:36651",
+      "taxon_name": "Mammalia",
+      "taxon_rank": "class",
+      "parent_no": "txn:67456",
+      "parent_name": "Mammaliaformes",
+      "accepted_no": "txn:36651",
+      "accepted_name": "Mammalia",
+      "accepted_rank": "class",
+      "reference_no": "ref:12782",
+      "proof": {
+        "object": "61524ff2e0438c8e0f74b959da7c0d48b2b3a183a9333185e32a9a969618c3d2",
+        "ordinal": 5,
+        "request": "8581695e790f7c3b73a264381fdad88911feeeedeee4a6464d4f83022abaeba3",
+        "row_hash": "b7d640b5488df0cc1670abe9ce825e85f113bcf9954d11064389ba6ad6f9952f"
+      }
+    },
+    "txn:67456": {
+      "orig_no": "txn:67456",
+      "taxon_no": "var:67456",
+      "taxon_name": "Mammaliaformes",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:67455",
+      "parent_name": "Mammaliamorpha",
+      "accepted_no": "txn:67456",
+      "accepted_name": "Mammaliaformes",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:18704",
+      "proof": {
+        "object": "a66733dd26d94f950549fcaf8250086f9f1e00f0715ca511cc588c8956efc08f",
+        "ordinal": 2,
+        "request": "45cb252fbbe912af838d10869584f0602e6fd175f80f0d6a70150a78f4fa3266",
+        "row_hash": "de366c300c7477fb034fb01f081a260107e7b07afcbe6160fd5c6a0e039c8063"
+      }
+    },
+    "txn:67455": {
+      "orig_no": "txn:67455",
+      "taxon_no": "var:67455",
+      "taxon_name": "Mammaliamorpha",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:39168",
+      "parent_name": "Cynodontia",
+      "accepted_no": "txn:67455",
+      "accepted_name": "Mammaliamorpha",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:18704",
+      "proof": {
+        "object": "d40d46883a875bb95b435312942a8073e081f5a19457bbc0f9bfb426140f45f6",
+        "ordinal": 1,
+        "request": "1da1ba839600383b449f8090f2dd0c9a449ca4e5ad2bc389de6c43051d11760e",
+        "row_hash": "71f540e516d297060a2324b958adb0fa8db4e0883805d3864a1c49c75982787d"
+      }
+    },
+    "txn:39168": {
+      "orig_no": "txn:39168",
+      "taxon_no": "var:95363",
+      "taxon_name": "Cynodontia",
+      "taxon_rank": "infraorder",
+      "parent_no": "txn:38935",
+      "parent_name": "Therapsida",
+      "accepted_no": "txn:39168",
+      "accepted_name": "Cynodontia",
+      "accepted_rank": "infraorder",
+      "reference_no": "ref:16227",
+      "proof": {
+        "object": "33e5605b12fa8ef233a4bcc43d4f60e0f7ab72d40dbebd3fe6588e7873c62484",
+        "ordinal": 0,
+        "request": "5b4ee0375fd7860cda9c82f25da6cdefcdab825876624637a4c2c587d031e9dc",
+        "row_hash": "a4a0c638ee386be67b75cf2778466104930c110cd0642f2544fcd5dd9b0df204"
+      }
+    },
+    "txn:38935": {
+      "orig_no": "txn:38935",
+      "taxon_no": "var:145256",
+      "taxon_name": "Therapsida",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:38882",
+      "parent_name": "Synapsida",
+      "accepted_no": "txn:38935",
+      "accepted_name": "Therapsida",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:32088",
+      "proof": {
+        "object": "36012e84abdd8e4ce91b3d1f51a85bb3eac9e98244149f126a81cc3f4cf00413",
+        "ordinal": 0,
+        "request": "88a78e0c3be6c2fb910ab760c2925f22bcb63494631c22e16472cea1f0b44810",
+        "row_hash": "75aeb942f0a2dafb0aee56ab31fbca8e6ca53092bdeed5ebd9a406d90d6b45a6"
+      }
+    },
+    "txn:38882": {
+      "orig_no": "txn:38882",
+      "taxon_no": "var:38882",
+      "taxon_name": "Synapsida",
+      "taxon_rank": "subclass",
+      "parent_no": "txn:53189",
+      "parent_name": "Amniota",
+      "accepted_no": "txn:38882",
+      "accepted_name": "Synapsida",
+      "accepted_rank": "subclass",
+      "reference_no": "ref:34185",
+      "proof": {
+        "object": "a9d903114ebb846125a9ff47afca4ff16a8208af8dbf5f801ca74a64ee503150",
+        "ordinal": 0,
+        "request": "a7d166eebeb38747604c8fdad4c9d94fd65bdae480032aa6121f3d54f7186fb8",
+        "row_hash": "948f5fd161cbc346ad47802059036e694a22523b505666b09af3b8ebe3c9ba17"
+      }
+    },
+    "txn:53189": {
+      "orig_no": "txn:53189",
+      "taxon_no": "var:53189",
+      "taxon_name": "Amniota",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:56749",
+      "parent_name": "Cotylosauria",
+      "accepted_no": "txn:53189",
+      "accepted_name": "Amniota",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:35418",
+      "proof": {
+        "object": "2db7a7f56321620dcd994ce8a7f8e36ae7a4fd34a40828f24eb56802c416b981",
+        "ordinal": 48,
+        "request": "cc79e992b9d6e2647735cafd38f7c8bb6eee51af447e7397d29d536a0558a0bb",
+        "row_hash": "8a0396609b01dcc93d25abc2afa8068957bb4eaf792992ed2377cea7d2e0406b"
+      }
+    },
+    "txn:56749": {
+      "orig_no": "txn:56749",
+      "taxon_no": "var:135885",
+      "taxon_name": "Cotylosauria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:465406",
+      "parent_name": "Amphibiosauria",
+      "immpar_no": "txn:99766",
+      "immpar_name": "Batrachosauria",
+      "accepted_no": "txn:56749",
+      "accepted_name": "Cotylosauria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:26928",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 48,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "cf84977b9274ad121bd63b5ac1e363851455ee466652c17c34c60e1c109cc0d6"
+      }
+    },
+    "txn:99766": {
+      "orig_no": "txn:99766",
+      "taxon_no": "var:99766",
+      "taxon_name": "Batrachosauria",
+      "taxon_rank": "subclass",
+      "parent_no": "txn:37177",
+      "parent_name": "Anthracosauria",
+      "accepted_no": "txn:465406",
+      "accepted_name": "Amphibiosauria",
+      "accepted_rank": "subclass",
+      "difference": "replaced by",
+      "reference_no": "ref:28775",
+      "proof": {
+        "object": "1a09748924adf34960c2581eaa9265e711bfb8de93f86e2eee1986d8266a434c",
+        "ordinal": 26,
+        "request": "90909f8458224b78a0487c6f7da65cf113dc658f95905e21e428105fcdcb6363",
+        "row_hash": "546ff31b38f39b11bf2ad14177d6382e6a1ee438e8258a9463b2864d2a80a5d2"
+      }
+    },
+    "txn:37177": {
+      "orig_no": "txn:37177",
+      "taxon_no": "var:37177",
+      "taxon_name": "Anthracosauria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:125547",
+      "parent_name": "Reptiliomorpha",
+      "accepted_no": "txn:37177",
+      "accepted_name": "Anthracosauria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:28463",
+      "proof": {
+        "object": "d789322182f48d852aa8a872d94c603bef66288dc9f3da32bb178276888ee0c5",
+        "ordinal": 8,
+        "request": "de1599cdff18f01e78b3240c438e60742e6c3b998f207922aede50ecb2ff6ac3",
+        "row_hash": "603fc2dfae72193bd3d28e2a395bb198320510c378dd5844f55bda630176e13e"
+      }
+    },
+    "txn:125547": {
+      "orig_no": "txn:125547",
+      "taxon_no": "var:125547",
+      "taxon_name": "Reptiliomorpha",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:53190",
+      "parent_name": "Tetrapoda",
+      "accepted_no": "txn:125547",
+      "accepted_name": "Reptiliomorpha",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:28463",
+      "proof": {
+        "object": "61524ff2e0438c8e0f74b959da7c0d48b2b3a183a9333185e32a9a969618c3d2",
+        "ordinal": 4,
+        "request": "8581695e790f7c3b73a264381fdad88911feeeedeee4a6464d4f83022abaeba3",
+        "row_hash": "aff62d1e116fec9957ea28463f5064ca0005ad9e472f91cb8c7ccfbdd779cc84"
+      }
+    },
+    "txn:53190": {
+      "orig_no": "txn:53190",
+      "taxon_no": "var:137279",
+      "taxon_name": "Tetrapoda",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:77135",
+      "parent_name": "Tetrapodomorpha",
+      "accepted_no": "txn:53190",
+      "accepted_name": "Tetrapoda",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:58890",
+      "proof": {
+        "object": "d789322182f48d852aa8a872d94c603bef66288dc9f3da32bb178276888ee0c5",
+        "ordinal": 7,
+        "request": "de1599cdff18f01e78b3240c438e60742e6c3b998f207922aede50ecb2ff6ac3",
+        "row_hash": "4e3d79f1f47c0eb89c81c3be50a4e2ae3010d5e4a83eb13708c8d03bb1ae72fa"
+      }
+    },
+    "txn:77135": {
+      "orig_no": "txn:77135",
+      "taxon_no": "var:266402",
+      "taxon_name": "Tetrapodomorpha",
+      "taxon_rank": "subclass",
+      "parent_no": "txn:219195",
+      "parent_name": "Dipnotetrapodomorpha",
+      "accepted_no": "txn:77135",
+      "accepted_name": "Tetrapodomorpha",
+      "accepted_rank": "subclass",
+      "reference_no": "ref:30398",
+      "proof": {
+        "object": "61524ff2e0438c8e0f74b959da7c0d48b2b3a183a9333185e32a9a969618c3d2",
+        "ordinal": 3,
+        "request": "8581695e790f7c3b73a264381fdad88911feeeedeee4a6464d4f83022abaeba3",
+        "row_hash": "a581e11de93b2dcce4ef6b9de98dad2e89f433f4de06134140017a250539c32c"
+      }
+    },
+    "txn:219195": {
+      "orig_no": "txn:219195",
+      "taxon_no": "var:266396",
+      "taxon_name": "Dipnotetrapodomorpha",
+      "taxon_rank": "subclass",
+      "parent_no": "txn:67348",
+      "parent_name": "Sarcopterygii",
+      "accepted_no": "txn:219195",
+      "accepted_name": "Dipnotetrapodomorpha",
+      "accepted_rank": "subclass",
+      "reference_no": "ref:46421",
+      "proof": {
+        "object": "a66733dd26d94f950549fcaf8250086f9f1e00f0715ca511cc588c8956efc08f",
+        "ordinal": 1,
+        "request": "45cb252fbbe912af838d10869584f0602e6fd175f80f0d6a70150a78f4fa3266",
+        "row_hash": "59a3fa689d364863ba7f792c3c9383b207543a36c454e8ed6edd84a7de35f6db"
+      }
+    },
+    "txn:67348": {
+      "orig_no": "txn:67348",
+      "taxon_no": "var:150289",
+      "taxon_name": "Sarcopterygii",
+      "taxon_rank": "subclass",
+      "parent_no": "txn:34881",
+      "parent_name": "Osteichthyes",
+      "accepted_no": "txn:67348",
+      "accepted_name": "Sarcopterygii",
+      "accepted_rank": "subclass",
+      "reference_no": "ref:39325",
+      "proof": {
+        "object": "d40d46883a875bb95b435312942a8073e081f5a19457bbc0f9bfb426140f45f6",
+        "ordinal": 0,
+        "request": "1da1ba839600383b449f8090f2dd0c9a449ca4e5ad2bc389de6c43051d11760e",
+        "row_hash": "f8662d16f6373d5421ab4ea2301be60f0d4b5e24a5d53174f9829f55e94d0670"
+      }
+    },
+    "txn:34881": {
+      "orig_no": "txn:34881",
+      "taxon_no": "var:34881",
+      "taxon_name": "Osteichthyes",
+      "taxon_rank": "class",
+      "parent_no": "txn:67344",
+      "parent_name": "Gnathostomata",
+      "accepted_no": "txn:34881",
+      "accepted_name": "Osteichthyes",
+      "accepted_rank": "class",
+      "reference_no": "ref:32625",
+      "proof": {
+        "object": "7083be3d58e2869e74e252335fe004508c03f5932254ff1dceda007f56efa378",
+        "ordinal": 14,
+        "request": "473898793c0692efb72eca2386ec2ef1ed8c99546e75f4a617c99338904b788d",
+        "row_hash": "fe04ada8afa79d72f9210d1b343b1c79c87679818ccca59d7eb921f3409dbbc5"
+      }
+    },
+    "txn:67344": {
+      "orig_no": "txn:67344",
+      "taxon_no": "var:67344",
+      "taxon_name": "Gnathostomata",
+      "taxon_rank": "superclass",
+      "parent_no": "txn:67149",
+      "parent_name": "Vertebrata",
+      "accepted_no": "txn:67344",
+      "accepted_name": "Gnathostomata",
+      "accepted_rank": "superclass",
+      "reference_no": "ref:35737",
+      "proof": {
+        "object": "7404058a5322f7aa2ed0e338daffd338bb1eb319779a8dd4ebbaf49f8b64c451",
+        "ordinal": 33,
+        "request": "3f60dd10942bb06b85cfbd3b2e6f8b55913e6d9457a727d04a7067dda07e92dd",
+        "row_hash": "49a7f991e81943bfd4121ce47956234d12da4f8b580222bffa6ba7fdc367f01d"
+      }
+    },
+    "txn:67149": {
+      "orig_no": "txn:67149",
+      "taxon_no": "var:67149",
+      "taxon_name": "Vertebrata",
+      "taxon_rank": "subphylum",
+      "parent_no": "txn:33815",
+      "parent_name": "Chordata",
+      "accepted_no": "txn:67149",
+      "accepted_name": "Vertebrata",
+      "accepted_rank": "subphylum",
+      "reference_no": "ref:17809",
+      "proof": {
+        "object": "37f6969a85b2d694e4905ea28e74379ff06b359da9870d27428d1a24fb77198f",
+        "ordinal": 35,
+        "request": "a1bea80f2f49af8c2cb56dac76b12756e180b9635e16c3bd916b8a108a46bfb7",
+        "row_hash": "0996ab64a19b01b43cd7fbcb4562633b5630d41256102fc5631aea51a138de9e"
+      }
+    },
+    "txn:33815": {
+      "orig_no": "txn:33815",
+      "taxon_no": "var:33815",
+      "taxon_name": "Chordata",
+      "taxon_rank": "phylum",
+      "parent_no": "txn:67145",
+      "parent_name": "Deuterostomia",
+      "accepted_no": "txn:33815",
+      "accepted_name": "Chordata",
+      "accepted_rank": "phylum",
+      "reference_no": "ref:35736",
+      "proof": {
+        "object": "2896079295b4f511e405df71f9e793f7482dc3e5df13f65a43e519a9667f817e",
+        "ordinal": 16,
+        "request": "821b9cf3e8f45a461bf291dc5ad3b92bc08f6197f6cb1f8dd7daea2a2d7d8436",
+        "row_hash": "87dc5e90ce9505aed5410e91dbd1ba80ddcdb1cbcbfae8b07c358de5f4601607"
+      }
+    },
+    "txn:67145": {
+      "orig_no": "txn:67145",
+      "taxon_no": "var:67145",
+      "taxon_name": "Deuterostomia",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:272902",
+      "parent_name": "Eubilateria",
+      "accepted_no": "txn:67145",
+      "accepted_name": "Deuterostomia",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:35738",
+      "proof": {
+        "object": "87a92aa7fe5988596376c9594f80c9bc4117e77842394064fb3be1a2c30a013e",
+        "ordinal": 55,
+        "request": "2761eda35d4d1dbc1dede2af058f292e3e3df8e7520b8bf1648b8bcbec357898",
+        "row_hash": "b1e6b7a8f8dbd423a66d277730ae4cf884e3122ae01910d90e97cff3722782eb"
+      }
+    },
+    "txn:272902": {
+      "orig_no": "txn:272902",
+      "taxon_no": "var:272902",
+      "taxon_name": "Eubilateria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:67103",
+      "parent_name": "Bilateria",
+      "accepted_no": "txn:272902",
+      "accepted_name": "Eubilateria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:47383",
+      "proof": {
+        "object": "3b8b610c1df1ef9fa8468470a40c0c31ea570f7e5dfccea6a53fc94cfc3a5b45",
+        "ordinal": 2,
+        "request": "e36968bd3d87db7f234ae461a5e731c8735d8ae7c15a45943f4fdb4fcb52d4c0",
+        "row_hash": "c414ccd35875cd9a2fae5fce05e6ed4adbfdf7c42adf3bb4ea7769d479a4d613"
+      }
+    },
+    "txn:67103": {
+      "orig_no": "txn:67103",
+      "taxon_no": "var:67103",
+      "taxon_name": "Bilateria",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:67091",
+      "parent_name": "Animalia",
+      "accepted_no": "txn:67103",
+      "accepted_name": "Bilateria",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:14206",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 1,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "7394a54fe1e952fe14ff6f9e4623369cef371127afd253df31ad2885ec224dc4"
+      }
+    },
+    "txn:67091": {
+      "orig_no": "txn:67091",
+      "taxon_no": "var:325038",
+      "taxon_name": "Animalia",
+      "taxon_rank": "kingdom",
+      "parent_no": "txn:212579",
+      "parent_name": "Opisthokonta",
+      "accepted_no": "txn:67091",
+      "accepted_name": "Animalia",
+      "accepted_rank": "kingdom",
+      "reference_no": "ref:12782",
+      "proof": {
+        "object": "87a92aa7fe5988596376c9594f80c9bc4117e77842394064fb3be1a2c30a013e",
+        "ordinal": 0,
+        "request": "2761eda35d4d1dbc1dede2af058f292e3e3df8e7520b8bf1648b8bcbec357898",
+        "row_hash": "1f099cfac7a2afcce00f8f8d74c980f3fbb1b64f024557774539e7975d10cd87"
+      }
+    },
+    "txn:212579": {
+      "orig_no": "txn:212579",
+      "taxon_no": "var:212579",
+      "taxon_name": "Opisthokonta",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:288516",
+      "parent_name": "Eucarya",
+      "accepted_no": "txn:212579",
+      "accepted_name": "Opisthokonta",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:39165",
+      "proof": {
+        "object": "43942797db4efebc8bb6ddfb29d419669f0255446497199f762af490f8c5bd3f",
+        "ordinal": 0,
+        "request": "bcbf41cd08192ee60e6671f75066910e5e86b8f4248e644215a617fe37fcd57f",
+        "row_hash": "95d3a44ff2d08634f58c026d2135384fcbc9855761dd9b2b0aea337868f9e52d"
+      }
+    },
+    "txn:288516": {
+      "orig_no": "txn:288516",
+      "taxon_no": "var:288516",
+      "taxon_name": "Eucarya",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:28595",
+      "parent_name": "Life",
+      "accepted_no": "txn:288516",
+      "accepted_name": "Eucarya",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:47451",
+      "proof": {
+        "object": "3b8b610c1df1ef9fa8468470a40c0c31ea570f7e5dfccea6a53fc94cfc3a5b45",
+        "ordinal": 0,
+        "request": "e36968bd3d87db7f234ae461a5e731c8735d8ae7c15a45943f4fdb4fcb52d4c0",
+        "row_hash": "dd3bb8c0ffd33786f256606d62d9d64a0bd0723d8ae104c6afd8ecb732db1379"
+      }
+    },
+    "txn:28595": {
+      "orig_no": "txn:28595",
+      "taxon_no": "var:28595",
+      "taxon_name": "Life",
+      "taxon_rank": "unranked clade",
+      "accepted_no": "txn:28595",
+      "accepted_name": "Life",
+      "accepted_rank": "unranked clade",
+      "terminal_boundary": {
+        "object": "83d9ee5ec29831525fbe41b3cb627ade6b99f556e174c2e5cc16d1f1d7646a84",
+        "request": "297174b7ecec96f01f1e053dbd8af52d2ad73f5d6766b8deefd18273fad0d1ba"
+      },
+      "reference_no": "ref:12782",
+      "proof": {
+        "object": "656c6c591cd4b0955423c5681cda0c94ba97f8409dd1a0611cdee48a1060c5bb",
+        "ordinal": 0,
+        "request": "5cf1de2b15100987955a6442081044f3337512124f1272ccffaafc4cee9b5743",
+        "row_hash": "08d04d7177248f83183c44ec2fbcf4086d13db959dccde9b7f97039e3b4f6296"
+      }
+    },
+    "var:94628": {
+      "orig_no": "txn:94628",
+      "taxon_no": "var:94628",
+      "taxon_name": "Divaricella chipolana",
+      "taxon_rank": "species",
+      "parent_no": "txn:94643",
+      "parent_name": "Divaricella (Divaricella)",
+      "accepted_no": "txn:94628",
+      "accepted_name": "Divaricella (Divaricella) chipolana",
+      "accepted_rank": "species",
+      "difference": "recombined as",
+      "reference_no": "ref:19909",
+      "proof": {
+        "object": "6bf3a08cf715ec21e4d4e3955394efe3571b9e128bbd2d2537ecde451764b742",
+        "ordinal": 38,
+        "request": "ac314516ce7179f1159ac8420668c4be5683a798ad33e9848735b8a6de34032c",
+        "row_hash": "423ce2f67b5e1d1165d7d1bdc8b38cd0bbb79eae269d1ea9f4425700efb52ae9"
+      }
+    },
+    "txn:94643": {
+      "orig_no": "txn:94643",
+      "taxon_no": "var:94643",
+      "taxon_name": "Divaricella (Divaricella)",
+      "taxon_rank": "subgenus",
+      "parent_no": "txn:17586",
+      "parent_name": "Divaricella",
+      "accepted_no": "txn:94643",
+      "accepted_name": "Divaricella (Divaricella)",
+      "accepted_rank": "subgenus",
+      "reference_no": "ref:19909",
+      "proof": {
+        "object": "0583a788d3543887421a915ddad5a959cafbc16f57ea443daebbf42395e31fc0",
+        "ordinal": 30,
+        "request": "dff1b4cd8254c79b9412f87e4d00daa76b072edee0ec51fcb11dac68a9e9b9f3",
+        "row_hash": "a72c9aafeb33af7d359bec4e667ec81dbb558c9ca57f04ad62e3677d92b981e3"
+      }
+    },
+    "txn:17586": {
+      "orig_no": "txn:17586",
+      "taxon_no": "var:17586",
+      "taxon_name": "Divaricella",
+      "taxon_rank": "genus",
+      "parent_no": "txn:60972",
+      "parent_name": "Lucininae",
+      "accepted_no": "txn:17586",
+      "accepted_name": "Divaricella",
+      "accepted_rank": "genus",
+      "reference_no": "ref:6930",
+      "proof": {
+        "object": "0888053d7310092b94f7f4e5fcd5cdb6165bedf9642f849a64fc91389f99c09f",
+        "ordinal": 57,
+        "request": "9bc0682b51dde2f8606ee635d3d7f0a76030805fb068694945d7276c4019f717",
+        "row_hash": "2d8e69c2bbd42655cf05df25a9e21b857de1b4b44a076bcb641b0ed228b54e03"
+      }
+    },
+    "txn:60972": {
+      "orig_no": "txn:60972",
+      "taxon_no": "var:60972",
+      "taxon_name": "Lucininae",
+      "taxon_rank": "subfamily",
+      "parent_no": "txn:60971",
+      "parent_name": "Lucinidae",
+      "accepted_no": "txn:60972",
+      "accepted_name": "Lucininae",
+      "accepted_rank": "subfamily",
+      "reference_no": "ref:7411",
+      "proof": {
+        "object": "8fa64f0556647137c80bc79bcdeac22ff8125f7ad336e4cfe892270119649e49",
+        "ordinal": 31,
+        "request": "2f5c3bad058967d1b8229fcf7d6d00d4c15d4e07b43f96d220d045d06af50e61",
+        "row_hash": "c8eaef9a6998c6fe026c9fd6a7ae728fc9484e7ee9913289b85ec886c3112a47"
+      }
+    },
+    "txn:60971": {
+      "orig_no": "txn:60971",
+      "taxon_no": "var:60971",
+      "taxon_name": "Lucinidae",
+      "taxon_rank": "family",
+      "parent_no": "txn:161489",
+      "parent_name": "Lucinida",
+      "accepted_no": "txn:60971",
+      "accepted_name": "Lucinidae",
+      "accepted_rank": "family",
+      "reference_no": "ref:7411",
+      "proof": {
+        "object": "8fa64f0556647137c80bc79bcdeac22ff8125f7ad336e4cfe892270119649e49",
+        "ordinal": 27,
+        "request": "2f5c3bad058967d1b8229fcf7d6d00d4c15d4e07b43f96d220d045d06af50e61",
+        "row_hash": "9f3ba11f0550dc55c0f78987882e2c3913d035840688ef2be2959dd1da734b94"
+      }
+    },
+    "txn:161489": {
+      "orig_no": "txn:161489",
+      "taxon_no": "var:244326",
+      "taxon_name": "Lucinida",
+      "taxon_rank": "order",
+      "parent_no": "txn:400194",
+      "parent_name": "Imparidentia",
+      "accepted_no": "txn:161489",
+      "accepted_name": "Lucinida",
+      "accepted_rank": "order",
+      "reference_no": "ref:38358",
+      "proof": {
+        "object": "43942797db4efebc8bb6ddfb29d419669f0255446497199f762af490f8c5bd3f",
+        "ordinal": 5,
+        "request": "bcbf41cd08192ee60e6671f75066910e5e86b8f4248e644215a617fe37fcd57f",
+        "row_hash": "261e4f3261271975b184605543c56e51b7248019e231e9c99956570e23781fc5"
+      }
+    },
+    "txn:400194": {
+      "orig_no": "txn:400194",
+      "taxon_no": "var:400194",
+      "taxon_name": "Imparidentia",
+      "taxon_rank": "superorder",
+      "parent_no": "txn:400192",
+      "parent_name": "Euheterodonta",
+      "accepted_no": "txn:400194",
+      "accepted_name": "Imparidentia",
+      "accepted_rank": "superorder",
+      "reference_no": "ref:57317",
+      "proof": {
+        "object": "38b3a1d8a6a2ce6197a6d93a8a9ab5b190ef08d64d3d26823414915409754945",
+        "ordinal": 4,
+        "request": "be50e975af7086a7a72d8a705c9ea505089c425cbae7bf9394e8d16378bafde4",
+        "row_hash": "9abebe0e0dd7882ed69d6706b9351b4c099b065bf35d99309e97d850d5d0231a"
+      }
+    },
+    "txn:400192": {
+      "orig_no": "txn:400192",
+      "taxon_no": "var:400192",
+      "taxon_name": "Euheterodonta",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:83696",
+      "parent_name": "Heteroconchia",
+      "accepted_no": "txn:400192",
+      "accepted_name": "Euheterodonta",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:57317",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 8,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "33031e4931dfbd35f4eaa70f9c8e7dde0c309ae9e72f0b8a76863176d4b96b09"
+      }
+    },
+    "txn:83696": {
+      "orig_no": "txn:83696",
+      "taxon_no": "var:244205",
+      "taxon_name": "Heteroconchia",
+      "taxon_rank": "infraclass",
+      "parent_no": "txn:83700",
+      "parent_name": "Autobranchia",
+      "accepted_no": "txn:83696",
+      "accepted_name": "Heteroconchia",
+      "accepted_rank": "infraclass",
+      "reference_no": "ref:18197",
+      "proof": {
+        "object": "1a09748924adf34960c2581eaa9265e711bfb8de93f86e2eee1986d8266a434c",
+        "ordinal": 3,
+        "request": "90909f8458224b78a0487c6f7da65cf113dc658f95905e21e428105fcdcb6363",
+        "row_hash": "c76c565a4d71c5a9bfacc7a76098d1daee8949009d3e69b4754073df4f02696e"
+      }
+    },
+    "txn:83700": {
+      "orig_no": "txn:83700",
+      "taxon_no": "var:243987",
+      "taxon_name": "Autobranchia",
+      "taxon_rank": "subclass",
+      "parent_no": "txn:16005",
+      "parent_name": "Bivalvia",
+      "accepted_no": "txn:83700",
+      "accepted_name": "Autobranchia",
+      "accepted_rank": "subclass",
+      "reference_no": "ref:38358",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 6,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "1dac27ec07e17971d8e43de7fc3509adb8763aa32808c2c9ec629de685c4c372"
+      }
+    },
+    "txn:16005": {
+      "orig_no": "txn:16005",
+      "taxon_no": "var:16005",
+      "taxon_name": "Bivalvia",
+      "taxon_rank": "class",
+      "parent_no": "txn:7805",
+      "parent_name": "Mollusca",
+      "accepted_no": "txn:16005",
+      "accepted_name": "Bivalvia",
+      "accepted_rank": "class",
+      "reference_no": "ref:12782",
+      "proof": {
+        "object": "f07f04aa1b5479eb5f1a3d4a1728187e89fce14d2834188864b2da0d95e3be60",
+        "ordinal": 0,
+        "request": "2b5220f6f3501497d0c6b874354f610413098e96e06702c6ea286723427434a3",
+        "row_hash": "6827d2f7e86916fbbfe36f254f59535c3f195ff8e20d74b632182d5dfe775a2f"
+      }
+    },
+    "txn:7805": {
+      "orig_no": "txn:7805",
+      "taxon_no": "var:7805",
+      "taxon_name": "Mollusca",
+      "taxon_rank": "phylum",
+      "parent_no": "txn:96201",
+      "parent_name": "Lophotrochozoa",
+      "accepted_no": "txn:7805",
+      "accepted_name": "Mollusca",
+      "accepted_rank": "phylum",
+      "reference_no": "ref:12782",
+      "proof": {
+        "object": "0782a54f080057d76ef26a439a28bbf9d285570ef901fc74da92a5de4bf6d9a7",
+        "ordinal": 34,
+        "request": "60b1da70f0248616bd205f97e7325d6d055ad120468e31e2f9edb2cf23d57393",
+        "row_hash": "95545fb35dc0c5fa96a4d7c5b53d75a54877c5925cf62b842a4b6cb695a2cb75"
+      }
+    },
+    "txn:96201": {
+      "orig_no": "txn:96201",
+      "taxon_no": "var:96201",
+      "taxon_name": "Lophotrochozoa",
+      "taxon_rank": "superphylum",
+      "parent_no": "txn:85326",
+      "parent_name": "Spiralia",
+      "accepted_no": "txn:96201",
+      "accepted_name": "Lophotrochozoa",
+      "accepted_rank": "superphylum",
+      "reference_no": "ref:23513",
+      "proof": {
+        "object": "1d1f126569439a9bfd8ac97ac56018135a1039646886126bae475d327bc7cf00",
+        "ordinal": 3,
+        "request": "2aa63cf8b29bb8232363acd78602502f3dbbda5ceb04602fa00ee5c872058f05",
+        "row_hash": "60e3dfce8e17a10e5930274d917c98002e737048456aa5b02ea6bcbdc5894d8c"
+      }
+    },
+    "txn:85326": {
+      "orig_no": "txn:85326",
+      "taxon_no": "var:85326",
+      "taxon_name": "Spiralia",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:85324",
+      "parent_name": "Protostomia",
+      "accepted_no": "txn:85326",
+      "accepted_name": "Spiralia",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:18620",
+      "proof": {
+        "object": "87a92aa7fe5988596376c9594f80c9bc4117e77842394064fb3be1a2c30a013e",
+        "ordinal": 11,
+        "request": "2761eda35d4d1dbc1dede2af058f292e3e3df8e7520b8bf1648b8bcbec357898",
+        "row_hash": "8fd510cbb52a5bc113b60eb76b916cbabda50adb339c0d95dae666d1c1fe104e"
+      }
+    },
+    "txn:85324": {
+      "orig_no": "txn:85324",
+      "taxon_no": "var:85324",
+      "taxon_name": "Protostomia",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:272902",
+      "parent_name": "Eubilateria",
+      "accepted_no": "txn:85324",
+      "accepted_name": "Protostomia",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:35738",
+      "proof": {
+        "object": "3b8b610c1df1ef9fa8468470a40c0c31ea570f7e5dfccea6a53fc94cfc3a5b45",
+        "ordinal": 3,
+        "request": "e36968bd3d87db7f234ae461a5e731c8735d8ae7c15a45943f4fdb4fcb52d4c0",
+        "row_hash": "d4230f4a5ee141d42c73ddadc055e560d46a361e13331ec8f05049e9eaf46307"
+      }
+    },
+    "txn:110871": {
+      "orig_no": "txn:110871",
+      "taxon_no": "var:110871",
+      "taxon_name": "Bufo woodhousei",
+      "taxon_rank": "species",
+      "parent_no": "txn:37465",
+      "parent_name": "Bufo",
+      "accepted_no": "txn:110871",
+      "accepted_name": "Bufo woodhousei",
+      "accepted_rank": "species",
+      "reference_no": "ref:28196",
+      "proof": {
+        "object": "2f67329a6326016afb6c8f7ecb1f89642e39ffc56575b279154e544ffc9c9de1",
+        "ordinal": 73,
+        "request": "aa3887f777a1d23d77c02c493babd1cfb5ebf8d1540560663b000df1777a7fc9",
+        "row_hash": "06d75749a9c90a85af1c0d941a2db15101bc94025a1078fd4c48525664e178eb"
+      }
+    },
+    "txn:37465": {
+      "orig_no": "txn:37465",
+      "taxon_no": "var:37465",
+      "taxon_name": "Bufo",
+      "taxon_rank": "genus",
+      "parent_no": "txn:37464",
+      "parent_name": "Bufonidae",
+      "accepted_no": "txn:37465",
+      "accepted_name": "Bufo",
+      "accepted_rank": "genus",
+      "reference_no": "ref:43100",
+      "proof": {
+        "object": "e0767574e0a37e4afb8637ddfda78547deb952a21fe2990beb64408a64c426ee",
+        "ordinal": 8,
+        "request": "47ee65740e0e2573861b56ab1a55eb6ded91c2e4ad0f45cb01e8dbfa4796794f",
+        "row_hash": "a45b96bea65cd4ad872640bda90c0a7e5bfd2eaf3a31435b87e1357ed2838b52"
+      }
+    },
+    "txn:37464": {
+      "orig_no": "txn:37464",
+      "taxon_no": "var:37464",
+      "taxon_name": "Bufonidae",
+      "taxon_rank": "family",
+      "parent_no": "txn:69091",
+      "parent_name": "Neobatrachia",
+      "accepted_no": "txn:37464",
+      "accepted_name": "Bufonidae",
+      "accepted_rank": "family",
+      "reference_no": "ref:4783",
+      "proof": {
+        "object": "2896079295b4f511e405df71f9e793f7482dc3e5df13f65a43e519a9667f817e",
+        "ordinal": 38,
+        "request": "821b9cf3e8f45a461bf291dc5ad3b92bc08f6197f6cb1f8dd7daea2a2d7d8436",
+        "row_hash": "1217e26b7bb4d3cf12adf30a9fe4661af31cfa7ca1853ccbe53ca17ab0de10a8"
+      }
+    },
+    "txn:69091": {
+      "orig_no": "txn:69091",
+      "taxon_no": "var:156430",
+      "taxon_name": "Neobatrachia",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:97112",
+      "parent_name": "Anura",
+      "accepted_no": "txn:69091",
+      "accepted_name": "Neobatrachia",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:31011",
+      "proof": {
+        "object": "87a92aa7fe5988596376c9594f80c9bc4117e77842394064fb3be1a2c30a013e",
+        "ordinal": 62,
+        "request": "2761eda35d4d1dbc1dede2af058f292e3e3df8e7520b8bf1648b8bcbec357898",
+        "row_hash": "41ff60a3df009e6b5cfde62efde53c6659e2cf81ed50a8db468a944b99bca12c"
+      }
+    },
+    "txn:97112": {
+      "orig_no": "txn:97112",
+      "taxon_no": "var:37422",
+      "taxon_name": "Anura",
+      "taxon_rank": "suborder",
+      "parent_no": "txn:57094",
+      "parent_name": "Salientia",
+      "accepted_no": "txn:97112",
+      "accepted_name": "Anura",
+      "accepted_rank": "suborder",
+      "reference_no": "ref:38996",
+      "proof": {
+        "object": "55b943e78b5654c506f085e5f3a5f6f3a356e08337976f117532c5dac73f058b",
+        "ordinal": 78,
+        "request": "2cb1e27a6697e028e6f51cc3b0ab4ece62809bd3cbd4e9d3d434caee057d6f9c",
+        "row_hash": "20604e6f646433c0c1b94318c6e2450180887dd32373fdbdad80d9c313a14b1a"
+      }
+    },
+    "txn:57094": {
+      "orig_no": "txn:57094",
+      "taxon_no": "var:57094",
+      "taxon_name": "Salientia",
+      "taxon_rank": "order",
+      "parent_no": "txn:67352",
+      "parent_name": "Batrachia",
+      "accepted_no": "txn:57094",
+      "accepted_name": "Salientia",
+      "accepted_rank": "order",
+      "reference_no": "ref:16886",
+      "proof": {
+        "object": "d993a60d3459ac0b601ddf1b0619b3977b6b61aea9c119080bd2414e6057461a",
+        "ordinal": 36,
+        "request": "b8cd9c912608c6916981971e2f49ab2b7a2648cce5bfd7286fa8fec7fc1b3115",
+        "row_hash": "b3e5ad3eff3c8288b40556aec82cf041159b6dc66a523c4048db356bac2ef837"
+      }
+    },
+    "txn:67352": {
+      "orig_no": "txn:67352",
+      "taxon_no": "var:95849",
+      "taxon_name": "Batrachia",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:67351",
+      "parent_name": "Lissamphibia",
+      "accepted_no": "txn:67352",
+      "accepted_name": "Batrachia",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:14305",
+      "proof": {
+        "object": "87a92aa7fe5988596376c9594f80c9bc4117e77842394064fb3be1a2c30a013e",
+        "ordinal": 61,
+        "request": "2761eda35d4d1dbc1dede2af058f292e3e3df8e7520b8bf1648b8bcbec357898",
+        "row_hash": "5a2b2002610004fed7eefc5b99560c46a524793eef2217012e2e84896f6feb24"
+      }
+    },
+    "txn:67351": {
+      "orig_no": "txn:67351",
+      "taxon_no": "var:106733",
+      "taxon_name": "Lissamphibia",
+      "taxon_rank": "unranked clade",
+      "parent_no": "txn:36320",
+      "parent_name": "Temnospondyli",
+      "accepted_no": "txn:67351",
+      "accepted_name": "Lissamphibia",
+      "accepted_rank": "unranked clade",
+      "reference_no": "ref:35418",
+      "proof": {
+        "object": "2db7a7f56321620dcd994ce8a7f8e36ae7a4fd34a40828f24eb56802c416b981",
+        "ordinal": 46,
+        "request": "cc79e992b9d6e2647735cafd38f7c8bb6eee51af447e7397d29d536a0558a0bb",
+        "row_hash": "9ccbf78eae320bb8d9ed35b3b40bff5fb969f01e38aa8c327a091cafdca1883a"
+      }
+    },
+    "txn:36320": {
+      "orig_no": "txn:36320",
+      "taxon_no": "var:152955",
+      "taxon_name": "Temnospondyli",
+      "taxon_rank": "order",
+      "parent_no": "txn:36319",
+      "parent_name": "Amphibia",
+      "accepted_no": "txn:36320",
+      "accepted_name": "Temnospondyli",
+      "accepted_rank": "order",
+      "reference_no": "ref:30586",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 47,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "9ab9652e2ac239dbd5951939961df330994878d4b881a14fc543201268e99024"
+      }
+    },
+    "txn:36319": {
+      "orig_no": "txn:36319",
+      "taxon_no": "var:36319",
+      "taxon_name": "Amphibia",
+      "taxon_rank": "class",
+      "parent_no": "txn:53190",
+      "parent_name": "Tetrapoda",
+      "accepted_no": "txn:36319",
+      "accepted_name": "Amphibia",
+      "accepted_rank": "class",
+      "reference_no": "ref:12782",
+      "proof": {
+        "object": "1a09748924adf34960c2581eaa9265e711bfb8de93f86e2eee1986d8266a434c",
+        "ordinal": 25,
+        "request": "90909f8458224b78a0487c6f7da65cf113dc658f95905e21e428105fcdcb6363",
+        "row_hash": "47043c7a39961cfd0c901360518cb0dac309121db42ae615f8afee9926ba653f"
+      }
+    },
+    "txn:155289": {
+      "orig_no": "txn:155289",
+      "taxon_no": "var:155289",
+      "taxon_name": "Velates floridanus",
+      "taxon_rank": "species",
+      "parent_no": "txn:9369",
+      "parent_name": "Velates",
+      "accepted_no": "txn:114119",
+      "accepted_name": "Velates perversus",
+      "accepted_rank": "species",
+      "difference": "subjective synonym of",
+      "reference_no": "ref:11306",
+      "proof": {
+        "object": "46525260d49ad26e0b4a880104904a0aac92f36033ac20f5630844d1e417be38",
+        "ordinal": 24,
+        "request": "2cb4a554afbea009fce30f3ac81e50b7755d89f36f9d90ff604766ae7fd78a64",
+        "row_hash": "189fc5d35c29fd0d435f49718e237494223aba214be8f7b803f3e48a8ce9f014"
+      }
+    },
+    "txn:9369": {
+      "orig_no": "txn:9369",
+      "taxon_no": "var:9369",
+      "taxon_name": "Velates",
+      "taxon_rank": "genus",
+      "parent_no": "txn:116253",
+      "parent_name": "Velatinae",
+      "accepted_no": "txn:9369",
+      "accepted_name": "Velates",
+      "accepted_rank": "genus",
+      "reference_no": "ref:6930",
+      "proof": {
+        "object": "a2aea25db0e695fccc2ea17146b0e8c0ca09b919f3f369e39a3beaeddf59b6e7",
+        "ordinal": 32,
+        "request": "2ae95da2a5c085141ef4b0980dac6fdaa619074b671cff97c8aec3ded89c2f65",
+        "row_hash": "0a653c87769df179764ed8b4d1b7ecd50dc2d0a38d09a5a1b076d23bafe3f050"
+      }
+    },
+    "txn:116253": {
+      "orig_no": "txn:116253",
+      "taxon_no": "var:116253",
+      "taxon_name": "Velatinae",
+      "taxon_rank": "subfamily",
+      "parent_no": "txn:61374",
+      "parent_name": "Neritidae",
+      "accepted_no": "txn:116253",
+      "accepted_name": "Velatinae",
+      "accepted_rank": "subfamily",
+      "reference_no": "ref:14945",
+      "proof": {
+        "object": "4d5b473738a7e215e2f065e0a0e0b96be00a2392058d1896ab7b6f3a6bec8529",
+        "ordinal": 17,
+        "request": "45491b39b39a6e0c7a68518db5429bc84da40210dc5600e263b6114750e2f7aa",
+        "row_hash": "0f422a5b1c5315a5f8e7c24cc8152f30fe3affafe9392fc8597921e0ae19a063"
+      }
+    },
+    "txn:61374": {
+      "orig_no": "txn:61374",
+      "taxon_no": "var:61374",
+      "taxon_name": "Neritidae",
+      "taxon_rank": "family",
+      "parent_no": "txn:61373",
+      "parent_name": "Neritoidea",
+      "accepted_no": "txn:61374",
+      "accepted_name": "Neritidae",
+      "accepted_rank": "family",
+      "reference_no": "ref:7429",
+      "proof": {
+        "object": "6861a072740175d893259c823b7120e08539c0026e9365efb03292b4e62b1d65",
+        "ordinal": 44,
+        "request": "4686daf36d6c9e60281d6c1755ab283b527143197dfe9cefed1d6eccd23a8d08",
+        "row_hash": "809ceb0916fec4995a2565fed811a2cc053e7872e9ec4c56b1fa2932c4ebea69"
+      }
+    },
+    "txn:61373": {
+      "orig_no": "txn:61373",
+      "taxon_no": "var:61382",
+      "taxon_name": "Neritoidea",
+      "taxon_rank": "superfamily",
+      "parent_no": "txn:66605",
+      "parent_name": "Neritaemorpha",
+      "accepted_no": "txn:61373",
+      "accepted_name": "Neritoidea",
+      "accepted_rank": "superfamily",
+      "reference_no": "ref:7429",
+      "proof": {
+        "object": "2db7a7f56321620dcd994ce8a7f8e36ae7a4fd34a40828f24eb56802c416b981",
+        "ordinal": 20,
+        "request": "cc79e992b9d6e2647735cafd38f7c8bb6eee51af447e7397d29d536a0558a0bb",
+        "row_hash": "07b9d8ca98f5eb6234579d232311c06c210f277ee759aa04130fbb7a3ebb804b"
+      }
+    },
+    "txn:66605": {
+      "orig_no": "txn:66605",
+      "taxon_no": "var:66606",
+      "taxon_name": "Neritaemorpha",
+      "taxon_rank": "suborder",
+      "parent_no": "txn:8304",
+      "parent_name": "Gastropoda",
+      "accepted_no": "txn:66605",
+      "accepted_name": "Neritaemorpha",
+      "accepted_rank": "suborder",
+      "reference_no": "ref:10119",
+      "proof": {
+        "object": "888de5c04aba11c2a10f59f3710ee0ef782a5d6c088f0954e5f771b08f8e9e71",
+        "ordinal": 24,
+        "request": "5a43a073fdd539d2f60fd34c6daa525327a27a15099539f2487b175ad442607c",
+        "row_hash": "a6f35c09c7daf3fec52f0fa54c0a1e19b8dfa0bab17ee2e24f31948a696ac18a"
+      }
+    },
+    "txn:8304": {
+      "orig_no": "txn:8304",
+      "taxon_no": "var:8304",
+      "taxon_name": "Gastropoda",
+      "taxon_rank": "class",
+      "parent_no": "txn:7805",
+      "parent_name": "Mollusca",
+      "accepted_no": "txn:8304",
+      "accepted_name": "Gastropoda",
+      "accepted_rank": "class",
+      "reference_no": "ref:84948",
+      "proof": {
+        "object": "0782a54f080057d76ef26a439a28bbf9d285570ef901fc74da92a5de4bf6d9a7",
+        "ordinal": 42,
+        "request": "60b1da70f0248616bd205f97e7325d6d055ad120468e31e2f9edb2cf23d57393",
+        "row_hash": "c0c37a05fa5089af193dbb305df275aedb468afc00884279d7bb4739a450e937"
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "Lutra canadensis",
+      "rank": "species",
+      "raw": {
+        "class": "Mammalia",
+        "genus": "Lontra",
+        "order": "Carnivora",
+        "family": "Mustelidae",
+        "phylum": "Chordata",
+        "difference": "recombined as",
+        "accepted_no": "txn:233974",
+        "reference_no": "ref:50335",
+        "accepted_name": "Lontra canadensis",
+        "accepted_rank": "species",
+        "identified_no": "var:47802",
+        "identified_name": "Lutra canadensis",
+        "identified_rank": "species"
+      },
+      "expected_path": [
+        "Life",
+        "Eucarya",
+        "Opisthokonta",
+        "Animalia",
+        "Bilateria",
+        "Eubilateria",
+        "Deuterostomia",
+        "Chordata",
+        "Vertebrata",
+        "Gnathostomata",
+        "Osteichthyes",
+        "Sarcopterygii",
+        "Dipnotetrapodomorpha",
+        "Tetrapodomorpha",
+        "Tetrapoda",
+        "Reptiliomorpha",
+        "Anthracosauria",
+        "Batrachosauria",
+        "Cotylosauria",
+        "Amniota",
+        "Synapsida",
+        "Therapsida",
+        "Cynodontia",
+        "Mammaliamorpha",
+        "Mammaliaformes",
+        "Mammalia",
+        "Cladotheria",
+        "Zatheria",
+        "Boreosphenida",
+        "Theria",
+        "Eutheria",
+        "Placentalia",
+        "Boreoeutheria",
+        "Laurasiatheria",
+        "Scrotifera",
+        "Ferae",
+        "Pancarnivora",
+        "Carnivoramorpha",
+        "Carnivoraformes",
+        "Carnivora",
+        "Caniformia",
+        "Canoidea",
+        "Arctoidea",
+        "Mustelida",
+        "Mustelidae",
+        "Lutrinae",
+        "Lontra",
+        "Lutra canadensis"
+      ],
+      "expected_placement": null
+    },
+    {
+      "name": "Divaricella chipolana",
+      "rank": "species",
+      "raw": {
+        "class": "Bivalvia",
+        "genus": "Divaricella (Divaricella)",
+        "order": "Lucinida",
+        "family": "Lucinidae",
+        "phylum": "Mollusca",
+        "difference": "recombined as",
+        "accepted_no": "txn:94628",
+        "reference_no": "ref:11206",
+        "accepted_name": "Divaricella (Divaricella) chipolana",
+        "accepted_rank": "species",
+        "identified_no": "var:94628",
+        "identified_name": "Divaricella chipolana",
+        "identified_rank": "species"
+      },
+      "expected_path": [
+        "Life",
+        "Eucarya",
+        "Opisthokonta",
+        "Animalia",
+        "Bilateria",
+        "Eubilateria",
+        "Protostomia",
+        "Spiralia",
+        "Lophotrochozoa",
+        "Mollusca",
+        "Bivalvia",
+        "Autobranchia",
+        "Heteroconchia",
+        "Euheterodonta",
+        "Imparidentia",
+        "Lucinida",
+        "Lucinidae",
+        "Lucininae",
+        "Divaricella",
+        "Divaricella (Divaricella)",
+        "Divaricella chipolana"
+      ],
+      "expected_placement": null
+    },
+    {
+      "name": "Bufo woodhousei fowleri",
+      "rank": "subspecies",
+      "raw": {
+        "class": "Amphibia",
+        "genus": "Bufo",
+        "order": "Anura",
+        "family": "Bufonidae",
+        "phylum": "Chordata",
+        "difference": "subspecies not entered",
+        "accepted_no": "txn:110871",
+        "reference_no": "ref:94004",
+        "accepted_name": "Bufo woodhousei",
+        "accepted_rank": "species",
+        "identified_name": "Bufo woodhousei fowleri",
+        "identified_rank": "subspecies"
+      },
+      "expected_path": [
+        "Life",
+        "Eucarya",
+        "Opisthokonta",
+        "Animalia",
+        "Bilateria",
+        "Eubilateria",
+        "Deuterostomia",
+        "Chordata",
+        "Vertebrata",
+        "Gnathostomata",
+        "Osteichthyes",
+        "Sarcopterygii",
+        "Dipnotetrapodomorpha",
+        "Tetrapodomorpha",
+        "Tetrapoda",
+        "Amphibia",
+        "Temnospondyli",
+        "Lissamphibia",
+        "Batrachia",
+        "Salientia",
+        "Anura",
+        "Neobatrachia",
+        "Bufonidae",
+        "Bufo",
+        "Bufo woodhousei",
+        "Bufo woodhousei fowleri"
+      ],
+      "expected_placement": "unresolved"
+    },
+    {
+      "name": "Velates floridanus",
+      "rank": "species",
+      "raw": {
+        "class": "Gastropoda",
+        "genus": "Velates",
+        "order": "NO_ORDER_SPECIFIED",
+        "family": "Neritidae",
+        "phylum": "Mollusca",
+        "accepted_no": "txn:114119",
+        "reference_no": "ref:124",
+        "accepted_name": "Velates perversus",
+        "accepted_rank": "species",
+        "identified_no": "txn:155289",
+        "identified_name": "Velates floridanus",
+        "identified_rank": "species"
+      },
+      "expected_path": [
+        "Life",
+        "Eucarya",
+        "Opisthokonta",
+        "Animalia",
+        "Bilateria",
+        "Eubilateria",
+        "Protostomia",
+        "Spiralia",
+        "Lophotrochozoa",
+        "Mollusca",
+        "Gastropoda",
+        "Neritaemorpha",
+        "Neritoidea",
+        "Neritidae",
+        "Velatinae",
+        "Velates",
+        "Velates floridanus"
+      ],
+      "expected_placement": null
+    }
+  ]
+}

@@ -10,6 +10,7 @@ from app.discovery.routes import router as discovery_router
 from app.errors import register_errors
 from app.explore.routes import router as explore_router
 from app.health import router
+from app.taxonomy.routes import router as taxonomy_router
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -36,6 +37,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(router, prefix="/api/v1")
     application.include_router(explore_router, prefix="/api/v1")
     application.include_router(discovery_router, prefix="/api/v1")
+    application.include_router(taxonomy_router, prefix="/api/v1")
     return application
 
 

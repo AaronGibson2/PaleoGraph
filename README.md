@@ -6,13 +6,13 @@ A provenance-aware paleobiology atlas integrating museum material and published 
 
 ## What it does
 
-Explore Florida's fossil evidence through an interactive Atlas, locality dossiers, source taxonomic classifications, geological time selection, and a shared evidence catalog. Search taxa, places, and catalog numbers; inspect identifications, age evidence, source revisions, and explicit bibliographic relationships.
+Explore Florida's fossil evidence through an interactive Atlas, locality dossiers, a unified Florida taxonomy explorer, geological time selection, and a shared evidence catalog. Search taxa, places, and catalog numbers; inspect identifications, age evidence, source revisions, and explicit bibliographic relationships.
 
 The validated local scientific dataset contains **462,280 UFVP records**, **18,915 Florida PBDB occurrences**, and **1,118 PBDB collections**. Museum catalog assertions can describe multiple pieces. Published occurrences remain distinct from physical specimens; PBDB ingestion creates **zero canonical Specimens**.
 
-| Search across sources | Observed evidence through time |
+| Search across sources | Florida taxonomy explorer |
 | --- | --- |
-| ![Mixed-source search](docs/screenshots/search.png) | ![Source classification and temporal evidence](docs/screenshots/lineage.png) |
+| ![Mixed-source search](docs/screenshots/search.png) | ![Expandable Florida classification tree and source-specific evidence](docs/screenshots/lineage.png) |
 
 ## Engineering highlights
 
@@ -40,7 +40,7 @@ Design C separates cold raw archives from queryable normalized evidence while re
 
 Occurrence is distinct from specimen; taxonomy is distinct from phylogeny. Source assertions remain separate from PaleoGraph interpretation. Source numeric ages remain separate from derived reference envelopes; uncertainty and qualifiers remain visible. Reconciliation candidates do not establish deterministic identity.
 
-Lineage shows observed source-supported material and occurrence evidence through time. It does not establish evolutionary origin, divergence, extinction timing, or complete geographic range. **PBDB coordinates are withheld from Atlas until datum/CRS semantics are sufficiently verified**; occurrences remain available through nonspatial browsing. See [scientific semantics](docs/scientific-semantics.md).
+The **Lineage** navigation opens **Florida Taxonomy**: an expandable classification tree over compatible UFVP/PBDB evidence, with search, stable focused links, source filters and separate material/occurrence counts. Temporal evidence is secondary node detail. [Explorer semantics and API](docs/taxonomy-explorer.md) describes grouping and unresolved paths. It does not establish evolutionary origin, divergence, extinction timing, or complete geographic range. **PBDB coordinates are withheld from Atlas until datum/CRS semantics are sufficiently verified**; occurrences remain available through nonspatial browsing. See [scientific semantics](docs/scientific-semantics.md).
 
 ## Performance
 
@@ -70,6 +70,12 @@ Requires Node.js 24, Python 3.12, pnpm 10.34.6, uv, and Docker with Compose. Run
    ```sh
    uv run --project apps/api python scripts/prepare_ufvp_fixture.py
    uv run --project apps/api python -m app.ingestion.import_ufvp --archive data/raw/ufvp-offline-fixture.zip --limit 8
+   ```
+
+   Imports rebuild the taxonomy browse projection automatically. For an existing populated database upgraded to the taxonomy migration, build its new projection once:
+
+   ```sh
+   uv run --project apps/api python -m app.taxonomy.build
    ```
 
 4. In separate terminals start the API and frontend:
@@ -116,7 +122,7 @@ Read [data sources and rights](docs/data-sources.md) before redistributing sourc
 
 ## Known limitations
 
-Coverage reflects retained snapshots and their omissions. Missing evidence does not prove biological absence. Equal names do not merge source taxon concepts or localities. Florida reconciliation has 326 assessments, 117 candidate edges, and zero deterministic links. Broad discovery at large scale needs further performance work. PBDB positions are not mapped, and decorative icons are not scientific specimen imagery.
+Coverage reflects retained snapshots and their omissions. Missing evidence does not prove biological absence. Equal names do not merge source taxon concepts or localities. Compatible classification paths may share a reversible browse node while retaining every source identity. Florida reconciliation has 326 assessments, 117 candidate edges, and zero deterministic links. Broad discovery at large scale needs further performance work. PBDB positions are not mapped, and decorative icons are not scientific specimen imagery.
 
 ## Current status
 

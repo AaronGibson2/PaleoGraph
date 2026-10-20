@@ -30,7 +30,10 @@ test("Explore and shareable URLs render on direct navigation and reload", async 
     await expect(page.locator(".explore-workspace")).toBeVisible();
     const expected = new URL(path, "http://route.test").searchParams;
     for (const [key, value] of expected) {
-      expect(new URL(page.url()).searchParams.get(key)).toBe(value);
+      if (key === "lineage_focus") {
+        const resolved = await (await request.get(`${apiBase}/taxonomy/nodes/${value}`)).json();
+        await expect.poll(() => new URL(page.url()).searchParams.get("taxonomy_focus")).toBe(resolved.node.id);
+      } else expect(new URL(page.url()).searchParams.get(key)).toBe(value);
     }
     if (expected.get("surface") === "lineage") {
       await expect(page.locator(".lineage-surface")).toHaveAttribute("aria-busy", "false");
@@ -58,7 +61,7 @@ test("locality, material, specimen and Lineage restore through history and refre
   const specimenURL = page.url();
   await page.getByRole("button", { name: "Lineage", exact: true }).click();
   await expect(page.locator(".lineage-surface")).toHaveAttribute("aria-busy", "false");
-  await expect(page.locator(".lineage-node").first()).toBeVisible();
+  await expect(page.locator(".taxonomy-row").first()).toBeVisible();
   const lineageURL = page.url();
   await page.goBack();
   await expect(page).toHaveURL(specimenURL);

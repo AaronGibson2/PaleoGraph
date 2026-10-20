@@ -1,7 +1,7 @@
 import type { AgeRange, Viewport } from "../../lib/api/types.ts";
 import { contextKeys, type EntityKind, type ExplorationContext } from "../../lib/api/discovery.ts";
 
-export type ExploreState = AgeRange & ExplorationContext & { lat: number; lng: number; zoom: number; selected: string | null; selected_kind?: EntityKind; surface?: "map" | "relationships" | "localities" | "lineage"; lineage_focus?: string | null; time_focus?: string; interval_id?: string | null; catalog?: "open" | null; inspect?: "closed" | null };
+export type ExploreState = AgeRange & ExplorationContext & { lat: number; lng: number; zoom: number; selected: string | null; selected_kind?: EntityKind; surface?: "map" | "relationships" | "localities" | "lineage"; lineage_focus?: string | null; taxonomy_focus?: string | null; time_focus?: string; interval_id?: string | null; catalog?: "open" | null; inspect?: "closed" | null };
 export const DEFAULT_VIEW = { lat: 28.4, lng: -83.0, zoom: 6.2 };
 export const FLORIDA_VIEWPORT: Viewport = { west: -88, south: 24, east: -79, north: 32 };
 
@@ -44,8 +44,9 @@ export function parseExploreState(params: URLSearchParams): ExploreState {
     younger_ma: hasAge ? younger : null,
     selected: selected && uuid.test(selected) ? selected : null,
     ...(kind && kinds.includes(kind) ? { selected_kind: kind as EntityKind } : {}),
-    ...(["relationships", "localities", "lineage"].includes(params.get("surface") ?? "") ? { surface: params.get("surface") as ExploreState["surface"] } : {}),
+    ...(["map", "relationships", "localities", "lineage"].includes(params.get("surface") ?? "") ? { surface: params.get("surface") as ExploreState["surface"] } : {}),
     ...(uuid.test(params.get("lineage_focus") ?? "") ? { lineage_focus: params.get("lineage_focus")! } : {}),
+    ...(uuid.test(params.get("taxonomy_focus") ?? "") ? { taxonomy_focus: params.get("taxonomy_focus")! } : {}),
     ...(params.get("q") ? { q: params.get("q")!.slice(0, 160) } : {}),
     ...(params.get("catalog")==="open" ? {catalog:"open" as const} : {}),
     ...(params.get("inspect")==="closed" ? {inspect:"closed" as const} : {}),
@@ -60,8 +61,8 @@ export function serializeExploreState(state: ExploreState, current = new URLSear
   params.set("lng", state.lng.toFixed(5));
   params.set("zoom", state.zoom.toFixed(2));
   params.delete("data_mode"); // Retired public mode is never restored or written.
-  for (const key of ["older_ma", "younger_ma", "selected", "selected_kind", "surface", "lineage_focus", "q", "time_focus", "interval_id", "catalog", "inspect", ...contextKeys] as const) {
-    if (state[key] === null || state[key] === undefined || state[key] === "" || state[key] === "map") params.delete(key);
+  for (const key of ["older_ma", "younger_ma", "selected", "selected_kind", "surface", "lineage_focus", "taxonomy_focus", "q", "time_focus", "interval_id", "catalog", "inspect", ...contextKeys] as const) {
+    if (state[key] === null || state[key] === undefined || state[key] === "") params.delete(key);
     else params.set(key, String(state[key]));
   }
   return params.toString();

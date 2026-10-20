@@ -48,6 +48,9 @@ test("PBDB collection context and source-scoped lineage work on mobile",async({p
  await expect(page.locator(".locality-surface")).toContainText("datum unverified");
  await expect(page.locator(".locality-counts")).not.toContainText("Distinct specimens");
  await page.getByRole("button",{name:"Locality in Lineage",exact:false}).click();
- await expect(page.locator(".lineage-node").first()).toContainText("published occurrences");
+ await expect(page.locator(".taxonomy-row").first()).toContainText("PBDB");
+ await page.locator(".taxonomy-row").first().click();
+ await expect(page.locator(".taxonomy-evidence-counts")).toContainText("PBDB published occurrences");
+ await expect(page.locator(".taxonomy-evidence-counts div").first().locator("dd")).toHaveText("0");
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

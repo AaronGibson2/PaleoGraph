@@ -415,3 +415,62 @@ body:has(.explore-workspace) #main { outline: none; }
 }
 
 @media(max-width:700px) { .unmapped-evidence { bottom:9.5rem;background:#f7f5ee; } }
+.taxonomy-surface { bottom: 38px; padding-bottom: 3rem; }
+.taxonomy-search { position: relative; max-width: 38rem; margin: 0 0 1.4rem; }
+.taxonomy-search label { display: block; font: 600 11px var(--font-sans), sans-serif; letter-spacing: .09em; text-transform: uppercase; margin-bottom: .4rem; }
+.taxonomy-search input { width: 100%; padding: .8rem 1rem; border: 1px solid #c7c8bb; background: #fbfbf5; color: #22372e; border-radius: 0; font: inherit; }
+.taxonomy-matches { position: absolute; z-index: 8; inset: 100% 0 auto; max-height: 360px; overflow: auto; border: 1px solid #bfc7ba; background: #fcfcf7; box-shadow: 0 10px 24px #20352b1c; }
+.taxonomy-matches button { display: block; width: 100%; text-align: left; padding: .75rem 1rem; border: 0; border-bottom: 1px solid #e1e4d9; background: transparent; }
+.taxonomy-matches small, .taxonomy-name small, .taxonomy-concepts small, .taxonomy-evidence small { display: block; font-size: 11px; color: #687268; line-height: 1.45; }
+.taxonomy-workspace { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(280px, .85fr); gap: 1.8rem; align-items: start; }
+.taxonomy-hierarchy { min-width: 0; border-top: 2px solid #364f41; }
+.taxonomy-column-labels { display: flex; justify-content: space-between; padding: .6rem .8rem; font-size: 9px; letter-spacing: .09em; color: #677467; border-bottom: 1px solid #cfd5c9; }
+.taxonomy-scroll { height: 560px; overflow: auto; overscroll-behavior: contain; scrollbar-gutter: stable; overflow-anchor: none; }
+.taxonomy-tree { margin: 0; padding: 0; list-style: none; }
+.taxonomy-row { display: flex; align-items: center; gap: .4rem; height: 58px; box-sizing: border-box; padding-right: .65rem; border-bottom: 1px solid #dde2d7; cursor: pointer; background: #f7f8ef; }
+.taxonomy-row[aria-selected="true"] { background: #e2ecdb; box-shadow: inset 3px 0 #425e43; }
+.taxonomy-row:focus-visible, .taxonomy-surface button:focus-visible, .taxonomy-search input:focus-visible { outline: 2px solid #386349; outline-offset: -2px; }
+.taxonomy-row:hover { background: #edf2e7; }
+.taxonomy-chevron { flex: 0 0 20px; border: 0; padding: 0; background: none; color: #335540; font-size: 18px; }
+.taxonomy-row .taxon-visual { width: 27px; height: 29px; flex: 0 0 27px; }
+.taxonomy-name { min-width: 0; flex: 1; }
+.taxonomy-name strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.taxonomy-name small { font-size: 9px; text-transform: uppercase; letter-spacing: .04em; }
+.taxonomy-presence { display: flex; flex-direction: column; gap: 3px; font-size: 8px; letter-spacing: .04em; color: #637561; }
+.taxonomy-count { flex: 0 0 67px; text-align: right; font-variant-numeric: tabular-nums; }
+.taxonomy-count strong { display: block; font-size: 13px; }
+.taxonomy-count small { font-size: 8px; color: #6f786c; }
+.taxonomy-keyboard, .taxonomy-pagination { font-size: 11px; color: #64725f; padding: .5rem 0; }
+.taxonomy-pagination { display: flex; justify-content: space-between; gap: .5rem; }
+.taxonomy-details { min-width: 0; max-height: 710px; overflow: auto; padding: 0 1rem 1rem; border-left: 1px solid #cfd6c6; }
+.taxonomy-details .taxonomy-focus { display: block; padding: 0; background: transparent; border: 0; }
+.taxonomy-details h3 { margin: .15rem 0 1rem; font-family: var(--font-serif), Georgia, serif; font-size: 30px; }
+.taxonomy-details h4 { margin: 1.2rem 0 .6rem; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.taxonomy-details p { font-size: 12px; line-height: 1.7; }
+.taxonomy-details .lineage-navigation { display: flex; flex-wrap: wrap; gap: .3rem; margin: .4rem 0 1rem; }
+.taxonomy-details .lineage-navigation button { font-size: 11px; padding: .25rem .4rem; }
+.taxonomy-details .lineage-navigation button + button::before { content: "› "; color: #879380; }
+.taxonomy-evidence-counts { margin: 0; padding: .6rem 0; border-block: 1px solid #d4dcc9; }
+.taxonomy-evidence-counts div { display: flex; gap: .6rem; justify-content: space-between; font-size: 11px; padding: .4rem 0; }
+.taxonomy-evidence-counts dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.taxonomy-time { padding: .1rem 0 .6rem; border-bottom: 1px solid #d4dcc9; }
+.taxonomy-time small { font-size: 10px; line-height: 1.6; color: #6d7865; display: block; }
+.taxonomy-concepts, .taxonomy-evidence { padding: 0; list-style: none; }
+.taxonomy-concepts li, .taxonomy-evidence li { border-bottom: 1px solid #dce3d1; padding: .6rem 0; }
+.taxonomy-concepts strong, .taxonomy-evidence strong { font-size: 11px; }
+.taxonomy-concepts small { overflow-wrap: anywhere; }
+.taxonomy-details button { color: #365039; border: 1px solid #cbd5c0; background: #f7f9ef; padding: .4rem .6rem; font-size: 11px; cursor: pointer; }
+.taxonomy-evidence button { text-align: left; width: 100%; border: 0; padding: 0; background: none; }
+.taxonomy-source-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+.taxonomy-source-actions p { flex-basis: 100%; }
+@media (max-width: 1000px) { .taxonomy-workspace { grid-template-columns: minmax(0, 1fr); gap: 1rem; } .taxonomy-details { border-left: 0; border-top: 1px solid #bac8b0; padding: 1rem 0; max-height: none; } .taxonomy-scroll { height: 440px; } }
+@media (max-width: 520px) { .taxonomy-surface { --taxonomy-indent: 9px; } .taxonomy-row .taxon-visual { display: none; } .taxonomy-presence { font-size: 7px; } .taxonomy-name strong { font-size: 12px; } .taxonomy-scroll { height: 390px; } .taxonomy-count { flex-basis: 50px; } .taxonomy-name small { font-size: 8px; } }
+
+.taxonomy-row[aria-level]:not([aria-level="1"]) { background-image: linear-gradient(var(--border),var(--border)); background-repeat: no-repeat; background-size: 1px 100%; background-position: 8px 0; }
+.taxonomy-surface .taxonomy-chevron { padding: 0; border: 0; background: transparent; }
+.taxonomy-source-actions label, .taxonomy-source-actions select { flex-basis: 100%; font-size: 11px; }
+.taxonomy-source-actions select { min-width: 0; width: 100%; padding: .5rem; color: var(--text); background: var(--surface-raised); border: 1px solid var(--border); }
+
+.taxonomy-matches [aria-selected="true"] { background: var(--surface-inset); outline: 1px solid var(--accent); outline-offset: -1px; }
+
+.taxonomy-identity { display: block; overflow-wrap: anywhere; font-size: 10px; color: var(--text-muted); }

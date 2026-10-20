@@ -64,14 +64,15 @@ test("locality, Lineage and Atlas describe material coverage without inventing l
   await expect(page.locator(".locality-time")).toContainText("not source-supplied locality geology");
   await expect(page.locator(".age-coverage")).toContainText(summary.unknown_age_count.toLocaleString("en-US"));
   await page.goto(`/explore?surface=lineage&lineage_focus=${unresolved.taxon_id}&inspect=closed`);
-  await expect(page.locator(".surface-introduction")).toContainText("observed temporal distribution");
+  await expect(page.locator(".surface-introduction")).toContainText("not an evolutionary phylogeny");
   await expect(page.locator(".scientific-caveat")).toContainText("Classification ≠ phylogeny");
-  await expect(page.locator(".scientific-caveat")).toContainText("no origin, extinction, or total biological range");
+  await expect(page.locator(".scientific-caveat")).toContainText("Source age bounds remain separate");
   const branch = await (await request.get(`${apiBase}/lineage?focus=${unresolved.taxon_id}`)).json();
   expect(branch.focal.unknown_age_count).toBeGreaterThan(0);
   // The source-identification cohort can also contain mapped material. Its outer
   // envelope must not turn the unresolved member into an interpreted specimen.
-  await expect(page.locator(".lineage-focus")).toContainText("assertions");
+  await expect(page.locator(".taxonomy-time")).toContainText("records lack complete numeric bounds");
+  await expect(page.locator(".taxonomy-time")).toContainText("not origin, extinction or biological duration");
   const params = new URLSearchParams({ at_lon: String(unresolved.longitude), at_lat: String(unresolved.latitude), inspect: "closed" });
   await page.goto(`/explore?${params}`);
   await expect(page.locator(".map-legend")).toContainText("Age unresolved");

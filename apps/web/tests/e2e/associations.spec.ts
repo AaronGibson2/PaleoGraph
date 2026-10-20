@@ -33,10 +33,10 @@ test("shared renderer preserves catalog identity, decorative semantics and membe
 });
 
 test("unknown source membership stays neutral even when its display label names a reviewed root", async ({ page }) => {
-  await page.route("**/api/v1/lineage?**", async route => {
+  await page.route("**/api/v1/taxonomy/roots?**", async route => {
     const response = await route.fetch();
     const payload = await response.json();
-    payload.items[0] = { ...payload.items[0], label: "Rodentia", classification: ["Mammalia", "Rodentia"], classification_path_ids: ["00000000-0000-0000-0000-000000000001"], id: "00000000-0000-0000-0000-000000000001" };
+    payload.items[0] = { ...payload.items[0], name: "Rodentia", classification: ["Mammalia", "Rodentia"], classification_path_ids: ["00000000-0000-0000-0000-000000000001"], id: "00000000-0000-0000-0000-000000000001" };
     await route.fulfill({ response, json: payload });
   });
   await page.goto("/explore?surface=lineage");
@@ -63,28 +63,34 @@ test("locality counts, fauna pivot, material and surface history share scientifi
   await expect(page.locator(".lineage-focus")).toBeVisible();
   expect(new URL(page.url()).searchParams.get("surface")).toBe("lineage");
   expect(new URL(page.url()).searchParams.get("locality_id")).toBe(site.id);
-  const focus = new URL(page.url()).searchParams.get("lineage_focus");
+  await expect.poll(() => new URL(page.url()).searchParams.get("taxonomy_focus")).not.toBeNull();
+  const focus = new URL(page.url()).searchParams.get("taxonomy_focus");
   await page.reload(); await expect(page.locator(".lineage-focus")).toBeVisible();
-  expect(new URL(page.url()).searchParams.get("lineage_focus")).toBe(focus);
+  expect(new URL(page.url()).searchParams.get("taxonomy_focus")).toBe(focus);
   await page.getByRole("button", { name: "Show on Atlas", exact: false }).click();
   await expect(page.getByRole("button", { name: "Atlas", exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.goBack(); await expect(page.locator(".lineage-focus")).toBeVisible();
 });
 
-test("classification keyboard focus traverses source ranks without asserting ancestry", async ({ page }) => {
+test("classification keyboard traverses and selects supported ranks without asserting ancestry", async ({ page }) => {
   await page.goto("/explore?surface=lineage");
   const root = page.getByRole("treeitem").filter({ hasText: "Animalia" });
-  await expect(root).toBeVisible(); await root.focus(); await page.keyboard.press("ArrowRight");
-  await expect(page.locator(".lineage-navigation nav")).toContainText("Animalia");
-  await expect(page.getByRole("treeitem").first()).toBeFocused();
-  const focus = new URL(page.url()).searchParams.get("lineage_focus");
-  expect(focus).toBeTruthy();
+  await expect(root).toBeVisible(); await root.focus(); await root.press("ArrowRight");
+  await expect(root).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("treeitem").filter({ hasText: "Chordata" })).toBeVisible();
+  expect(new URL(page.url()).searchParams.get("taxonomy_focus")).toBeNull();
+  await root.press("ArrowRight");
+  await expect(page.getByRole("treeitem").filter({ hasText: "Chordata" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".lineage-navigation")).toContainText("Animalia");
+  await expect(page.locator(".taxonomy-focus h3")).toHaveText("Chordata");
+  expect(new URL(page.url()).searchParams.get("taxonomy_focus")).toBeTruthy();
   await page.keyboard.press("ArrowLeft");
-  await expect.poll(() => new URL(page.url()).searchParams.get("lineage_focus")).toBeNull();
-  await expect(page.locator(".scientific-caveat")).toContainText("Classification ≠ phylogeny");
-  await expect(page.locator(".lineage-span").first()).toContainText("with numeric bounds");
-  await expect(page.locator(".lineage-reference span").first()).toBeVisible();
-  await expect(page.locator(".taxon-icon").first()).toBeVisible();
+  await expect(root).toBeFocused(); await root.press("ArrowLeft");
+  await expect(root).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator(".scientific-caveat")).toContainText("Classification \u2260 phylogeny");
+  await expect(page.locator(".taxonomy-time")).toContainText("numeric bounds");
+  await expect(page.locator(".taxon-visual").first()).toBeVisible();
 });
 
 test("a selected species remains conjunctive when a genus focus returns to Atlas", async ({ page, request }) => {
@@ -117,12 +123,11 @@ test("mobile locality and lineage use semantic cards with reduced motion and vis
   await expect(page.locator(".locality-counts")).toBeVisible();
   await page.getByRole("button", { name: "Locality in Lineage", exact: false }).click();
   await expect(page.getByRole("treeitem").first()).toBeVisible();
-  await page.getByRole("treeitem").first().focus(); await page.keyboard.press("ArrowRight");
+  await page.getByRole("treeitem").first().focus(); await page.keyboard.press("Enter");
   await expect(page.locator(".lineage-focus")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await expect(page.locator(".canvas-source")).toContainText("CC BY-NC 4.0");
   await expect(page.locator(".maplibregl-ctrl-attrib")).toBeHidden();
-  await page.getByRole("button", { name: "Taxon actions", exact: true }).click();
   await page.getByRole("button", { name: "Associated localities", exact: false }).click();
   await expect(page.locator(".locality-counts")).toBeVisible();
 });
