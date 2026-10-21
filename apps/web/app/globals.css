@@ -34,6 +34,8 @@ a:hover { text-decoration: underline; }
 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: var(--radius); }
 .site-header { max-width: 72rem; margin-inline: auto; padding: var(--space-3) var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
 .wordmark { color: var(--text); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 400; letter-spacing: -0.025em; text-decoration: none; }
+.site-header nav { display: flex; flex-wrap: wrap; gap: 1rem; font-size: .875rem; }
+.site-header nav a { display: inline-flex; align-items: center; min-height: 44px; }
 .page-section { max-width: 72rem; margin-inline: auto; padding: var(--space-5) var(--space-4); }
 .eyebrow { color: var(--text-muted); font-size: var(--text-label); letter-spacing: 0.09em; text-transform: uppercase; }
 h1 { font-family: var(--font-heading); font-weight: 400; font-size: var(--text-heading); line-height: 1.12; letter-spacing: -0.025em; margin-block: var(--space-3); }

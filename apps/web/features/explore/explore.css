@@ -1,9 +1,3 @@
-:root {
- --surface: #f4efdf; --surface-raised: #fffaf0; --surface-inset: #e7dfcb;
- --text: #183d3a; --text-muted: #63706b; --accent: #174d48; --border: #c9c3ae;
- --map-point: #205d56; --map-selected: #b7462e; --map-unknown: #73786d;
- --water: #86aaa1; --provenance: #775332; --motion-fast: 140ms;
-}
 .scientific-surface { position: absolute; inset: 0; overflow: auto; padding: 66px 40px 110px; background: var(--surface); color: var(--text); scrollbar-gutter: stable; }
 .map-workspace:has(.inspector) .scientific-surface { right: 445px; }
 .surface-introduction { display: flex; align-items: start; justify-content: space-between; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }

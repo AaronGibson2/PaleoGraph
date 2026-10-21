@@ -1,0 +1,20 @@
+.explore-workspace .exploration-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--control-gap); min-width: 0; }
+.explore-workspace .exploration-toolbar button, .explore-workspace .exploration-toolbar select { min-height: 36px; border-radius: var(--radius); }
+.explore-workspace .exploration-toolbar select { font: inherit; color: var(--text); background: var(--surface-raised); border: 1px solid var(--border); padding: .4rem .5rem; }
+.explore-workspace .exploration-toolbar .toolbar-reset { margin-left: auto; border: 0; border-bottom: 1px solid var(--border); background: transparent; color: var(--accent); padding: .3rem .5rem; white-space: nowrap; }
+.explore-workspace .exploration-toolbar .toolbar-reset:hover { background: var(--surface-hover); }
+.explore-workspace .atlas-context.exploration-toolbar { overflow: visible; white-space: normal; padding: .35rem var(--page-gutter); font-size: var(--type-support); gap: .4rem 1rem; }
+.explore-workspace .atlas-context .context-assertion { min-width: 0; flex-wrap: wrap; gap: .35rem; }
+.explore-workspace .atlas-context .context-assertion strong { overflow-wrap: anywhere; }
+.explore-workspace .atlas-context .source-filter select { max-width: 100%; font-size: var(--type-support); }
+.explore-workspace .atlas-context .context-label { font-size: var(--type-label); }
+.explore-workspace .taxonomy-tools { padding-block: .75rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+.explore-workspace .taxonomy-tools .taxonomy-search { flex: 1; margin: 0; max-width: 38rem; min-width: min(100%, 16rem); }
+.explore-workspace .taxonomy-tools .taxonomy-search input { min-height: 42px; padding: .6rem .75rem; }
+.explore-workspace .catalog-tools { padding: .4rem var(--panel-padding) .5rem; border-bottom: 1px solid var(--border); }
+.explore-workspace .catalog-tools .result-count { padding: 0; min-height: 1.25rem; font-size: var(--type-value); }
+@media (max-width: 700px) {
+.explore-workspace .atlas-context.exploration-toolbar { gap: .25rem .75rem; max-height: 126px; overflow: auto; }
+.explore-workspace .atlas-context .context-label { display: none; }
+.explore-workspace .exploration-toolbar button, .explore-workspace .exploration-toolbar select { min-height: 44px; }
+}

@@ -1,0 +1,36 @@
+/* PaleoGraph: archival paper, forest ink, and a restrained evidence accent. */
+:root {
+  --surface: #f5f3e9;
+  --surface-raised: #fdfcf7;
+  --surface-inset: #eae8dc;
+  --surface-hover: #edf1e8;
+  --surface-selected: #e1ebdf;
+  --surface-evidence: #f0eadc;
+  --text: #203f39;
+  --text-muted: #53645b;
+  --accent: #174d48;
+  --border: #c9cebf;
+  --border-subtle: #dce0d4;
+  --provenance: #745234;
+  --map-point: #205d56;
+  --map-selected: #a6402b;
+  --map-unknown: #687363;
+  --water: #86aaa1;
+  --font-scientific: Georgia, "Times New Roman", serif;
+  --type-page: clamp(1.6rem, 2.4vw, 2.15rem);
+  --type-section: 1.125rem;
+  --type-scientific: 1rem;
+  --type-label: .6875rem;
+  --type-value: .8125rem;
+  --type-count: 1.375rem;
+  --type-support: .75rem;
+  --type-source: .6875rem;
+  --page-gutter: clamp(1rem, 2.5vw, 2.5rem);
+  --panel-padding: 1rem;
+  --row-padding: .75rem;
+  --section-gap: 1.5rem;
+  --control-gap: .5rem;
+  --radius: 2px;
+  --shadow-panel: 0 3px 12px #173e3a12;
+  --motion-fast: 120ms;
+}

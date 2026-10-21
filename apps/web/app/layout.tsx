@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import "./design-tokens.css";
 
 export const metadata: Metadata = {
   title: { default: "PaleoGraph", template: "%s | PaleoGraph" },
@@ -14,7 +15,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <a className="skip-link" href="#main">Skip to content</a>
         <header className="site-header">
           <Link className="wordmark" href="/">PaleoGraph</Link>
-          <nav aria-label="Main navigation"><Link href="/explore">Explore</Link></nav>
+          <nav aria-label="Main navigation"><Link href="/explore">Atlas</Link><Link href="/explore?catalog=open">Catalog</Link><Link href="/lineage">Lineage</Link></nav>
         </header>
         <main id="main" tabIndex={-1}>{children}</main>
       </body>

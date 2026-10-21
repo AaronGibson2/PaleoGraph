@@ -1,0 +1,41 @@
+/* Row height stays 58px: the lazy tree's windowing contract is unchanged. */
+.explore-workspace .taxonomy-row { background-color: var(--surface-raised); border-color: var(--border-subtle); }
+.explore-workspace .taxonomy-row:hover { background-color: var(--surface-hover); }
+.explore-workspace .taxonomy-row[aria-selected=true] { background-color: var(--surface-selected); box-shadow: inset 3px 0 var(--accent); }
+.explore-workspace .taxonomy-name strong { font: 400 1rem/1.3 var(--font-scientific); }
+.explore-workspace .taxonomy-row:is([data-rank=species],[data-rank=subspecies],[data-rank=genus]) .taxonomy-name strong { font-style: italic; }
+.explore-workspace .taxonomy-name small { font-size: .625rem; letter-spacing: .04em; color: var(--text-muted); }
+.explore-workspace .taxonomy-presence { font-size: .625rem; color: var(--text-muted); }
+.explore-workspace .taxonomy-count { flex-basis: 74px; }
+.explore-workspace .taxonomy-count strong { font-size: .875rem; font-weight: 600; }
+.explore-workspace .taxonomy-count small { font-size: .625rem; color: var(--text-muted); }
+.explore-workspace .taxonomy-column-labels { font-size: var(--type-label); color: var(--text-muted); }
+.explore-workspace .taxonomy-keyboard { font-size: var(--type-label); color: var(--text-muted); line-height: 1.6; }
+.explore-workspace .taxonomy-details h3 { font-size: 1.75rem; overflow-wrap: anywhere; }
+.explore-workspace .taxonomy-details h4 { font-size: var(--type-label); }
+.explore-workspace .taxonomy-details p, .explore-workspace .taxonomy-details button, .explore-workspace .taxonomy-details .lineage-navigation button { font-size: var(--type-support); }
+.explore-workspace .taxonomy-details .taxonomy-evidence-counts div { font-size: var(--type-support); align-items: baseline; padding-block: .5rem; }
+.explore-workspace .taxonomy-evidence-counts dt { max-width: 75%; }
+.explore-workspace .taxonomy-evidence-counts dd { text-align: right; font-size: 1rem; }
+.explore-workspace .taxonomy-concepts small, .explore-workspace .taxonomy-evidence small, .explore-workspace .taxonomy-time small, .explore-workspace .taxonomy-identity { font-size: var(--type-label); color: var(--text-muted); }
+.explore-workspace .taxonomy-concepts strong, .explore-workspace .taxonomy-evidence strong { font-size: var(--type-support); }
+.explore-workspace .taxonomy-details button { min-height: 36px; }
+.explore-workspace .taxonomy-source-actions select { font-size: var(--type-support); min-height: 40px; }
+.explore-workspace .taxonomy-search label { font-size: var(--type-label); color: var(--text-muted); }
+.explore-workspace .taxonomy-search input { font-size: .875rem; }
+.explore-workspace .taxonomy-workspace { gap: var(--section-gap); }
+.explore-workspace .taxonomy-scroll { height: min(560px, 55svh); }
+.explore-workspace .taxonomy-details { max-height: min(710px, 65svh); scrollbar-gutter: stable; }
+@media (max-width: 1000px) {
+.explore-workspace .taxonomy-workspace { grid-template-columns: minmax(0,1fr); }
+.explore-workspace .taxonomy-details { max-height: none; padding-inline: 0; }
+.explore-workspace .taxonomy-scroll { height: min(440px, 44svh); }
+}
+@media (max-width: 760px) {
+.explore-workspace .taxonomy-row .taxon-visual { display: none; }
+.explore-workspace .taxonomy-name strong { font-size: .9375rem; }
+.explore-workspace .taxonomy-name small, .explore-workspace .taxonomy-presence, .explore-workspace .taxonomy-count small { font-size: .625rem; }
+.explore-workspace .taxonomy-count { flex-basis: 61px; }
+.explore-workspace .taxonomy-chevron { min-height: 44px; flex-basis: 28px; }
+.explore-workspace .taxonomy-details button { min-height: 44px; }
+}

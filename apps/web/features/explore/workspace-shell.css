@@ -1,0 +1,75 @@
+/* Compact application shell; the map and source semantics remain unchanged. */
+.explore-workspace .atlas-bar { height: 60px; gap: 1.25rem; border-bottom-width: 2px; padding-inline: var(--page-gutter); }
+.explore-workspace .atlas-wordmark { font-size: 1.5rem; }
+.explore-workspace .atlas-index { font-size: var(--type-label); letter-spacing: .1em; }
+.explore-workspace .surface-tabs { gap: 0; flex: none; }
+.explore-workspace .surface-tabs button { min-height: 42px; padding-inline: .8rem; font-size: var(--type-value); }
+.explore-workspace .surface-tabs button[aria-expanded=true] { background: #ffffff12; color: #fff4d9; }
+.explore-workspace .surface-tabs button:hover { background: #ffffff0d; }
+.explore-workspace .surface-tabs button + button { border-left: 1px solid #ffffff16; }
+.explore-workspace .atlas-search input { font-size: var(--type-value); }
+.explore-workspace .atlas-search input::placeholder { font-size: var(--type-value); }
+.explore-workspace :is(button,input,select,summary):focus-visible { outline: 2px solid var(--map-selected); outline-offset: 2px; }
+.explore-workspace :is(.atlas-bar button,.atlas-bar input):focus-visible { outline-color: #f3d698; }
+.explore-workspace .scientific-surface { padding: 60px var(--page-gutter) 70px; }
+.explore-workspace .surface-introduction { gap: 1rem; padding-bottom: 1rem; }
+.explore-workspace .surface-introduction h2, .explore-workspace .lineage-surface .surface-introduction h2 { font-size: var(--type-page); }
+.explore-workspace .surface-introduction p:not(.eyebrow) { font-size: var(--type-value); line-height: 1.6; }
+.explore-workspace .eyebrow { font-size: var(--type-label); letter-spacing: .09em; }
+.explore-workspace .context-note { font-size: var(--type-support) !important; }
+.explore-workspace .atlas-layout { min-height: 0; }
+.explore-workspace .canvas-toolbar { top: 12px; }
+.explore-workspace .canvas-toolbar button { min-height: 36px; font-size: var(--type-support); }
+.explore-workspace .canvas-source { font-size: .625rem; }
+.explore-workspace .atlas-selection { position: absolute; z-index: 4; right: 56px; top: 12px; max-width: 23rem; background: var(--surface-raised); border-left: 3px solid var(--accent); padding: .6rem .8rem; font-size: var(--type-support); box-shadow: var(--shadow-panel); }
+.explore-workspace .atlas-selection strong, .explore-workspace .atlas-selection span { display: block; }
+.explore-workspace .atlas-selection button { color: var(--accent); border: 0; background: transparent; text-decoration: underline; padding: .5rem 0 0; }
+.explore-workspace .map-workspace:has(.inspector) .atlas-selection { display: none; }
+.explore-workspace .map-workspace:has(.catalog-panel:not([hidden])) :is(.map-status,.map-notice) { left: 400px; }
+.explore-workspace .time-control { border-top-width: 2px; box-shadow: none; padding: 8px var(--page-gutter); background: var(--surface); }
+.explore-workspace .time-title h2 { font-size: 1.25rem; }
+.explore-workspace .time-control .time-explanation { font-size: var(--type-support); }
+.explore-workspace .time-footnote, .explore-workspace .time-help { font-size: .625rem; }
+.explore-workspace .time-ancestry { margin-top: 5px; }
+.explore-workspace .time-ancestry button { font-size: var(--type-label); }
+@media (max-width: 1100px) {
+.explore-workspace .atlas-index { display: none; }
+.explore-workspace .atlas-bar { gap: .75rem; }
+.explore-workspace .surface-tabs button { padding-inline: .6rem; }
+}
+@media (max-width: 760px) {
+.explore-workspace .atlas-bar { height: auto; min-height: 106px; flex-wrap: wrap; gap: 0 .5rem; padding: .35rem 1rem .5rem; }
+.explore-workspace .atlas-wordmark { font-size: 1.2rem; }
+.explore-workspace .atlas-wordmark i { display: none; }
+.explore-workspace .surface-tabs { order: 1; margin-left: auto; }
+.explore-workspace .surface-tabs button { padding: .4rem .45rem; font-size: .75rem; min-height: 44px; }
+.explore-workspace .atlas-search { order: 2; flex-basis: 100%; min-width: 0; max-width: none; }
+.explore-workspace .atlas-search input { height: 40px; }
+.explore-workspace .search-popover { top: 44px; max-height: 55svh; }
+.explore-workspace .search-popover li button { grid-template-columns: 60px minmax(0,1fr); min-height: 48px; }
+.explore-workspace .search-popover strong { overflow-wrap: anywhere; }
+.explore-workspace .scientific-surface { padding: 64px 1rem 65px; }
+.explore-workspace .map-workspace:not([data-surface=map]) .canvas-toolbar { display: none; }
+.explore-workspace .map-workspace:not([data-surface=map]) .scientific-surface { padding-top: 1rem; }
+.explore-workspace .canvas-toolbar button { min-height: 44px; }
+.explore-workspace .atlas-selection { top: 65px; left: 1rem; right: 1rem; max-width: none; }
+.explore-workspace .map-workspace:has(.catalog-panel:not([hidden])) .atlas-selection { display: none; }
+  .explore-workspace .map-workspace:has(.catalog-panel:not([hidden]),.inspector) :is(.canvas-source,.map-legend) { visibility: hidden; }
+  .explore-workspace .map-workspace:has(.catalog-panel:not([hidden]),.inspector) :is(.map-status,.map-notice) { left: .75rem; right: .75rem; bottom: 0; max-width: none; max-height: 42px; overflow: auto; padding: .3rem .5rem; font-size: .625rem; }
+  .explore-workspace .map-workspace:has(.map-status) .map-notice { display: none; }
+.explore-workspace .time-control { padding: .5rem 1rem; }
+.explore-workspace .time-title h2 { font-size: 1.125rem; }
+.explore-workspace .time-footnote { font-size: .625rem; }
+.explore-workspace .time-help { display: none; }
+}
+@media (max-width: 420px) {
+.explore-workspace .atlas-bar { padding-inline: .75rem; }
+.explore-workspace .surface-tabs button { padding-inline: .35rem; font-size: .6875rem; }
+.explore-workspace .atlas-wordmark { font-size: 1.125rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+.explore-workspace .surface-tabs button, .explore-workspace .catalog-entry, .explore-workspace .taxonomy-row, .explore-workspace .entry-pivots button { transition: background-color var(--motion-fast), border-color var(--motion-fast); }
+}
+@media (prefers-reduced-motion: reduce) {
+.explore-workspace *, .explore-workspace *::before, .explore-workspace *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+}

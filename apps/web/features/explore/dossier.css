@@ -1,0 +1,47 @@
+.explore-workspace .dossier-breadcrumbs { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; font-size: var(--type-support); color: var(--text-muted); margin-bottom: .5rem; }
+.explore-workspace .dossier-breadcrumbs button { border: 0; padding: .4rem 0; background: transparent; color: var(--accent); text-decoration: underline; text-underline-offset: .2em; font: inherit; min-height: 36px; }
+.explore-workspace .section-index { position: sticky; top: -1px; z-index: 2; display: flex; gap: .15rem .5rem; overflow-x: auto; scrollbar-width: thin; border-block: 1px solid var(--border); background: var(--surface-raised); padding: .35rem 0; margin-block: .75rem; }
+.explore-workspace .section-index button { flex: none; white-space: nowrap; color: var(--accent); background: transparent; border: 0; border-radius: var(--radius); padding: .35rem .4rem; min-height: 32px; font: inherit; font-size: var(--type-label); }
+.explore-workspace .section-index button:hover { background: var(--surface-hover); }
+.explore-workspace .inspector { top: 12px; bottom: 72px; width: 390px; padding: var(--panel-padding); border-color: var(--border); border-top: 3px solid var(--map-selected); box-shadow: var(--shadow-panel); scroll-padding-top: 100px; scrollbar-gutter: stable; }
+.explore-workspace .inspector .dossier-title { font-size: 1.625rem; line-height: 1.2; }
+.explore-workspace .inspector .inspector-subtitle { font-size: var(--type-scientific); }
+.explore-workspace .inspector p { font-size: var(--type-value); line-height: 1.65; }
+.explore-workspace .inspector h3 { font-size: var(--type-section); line-height: 1.4; }
+.explore-workspace .inspector section { padding-block: 1rem; }
+.explore-workspace .inspector dl { font-size: var(--type-value); }
+.explore-workspace .inspector dl > div { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.3fr); gap: .75rem; align-items: baseline; padding-block: .5rem; border-color: var(--border-subtle); }
+.explore-workspace .inspector dt { font-size: var(--type-label); color: var(--text-muted); overflow-wrap: anywhere; }
+.explore-workspace .inspector dd { margin: 0; font-variant-numeric: tabular-nums; }
+.explore-workspace .inspector dd small { font-size: var(--type-label); }
+.explore-workspace .inspector .entity-stat { padding-block: .75rem; }
+.explore-workspace .inspector .entity-stat > strong { font: 400 var(--type-count) var(--font-scientific); font-variant-numeric: tabular-nums; }
+.explore-workspace .inspector .entity-stat span { font-size: var(--type-support); }
+.explore-workspace .inspector .interpretation { background: var(--surface-selected); border: 0; border-left: 2px solid var(--accent); padding: .75rem; }
+.explore-workspace .inspector details, .explore-workspace .inspector .provenance a { font-size: var(--type-support); }
+.explore-workspace .inspector summary { padding-block: .5rem; min-height: 36px; }
+.explore-workspace .inspector .entity-connections button { min-height: 44px; font-size: var(--type-value); }
+.explore-workspace .inspector .entity-connections button > span:first-child { font-size: var(--type-label); }
+.explore-workspace .inspector .entity-connections button small { font-size: var(--type-label); }
+.explore-workspace .inspector .inspector-pivots button, .explore-workspace .reference-evidence button { min-height: 36px; font-size: var(--type-support); }
+.explore-workspace .locality-surface { scroll-padding-top: 80px; }
+.explore-workspace .locality-surface .section-index { background: var(--surface); }
+.explore-workspace .locality-counts dt { font-size: var(--type-support); }
+.explore-workspace .locality-counts dd { font-size: 1.75rem; font-variant-numeric: tabular-nums; }
+.explore-workspace .locality-geology dt, .explore-workspace .locality-geology dd small { font-size: var(--type-label); }
+.explore-workspace .locality-geology dd { font-size: var(--type-value); }
+.explore-workspace .association-rows small, .explore-workspace .association-list-heading > span { font-size: var(--type-support); }
+.explore-workspace .association-count { font-variant-numeric: tabular-nums; }
+.explore-workspace .locality-actions { margin-block: 1rem; }
+.explore-workspace .locality-actions button { min-height: 36px; font-size: var(--type-support); }
+.explore-workspace .locality-surface .dossier-breadcrumbs button { border: 0; background: transparent; padding-inline: 0; }
+.explore-workspace .inspector :is(h2,h3,h4):focus-visible, .explore-workspace .locality-surface :is(h2,h3,h4):focus-visible { outline: 2px solid var(--map-selected); outline-offset: 3px; }
+@media (max-width: 1100px) { .inspector { width: 340px; right: 48px; } }
+@media (max-width: 760px) {
+.explore-workspace .inspector { top: 62px; bottom: 48px; right: .75rem; width: calc(100% - 1.5rem); max-width: none; padding: .75rem; scroll-padding-top: 150px; }
+.explore-workspace .inspector .dossier-title { font-size: 1.5rem; }
+.explore-workspace .section-index button { min-height: 44px; }
+.explore-workspace .inspector .inspector-pivots button, .explore-workspace .reference-evidence button, .explore-workspace .dossier-breadcrumbs button { min-height: 44px; }
+.explore-workspace .locality-columns { display: block; }
+.explore-workspace .map-workspace:has(.inspector) .scientific-surface { right: 0; }
+}
