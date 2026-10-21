@@ -78,13 +78,22 @@ test("Catalog error can be retried without losing browse context",async({page})=
   await expect(page).toHaveURL(url);
 });
 
-for(const width of [1440,1280,820,390]) {
+for(const width of [1440,1280,1024,820,768,390]) {
   test(`dense browsing remains usable at ${width}px`,async({page})=>{
     await page.setViewportSize({width,height:width===390?844:900});
     await page.goto("/explore?catalog=open");
     await openCatalog(page);
     const list=await page.locator(".catalog-list").boundingBox();
     expect(list!.height).toBeGreaterThan(125);
+    const toolbar = page.locator(".canvas-toolbar");
+    if (await toolbar.isVisible()) {
+      const panel = await page.locator(".catalog-panel").boundingBox();
+      for (const button of await toolbar.getByRole("button").all()) {
+        const box = await button.boundingBox();
+        expect(box!.x).toBeGreaterThanOrEqual(panel!.x + panel!.width);
+        expect(box!.x + box!.width).toBeLessThanOrEqual(width);
+      }
+    }
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     await page.locator(".catalog-entry").first().click();
     await expect(page.locator(".inspector")).toBeVisible();

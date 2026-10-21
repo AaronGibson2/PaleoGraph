@@ -13,6 +13,8 @@ import { PublishedEvidence } from "./PublishedEvidence";
 import { References, ReferenceCitation } from "./References";
 import { ageLabel } from "./state";
 import { SectionIndex } from "./SectionIndex";
+import { NavigationIcon } from "./NavigationIcon";
+import "./record-experience.css";
 
 const numeric = (value: unknown) => typeof value === "number" || typeof value === "string" ? Number(value).toLocaleString("en-US", { maximumFractionDigits: 4 }) : "unknown";
 const safeUrl = (value: string | null) => { try { const url = new URL(value ?? ""); return ["http:", "https:"].includes(url.protocol) ? url.href : undefined; } catch { return undefined; } };
@@ -35,7 +37,8 @@ export function EntityInspector({ kind, id, identity, context, viewport, onPivot
   const interval = p?.interval as GeologicalInterval | undefined;
   const outside = specimen?.longitude != null && specimen.latitude != null && (specimen.latitude < viewport.south || specimen.latitude > viewport.north || (viewport.west <= viewport.east ? specimen.longitude < viewport.west || specimen.longitude > viewport.east : specimen.longitude < viewport.west && specimen.longitude > viewport.east));
   const sourceLink = (value: string) => data?.related.find(entity => entity.label === value || entity.subtitle === value);
-  return <aside className="inspector" aria-labelledby="inspection-heading" onKeyDown={event => { if (event.key === "Escape") onClose(); }}>
+  return <aside key={`${kind}:${id}`} className="inspector" data-record-kind={kind} aria-labelledby="inspection-heading" onKeyDown={event => { if (event.key === "Escape") onClose(); }}>
+    <div className="dossier-edition"><span>PALEOGRAPH / SOURCE DOSSIER</span><NavigationIcon kind="catalog" /></div>
     <nav className="dossier-breadcrumbs" aria-label="Record context"><button onClick={onClose}>Back to exploration</button><span aria-hidden="true">›</span><span>{kind === "specimen" ? "Museum material" : kind === "occurrence" ? "Published occurrence" : kind}</span></nav>
     <div className="inspector-top"><p className="eyebrow">{kind === "specimen" ? "Material / field label" : kind === "occurrence" ? "PBDB / Published occurrence" : kind === "locality" && known?.source === "pbdb" ? "PBDB / Collection context" : `${kind} / explorer`}</p><button className="icon-button" aria-label="Close occurrence inspection" onClick={onClose}>×</button></div>
     <h2 className="dossier-title" id="inspection-heading" ref={heading} tabIndex={-1}>{known?.label ?? "Reading the record…"}</h2>

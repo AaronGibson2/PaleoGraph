@@ -6,7 +6,7 @@ export async function stubBasemap(page: Page) {
  await page.route("**/test-glyphs/**", route => route.fulfill({ body: Buffer.alloc(0), contentType:"application/x-protobuf" }));
 }
 export async function openCatalog(page: Page) {
- const toggle = page.getByRole("button", {name:"Museum catalog",exact:false}).first();
+ const toggle = page.getByRole("button", {name:"Toggle evidence catalog",exact:true});
  if (await toggle.getAttribute("aria-expanded") !== "true") await toggle.click();
  await expect(page.locator(".catalog-entry").first()).toBeVisible();
  await expect(page.locator(".result-count")).not.toContainText("Updating");

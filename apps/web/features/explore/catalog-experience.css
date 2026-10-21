@@ -1,0 +1,47 @@
+.explore-workspace.experience .catalog-panel { left: 18px; top: 16px; bottom: 58px; width: 438px; border: 1px solid #bdccba; border-radius: 7px; background: #fcfcf7f5; backdrop-filter: blur(12px); box-shadow: var(--shadow-panel); overflow: hidden; }
+.experience .catalog-panel .panel-heading { padding: 22px 20px 8px; }
+.experience .catalog-panel .panel-heading h2 { font: 30px/1.1 var(--font-scientific); letter-spacing: -.03em; }
+.experience .catalog-panel .panel-heading .eyebrow { display: block; font: 10px var(--font-accession); color: #59735e; letter-spacing: .14em; margin-bottom: 7px; }
+.experience .catalog-panel .icon-button { background: #eaf0e2; color: #28593f; border-radius: 50%; min-height: 36px; min-width: 36px; }
+.experience .catalog-tools { padding: 10px 20px 12px; gap: 8px; align-items: center; }
+.experience .catalog-tools .result-count { font-size: 12px; flex: 1; font-variant-numeric: tabular-nums; }
+.experience .catalog-view-switch { display: flex; border: 1px solid #bacbb4; padding: 2px; border-radius: 4px; gap: 2px; }
+.experience .catalog-view-switch button { min-height: 30px; padding: 4px 8px; font-size: 11px; color: #526b5b; background: transparent; border: 0; }
+.experience .catalog-view-switch button[aria-pressed=true] { background: #dfe9d7; color: #214f37; }
+.experience .catalog-panel .continuity-note { position: static; width: auto; height: auto; clip-path: none; padding: 8px 20px; font-size: 11px; line-height: 1.6; background: #edf1e7; }
+.experience .catalog-panel .catalog-list { border-top: 1px solid var(--border); scrollbar-gutter: stable; }
+.experience .catalog-panel .catalog-list li { border-bottom: 1px solid #d4dece; }
+.experience .catalog-panel .catalog-entry { padding: 14px 18px 4px; gap: 14px; }
+.experience .catalog-entry .scientific-name { font: 20px/1.2 var(--font-scientific); letter-spacing: -.025em; }
+.experience .catalog-entry .catalog-label { font: 11px/1.4 var(--font-accession); color: #687460; letter-spacing: .02em; }
+.experience .catalog-entry .catalog-identity { display: grid; gap: 5px; }
+.experience .catalog-entry .evidence-source { font-size: 10px; color: #526b5b; }
+.experience .catalog-entry .catalog-metadata > span { font-size: 12px; grid-template-columns: 70px 1fr; gap: 10px; line-height: 1.5; }
+.experience .catalog-entry .catalog-metadata small { font-size: 11px; }
+.experience .catalog-entry > .taxon-visual { width: 32px; height: 36px; align-self: flex-start; margin-top: 4px; }
+.experience .catalog-panel .entry-pivots { padding: 0 18px 8px 62px; gap: 12px; }
+.experience .catalog-panel .entry-pivots button { font-size: 11px; text-decoration: none; min-height: 28px; color: #43684d; }
+.experience .catalog-panel[data-view=list] .catalog-entry .catalog-metadata > span { display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.experience .catalog-panel[data-view=list] .catalog-entry .catalog-metadata small { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+.experience .catalog-panel[data-view=list] .catalog-entry .catalog-age { color: #687460; font-size: 11px; }
+.experience .catalog-panel[data-view=list] .catalog-entry .catalog-metadata { gap: 2px; }
+.experience .catalog-panel[data-view=records] .catalog-entry { padding-block: 20px 8px; }
+.experience .catalog-panel[data-view=records] .catalog-entry > .taxon-visual { width: 75px; height: 80px; padding: 12px; background: #e5ecdb; border-radius: 3px; }
+.experience .catalog-panel[data-view=records] .catalog-entry .scientific-name { font-size: 23px; }
+.experience .catalog-panel[data-view=records] .entry-pivots { padding-left: 107px; padding-bottom: 16px; }
+.experience .catalog-entry:hover { background: #edf2e5; box-shadow: inset 3px 0 #7f9e73; }
+.experience .catalog-entry[aria-pressed=true] { background: #dce8d7; box-shadow: inset 3px 0 #36684b; }
+.experience .catalog-pagination { background: #f6f7ef; padding: 8px 14px; font-size: 11px; }
+.experience .catalog-pagination button { min-height: 38px; font-size: 12px; }
+@media (max-width: 1100px) { .explore-workspace.experience .catalog-panel { width: 390px; } }
+@media (max-width: 767px) {
+  .explore-workspace.experience .catalog-panel { left: 8px; right: 8px; width: auto; max-width: none; top: 10px; bottom: 42px; }
+  .experience .catalog-panel .panel-heading { padding: 16px 16px 6px; }
+  .experience .catalog-panel .panel-heading h2 { font-size: 28px; }
+  .experience .catalog-tools { padding: 7px 16px; }
+  .experience .catalog-panel .continuity-note { padding: 6px 16px; font-size: 10px; }
+  .experience .catalog-view-switch button, .experience .catalog-pagination button, .experience .catalog-panel .entry-pivots button { min-height: 44px; }
+  .experience .catalog-entry .scientific-name { font-size: 19px; }
+  .experience .catalog-panel .catalog-entry { padding-inline: 14px; gap: 10px; }
+  .experience .catalog-panel .entry-pivots { padding-left: 55px; padding-bottom: 4px; }
+}

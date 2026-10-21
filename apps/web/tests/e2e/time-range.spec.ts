@@ -24,6 +24,7 @@ test("pointer boundaries create a custom range and do not cross",async({page})=>
 
 test("formal hierarchy semantic zoom and reduced motion work on mobile",async({page})=>{
  await page.setViewportSize({width:390,height:844});await page.emulateMedia({reducedMotion:"reduce"});await page.goto("/explore");
+ await page.getByRole("button",{name:"Time details",exact:true}).click();
  await page.getByRole("button",{name:"Explore subdivisions of Neogene"}).click();await expect(page.locator(".time-windows")).toContainText("Miocene");
  await page.getByRole("button",{name:"Explore subdivisions of Miocene"}).click();await expect(page.locator(".time-windows")).toContainText("Aquitanian");
  await page.reload();await expect(page.locator(".time-windows")).toContainText("Aquitanian");

@@ -1,0 +1,3 @@
+export function NavigationIcon({ kind }: { kind: "atlas" | "catalog" | "localities" | "lineage" }) {
+  return <svg className="navigation-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true">{kind === "atlas" ? <><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c5 5 5 12 0 17-5-5-5-12 0-17Z"/></> : kind === "catalog" ? <><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></> : kind === "localities" ? <><path d="M18 10c0 5-6 10-6 10S6 15 6 10a6 6 0 1 1 12 0Z"/><circle cx="12" cy="10" r="2"/></> : <><path d="M5 4v12h6M5 9h10M15 9v10M15 14h5"/><circle cx="5" cy="3" r="1.5"/><circle cx="12" cy="16" r="1.5"/><circle cx="15" cy="20" r="1.5"/><circle cx="21" cy="14" r="1.5"/></>}</svg>;
+}

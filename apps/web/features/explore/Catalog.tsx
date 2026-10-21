@@ -10,19 +10,21 @@ import { prefetchEntity, type BrowseTarget } from "./browseIntent";
 import { IntentButton } from "./IntentButton";
 import { ExplorationToolbar } from "./ExplorationToolbar";
 import "./catalog.css";
+import "./catalog-experience.css";
 
 export function Catalog({ query, open, selected, onSelect, onClose, retry }: { selected?: string | null; query: string; open: boolean; onSelect: (entity: BrowseTarget) => void; onClose: () => void; retry: number }) {
   const [navigation, setNavigation] = useState<{ base: string; cursors: string[] }>({ base: "", cursors: [] });
   const [catalogRetry, setCatalogRetry] = useState(0);
+  const [view, setView] = useState<"list" | "records">("list");
   const cursors = navigation.base === query ? navigation.cursors : [];
   const pageQuery = `${query}&limit=30${cursors.length ? `&cursor=${encodeURIComponent(cursors.at(-1)!)}` : ""}`;
   const debounce = /(?:^|&)(?:locality_id|taxon_id)=/.test(query) ? 0 : 180;
   const result = useResource<Page<CatalogItem> & { offset: number }>(open ? browseKey("/catalog",pageQuery) : null, async signal => ({ ...await discovery.catalog(pageQuery, signal), offset: cursors.length * 30 }), debounce, retry + catalogRetry);
   const items = result.data?.items ?? [];
   const source=new URLSearchParams(query).get("source") ?? "ufvp";
-  return <aside hidden={!open} inert={!open} style={open ? undefined : { display: "none" }} className="catalog-panel" aria-labelledby="results-heading" aria-busy={result.loading}>
+  return <aside hidden={!open} inert={!open} style={open ? undefined : { display: "none" }} className="catalog-panel" data-view={view} aria-labelledby="results-heading" aria-busy={result.loading}>
     <div className="panel-heading"><div><p className="eyebrow">Source evidence</p><h2 id="results-heading" tabIndex={-1}>{source === "ufvp" ? "Museum catalog" : source === "pbdb" ? "Published occurrences" : "Evidence catalog"}</h2></div><button className="icon-button" aria-label="Close catalog" onClick={onClose}>×</button></div>
-    <ExplorationToolbar label="Catalog results" className="catalog-tools"><p className="result-count" role="status">{result.data ? `${result.data.total.toLocaleString("en-US")} ${source === "ufvp" ? "assertions" : source === "pbdb" ? "published occurrences" : "evidence records"}` : "Loading catalog…"}{result.loading && result.data ? " · Updating…" : ""}</p></ExplorationToolbar>
+    <ExplorationToolbar label="Catalog results" className="catalog-tools"><p className="result-count" role="status">{result.data ? `${result.data.total.toLocaleString("en-US")} ${source === "ufvp" ? "assertions" : source === "pbdb" ? "published occurrences" : "evidence records"}` : "Loading catalog…"}{result.loading && result.data ? " · Updating…" : ""}</p><div className="catalog-view-switch" role="group" aria-label="Catalog presentation"><button aria-pressed={view === "list"} onClick={() => setView("list")}>List</button><button aria-pressed={view === "records"} onClick={() => setView("records")}>Records</button></div></ExplorationToolbar>
     {source === "all" && result.data?.counts && <p className="evidence-source">UFVP museum material: {result.data.counts.museum_material.toLocaleString("en-US")} / PBDB published occurrences: {result.data.counts.published_occurrences.toLocaleString("en-US")}</p>}
     {source === "pbdb" && <p className="context-note catalog-scope">Published occurrences under selected source filters. No map viewport is applied; an exact selected position remains a filter.</p>}
     <p className="continuity-note" role={result.error ? "alert" : undefined}>{result.loading && result.data ? "Showing last loaded results." : result.error ?? "Museum assertions may contain multiple pieces. Published occurrences describe source evidence."}{result.error && <button className="catalog-retry" onClick={() => setCatalogRetry(value => value + 1)}>Retry catalog</button>}</p>

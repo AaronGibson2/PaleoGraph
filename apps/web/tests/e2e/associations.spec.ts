@@ -43,7 +43,7 @@ test("unknown source membership stays neutral even when its display label names 
   const row = page.getByRole("treeitem").filter({ hasText: "Rodentia" });
   await expect(row).toBeVisible();
   await expect(row.locator(".taxon-visual")).toHaveAttribute("data-visual-kind", "neutral");
-  await expect(row.locator("svg")).toBeVisible();
+  await expect(row.locator(".taxon-visual svg")).toBeVisible();
 });
 
 test("locality counts, fauna pivot, material and surface history share scientific context", async ({ page, request }) => {
@@ -137,7 +137,8 @@ test("locality refresh retains a labeled snapshot on a recoverable failure", asy
   await page.goto(`/explore?surface=localities&locality_id=${site.id}`);
   await expect(page.locator(".locality-counts")).toBeVisible();
   await page.route(`**/api/v1/localities/${site.id}?**`, route => route.fulfill({ status: 503, json: { error: { message: "Temporary outage" } } }));
-  await page.locator(".time-window").filter({ hasText: "Quaternary" }).click();
+  await page.getByRole("button", { name: "Time details", exact: true }).click();
+ await page.locator(".time-window").filter({ hasText: "Quaternary" }).click();
   await expect(page.locator(".snapshot-status")).toContainText("Showing the last loaded locality");
   await expect(page.locator(".locality-counts")).toBeVisible();
   await page.unroute(`**/api/v1/localities/${site.id}?**`);

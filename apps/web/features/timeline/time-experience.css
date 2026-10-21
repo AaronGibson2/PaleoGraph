@@ -1,0 +1,54 @@
+.explore-workspace.experience .time-control { position: relative; z-index: 11; border-top: 1px solid #93a88e; background: #fcfcf7f2; padding: 12px 28px 8px; box-shadow: 0 -8px 28px #153d3407; }
+.experience .time-control [hidden] { display: none !important; }
+.experience .time-title { display: flex; align-items: center; gap: 14px; }
+.experience .time-title > div { min-width: 150px; }
+.experience .time-title .eyebrow { font: 9px var(--font-accession); letter-spacing: .11em; color: #61765d; }
+.experience .time-title h2 { font: 22px/1.15 var(--font-scientific); color: var(--text); min-width: 0; }
+.experience .time-title .quiet-button, .experience .time-expand { min-height: 34px; border: 1px solid var(--border); background: transparent; border-radius: 4px; font-size: 11px; color: #285339; padding: 6px 12px; }
+.experience .time-title .quiet-button { margin-left: auto; white-space: nowrap; }
+.experience .time-title .quiet-button[aria-pressed=true] { background: #e4eddb; border-color: #a2b799; }
+.experience .time-expand { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.experience .time-expand svg { width: 12px; height: 12px; }
+.experience .time-expand[aria-expanded=true] svg { transform: rotate(180deg); }
+.experience .time-direction { font: 9px/1.2 var(--font-accession); color: #61765d; padding: 4px 0 2px; }
+.experience .time-direction span:nth-child(2) { font-size: 9px; }
+.experience .time-track { margin: 14px 8px 12px; height: 10px; border: 0; border-radius: 2px; background: #e6e8dc; }
+.experience .time-strata { opacity: .45; border: 0; }
+.experience .time-selection { background: #47754880; border: 1px solid #527746; }
+.experience .time-handle { width: 14px; height: 28px; border: 2px solid #fcfcf7; border-radius: 3px; background: #285c42; box-shadow: 0 0 0 1px #285c42; }
+.experience .time-handle::before { content: ""; position: absolute; inset: -8px -12px; }
+.experience .time-handle-label { font-size: 10px; color: #284d37; }
+.experience .time-bottom { margin: 0; align-items: baseline; gap: 10px; }
+.experience .time-footnote { font-size: 10px; line-height: 1.5; }
+.experience .time-help { font-size: 10px; line-height: 1.5; }
+.experience .time-control[data-expanded=false] .time-explanation { display: none; }
+.experience .time-control[data-expanded=false] .time-help, .experience .time-control[data-expanded=false] .time-reference-note { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+.experience .time-control[data-expanded=false] .time-bottom { margin-top: 5px; }
+.experience .time-ancestry { padding: 5px 0; margin-top: 8px; }
+.experience .time-ancestry button { min-height: 28px; font-size: 11px; }
+.experience .time-windows { margin-top: 12px; gap: 5px; }
+.experience .interval-choice { border-radius: 3px; overflow: hidden; background: #eef1e6; }
+.experience .time-window { padding: 9px; }
+.experience .time-window strong { font-size: 12px; }
+.experience .time-window small { font-size: 10px; }
+.experience .interval-dive { min-width: 28px; }
+@media (prefers-reduced-motion: no-preference) {
+  .experience .time-selection { animation: surface-arrive var(--motion-fast) var(--ease-out) both; }
+  .experience .time-control[data-expanded=true] .time-windows, .experience .time-control[data-expanded=true] .time-ancestry { animation: context-arrive var(--motion-standard) var(--ease-out) both; }
+  .experience .time-expand svg { transition: transform var(--motion-fast); }
+}
+@media (max-width: 767px) {
+  .explore-workspace.experience .time-control { padding: 10px 14px 7px; }
+  .experience .time-title { gap: 7px; }
+  .experience .time-title > div { min-width: 0; flex: 1; }
+  .experience .time-title h2 { font-size: 18px; }
+  .experience .time-title .quiet-button, .experience .time-expand { min-height: 44px; padding: 7px; font-size: 10px; }
+  .experience .time-title .time-explanation { display: none; }
+  .experience .time-direction { font-size: 8px; }
+  .experience .time-direction span:nth-child(2) { font-size: 8px; letter-spacing: 0; }
+  .experience .time-bottom { display: block; }
+  .experience .time-footnote { font-size: 9px; }
+  .experience .time-windows { overflow-x: auto; }
+  .experience .time-window { min-height: 44px; }
+  .experience .time-ancestry button { min-height: 44px; }
+}

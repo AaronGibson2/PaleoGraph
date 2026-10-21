@@ -1,0 +1,95 @@
+/* A navigation spine and open atlas replace the stacked header/footer composition. */
+.explore-workspace.experience { padding-left: var(--rail-width); background: var(--surface); }
+.experience::before { content: ""; position: fixed; inset: 0 auto 0 0; width: var(--rail-width); background: #103c32; z-index: 12; }
+.explore-workspace.experience .atlas-bar { height: 64px; padding: 0 28px; gap: 28px; color: var(--text); background: #fcfcf7f2; border: 0; border-bottom: 1px solid var(--border); }
+.explore-workspace.experience .atlas-wordmark { position: fixed; inset: 0 auto auto 0; width: var(--rail-width); height: 76px; display: grid; place-items: center; z-index: 14; color: #f1efdc; background: #103c32; }
+.experience .brand-monogram { position: relative; font: italic 36px/.9 Georgia,serif; letter-spacing: -.16em; padding-right: 7px; }
+.experience .brand-monogram > span { color: #d4c49b; }
+.experience .brand-monogram i { position: absolute; right: -3px; top: -5px; width: 4px; height: 4px; background: #d4c49b; border: 0; transform: none; margin: 0; }
+.experience .workspace-identity { display: grid; flex: none; gap: 2px; min-width: 175px; }
+.experience .workspace-identity > span { font: 10px var(--font-accession); letter-spacing: .13em; color: var(--text-muted); }
+.experience .workspace-identity > strong { font: 20px var(--font-scientific); font-weight: 400; }
+.explore-workspace.experience .surface-tabs { position: fixed; left: 0; top: 92px; bottom: 20px; width: var(--rail-width); display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin: 0; z-index: 14; }
+.explore-workspace.experience .surface-tabs button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 68px; padding: 10px 4px; color: #cbd9c9; background: transparent; border: 0; border-left: 3px solid transparent; font-size: 10px; letter-spacing: .02em; }
+.experience .navigation-icon { width: 24px; height: 24px; flex: none; }
+.explore-workspace.experience .surface-tabs button:is([aria-pressed=true],[aria-expanded=true]) { background: #ffffff13; border-left-color: #d4c49b; color: #fffce8; }
+.explore-workspace.experience .surface-tabs button:hover { background: #ffffff0c; color: white; }
+.explore-workspace.experience .atlas-search { max-width: 560px; margin-left: auto; }
+.explore-workspace.experience .atlas-search input { height: 40px; background: #edf1e9; color: var(--text); border: 1px solid transparent; border-radius: 5px; padding-left: 36px; font-size: 13px; }
+.explore-workspace.experience .atlas-search input::placeholder { color: #52665a; font-size: 13px; }
+.experience .atlas-search input:focus { background: var(--surface-raised); border-color: #849a87; }
+.experience .search-symbol, .experience .search-clear { color: var(--accent); }
+.explore-workspace.experience .search-popover { top: 47px; border-radius: 6px; padding: 4px; box-shadow: var(--shadow-panel); }
+.experience .search-popover li button { border-radius: 3px; min-height: 52px; padding: 10px; }
+.explore-workspace.experience .atlas-context { min-height: 48px; max-height: 150px; padding: 6px 28px; gap: 8px 18px; background: #fcfcf7b3; backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); font-size: 12px; }
+.explore-workspace.experience .source-filter select { background: transparent; border-color: transparent; border-right-color: var(--border); border-radius: 0; padding-left: 0; min-height: 32px; font-size: 12px; }
+.experience .context-label { display: none; }
+.experience .context-assertion { padding: 3px 8px; border: 1px solid var(--border); border-radius: 4px; background: #fcfcf7; }
+.explore-workspace.experience .atlas-layout { min-height: 0; }
+.experience .map-workspace { overflow: clip; }
+.experience .atlas-caption { position: absolute; z-index: 3; top: 30px; left: 32px; pointer-events: none; color: #123e35; text-shadow: 0 1px 10px #fcfcf7; }
+.experience .atlas-caption h1 { font: 40px/1.05 var(--font-scientific); letter-spacing: -.04em; margin: 8px 0; }
+.experience .atlas-caption > p:not(.eyebrow) { font-size: 13px; }
+.experience .map-workspace:has(.catalog-panel:not([hidden])) .atlas-caption { left: 480px; }
+.explore-workspace.experience .canvas-toolbar { left: 30px; top: auto; bottom: 65px; gap: 6px; }
+.explore-workspace.experience .canvas-toolbar button { background: #fcfcf7e8; color: var(--accent); border: 1px solid #9cae9a; border-radius: 4px; min-height: 40px; padding: 8px 14px; box-shadow: 0 2px 8px #173e3a10; }
+.experience .map-workspace:not([data-surface=map]) .canvas-toolbar { display: none; }
+.explore-workspace.experience .map-legend { left: 30px; bottom: 26px; padding: 7px 10px; border-radius: 3px; background: #fcfcf7d9; font-size: 10px; }
+.explore-workspace.experience .canvas-source { bottom: 0; left: 30px; max-width: calc(100% - 60px); padding: 5px 0; font-size: 10px; background: #fcfcf7c9; }
+.experience .map-workspace:has(.catalog-panel:not([hidden])) .map-legend { left: 480px; }
+.explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden])) .canvas-toolbar { left: 480px; }
+.experience .map-workspace[data-surface=relationships]:has(.catalog-panel:not([hidden])) .relationship-surface { left: 480px; }
+.explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden])) :is(.map-status,.map-notice) { left: 480px; }
+.experience .map-status, .experience .map-notice { bottom: 120px; left: 30px; border-radius: 3px; }
+.experience .map-workspace:has(.map-status) .map-notice { display: none; }
+.experience .map-workspace:has(.inspector) .atlas-caption { display: none; }
+.experience .map-workspace:has(.inspector) .canvas-toolbar { visibility: hidden; }
+.experience .atlas-selection { top: 22px; right: 70px; padding: 18px 20px; border: 1px solid #adbea7; border-top: 3px solid #47734e; border-radius: 6px; background: #fcfcf7ef; backdrop-filter: blur(12px); box-shadow: var(--shadow-panel); max-width: 320px; }
+.experience .atlas-selection strong { font: 22px/1.2 var(--font-scientific); margin-bottom: 8px; }
+.experience .atlas-selection span { font-size: 12px; line-height: 1.6; }
+.experience .atlas-selection button { display: block; min-height: 36px; font-size: 12px; }
+.explore-workspace.experience .scientific-surface { background: var(--surface); padding: 28px 32px 54px; }
+.explore-workspace.experience .surface-introduction { padding-bottom: 22px; border-bottom: 0; align-items: flex-start; }
+.explore-workspace.experience .surface-introduction h2 { font-size: var(--type-page); line-height: 1.05; letter-spacing: -.035em; }
+.experience .plate-number { color: var(--text-muted); font-size: 10px; border-top-width: 1px; padding-top: 8px; }
+.explore-workspace.experience :is(button,input,select,summary):focus-visible { outline: 2px solid #9d4b30; outline-offset: 3px; }
+.explore-workspace.experience .surface-tabs button:focus-visible { outline-color: #e0d7a9; outline-offset: -4px; }
+@media (max-width: 1100px) {
+  .experience .workspace-identity { min-width: 150px; }
+  .experience .atlas-caption h1 { font-size: 32px; }
+  .explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden])) .canvas-toolbar { left: 428px; }
+  .experience .map-workspace:has(.catalog-panel:not([hidden])) :is(.atlas-caption,.map-legend) { visibility: hidden; }
+  .explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden])) .canvas-toolbar { right: 18px; bottom: 58px; flex-wrap: wrap; }
+  .explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden])) .canvas-toolbar button { max-width: 100%; }
+  .explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden])) :is(.map-status,.map-notice) { left: 428px; right: 18px; bottom: 168px; max-width: none; }
+}
+@media (max-width: 767px) {
+  .explore-workspace.experience { padding-left: 0; }
+  .experience::before { display: none; }
+  .explore-workspace.experience .atlas-bar { height: 108px; min-height: 108px; align-items: flex-start; padding: 8px 12px; gap: 12px; background: var(--surface-raised); }
+  .explore-workspace.experience .atlas-wordmark { position: static; width: 40px; height: 40px; border-radius: 4px; }
+  .experience .brand-monogram { font-size: 26px; }
+  .experience .workspace-identity { display: none; }
+  .explore-workspace.experience .atlas-search { order: 0; margin: 0; flex: 1; min-width: 0; }
+  .explore-workspace.experience .atlas-search input { font-size: 12px; }
+  .explore-workspace.experience .surface-tabs { top: 56px; left: 8px; right: 8px; bottom: auto; width: auto; flex-direction: row; gap: 2px; height: 44px; }
+  .explore-workspace.experience .surface-tabs button { flex: 1; flex-direction: row; min-height: 44px; gap: 5px; padding: 7px 4px; color: #52665a; border: 0; border-bottom: 2px solid transparent; font-size: 11px; }
+  .experience .navigation-icon { width: 17px; height: 17px; }
+  .explore-workspace.experience .surface-tabs button:is([aria-pressed=true],[aria-expanded=true]) { color: #123e35; background: #e6eddf; border-bottom-color: #35664c; }
+  .explore-workspace.experience .atlas-context { padding: 4px 12px; gap: 4px 10px; max-height: 116px; backdrop-filter: none; }
+  .explore-workspace.experience .atlas-context > span:not(.context-assertion) { font-size: 11px; }
+  .explore-workspace.experience .source-filter select { max-width: 14rem; min-height: 36px; }
+  .experience .atlas-caption { display: none; }
+  .experience .atlas-caption h1 { font-size: 32px; }
+  .experience .map-workspace:has(.catalog-panel:not([hidden]),.inspector) .atlas-caption { display: none; }
+  .explore-workspace.experience .canvas-toolbar { left: 12px; bottom: 88px; }
+  .explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden])) .canvas-toolbar { visibility: hidden; }
+  .explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden])) .map-legend { left: 12px; }
+  .explore-workspace.experience .canvas-toolbar button { min-height: 44px; font-size: 11px; padding-inline: 10px; }
+  .explore-workspace.experience .map-legend { bottom: 38px; left: 12px; font-size: 9px; max-width: calc(100% - 24px); }
+  .experience .map-status, .experience .map-notice { bottom: 144px; }
+  .explore-workspace.experience .canvas-source { left: 12px; font-size: 9px; }
+  .explore-workspace.experience .scientific-surface { padding: 22px 16px 45px; }
+  .experience .surface-introduction .plate-number { display: none; }
+  .explore-workspace.experience .map-workspace:has(.catalog-panel:not([hidden]),.inspector) :is(.map-status,.map-notice) { left: 12px; right: 12px; bottom: 0; max-height: 36px; font-size: 10px; }
+}

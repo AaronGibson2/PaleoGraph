@@ -37,7 +37,7 @@ test("specimen relationships are bounded, progressive, accessible and coordinate
 test("large and laptop canvases use the viewport and expose authoritative time",async({page})=>{
  for(const size of [{width:1800,height:1100},{width:1366,height:900}]){
   await page.setViewportSize(size);await page.goto("/explore");await expect(page.locator(".maplibregl-canvas")).toBeVisible();
-  const box=await page.locator(".map-canvas").boundingBox();expect(box!.width).toBe(size.width);expect(box!.height).toBeGreaterThan(size.height*.55);
+  const box=await page.locator(".map-canvas").boundingBox();const navigation=await page.locator(".surface-tabs").boundingBox();expect(box!.x).toBeGreaterThanOrEqual(navigation!.x+navigation!.width);expect(Math.round(box!.x+box!.width)).toBe(size.width);expect(box!.height).toBeGreaterThan(size.height*.55);
   await expect(page.getByText("ICS v2026/06",{exact:true})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight)).toBe(true);
  }
 });

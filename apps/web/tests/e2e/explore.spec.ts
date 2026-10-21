@@ -11,6 +11,7 @@ test("database material, inspection, geological filtering and URL restoration", 
  await expect(page.getByRole("heading",{name:"Sources & evidence"})).toBeVisible();
  await expect(page.locator(".interpretation")).toContainText("not a measured specimen age");
  const selected=new URL(page.url()).searchParams.get("selected");
+ await page.getByRole("button", { name: "Time details", exact: true }).click();
  await page.locator(".time-window").filter({hasText:"Quaternary"}).click();
  expect(new URL(page.url()).searchParams.get("older_ma")).toBe("2.58");
  await page.reload();

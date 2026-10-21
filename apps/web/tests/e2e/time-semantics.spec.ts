@@ -78,6 +78,7 @@ test("locality, Lineage and Atlas describe material coverage without inventing l
   await expect(page.locator(".map-legend")).toContainText("Age unresolved");
   await expect(page.locator(".atlas-context")).toContainText("with numeric bounds");
   await expect(page.locator(".atlas-context")).toContainText("unresolved");
-  await page.locator(".time-window").filter({ hasText: "Quaternary" }).click();
+  await page.getByRole("button", { name: "Time details", exact: true }).click();
+ await page.locator(".time-window").filter({ hasText: "Quaternary" }).click();
   await expect(page.locator(".time-explanation")).toContainText("including boundary equality");
 });

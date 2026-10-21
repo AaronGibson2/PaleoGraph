@@ -1,0 +1,47 @@
+.explore-workspace.experience .inspector { top: 16px; right: 18px; bottom: 58px; width: 440px; max-width: calc(100% - 36px); padding: 24px; border: 1px solid #bdccba; border-top: 0; border-radius: 7px; background: #fcfcf7f5; backdrop-filter: blur(14px); box-shadow: var(--shadow-panel); scroll-padding-top: 80px; }
+.experience .dossier-edition { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; margin-bottom: 12px; border-bottom: 1px solid var(--border); font: 10px var(--font-accession); letter-spacing: .12em; color: #65775f; }
+.experience .dossier-edition svg { width: 22px; height: 22px; }
+.experience .inspector .dossier-breadcrumbs { font-size: 11px; margin: 0 0 14px; gap: 7px; }
+.experience .inspector .inspector-top { align-items: center; }
+.experience .inspector .inspector-top .eyebrow { color: #5a6d5c; font: 10px var(--font-accession); letter-spacing: .08em; }
+.experience .inspector .dossier-title { font: 16px/1.4 var(--font-accession); color: #526b5b; letter-spacing: 0; padding-right: 16px; margin: 8px 0; }
+.experience .inspector .inspector-subtitle { font: italic 30px/1.2 var(--font-scientific); color: var(--text); margin-block: 8px 20px; letter-spacing: -.025em; }
+.experience .inspector .inspection-taxon-cue .taxon-visual { width: 54px; height: 48px; }
+.experience .inspector[data-record-kind=reference] .dossier-title { font: 30px/1.2 var(--font-scientific); letter-spacing: -.025em; color: var(--text); }
+.experience .inspector[data-record-kind=reference] .inspector-subtitle { font: 14px var(--font-accession); }
+.experience .inspector .section-index { background: #fcfcf7f5; backdrop-filter: blur(8px); padding: 7px 0; border-block-color: #c2d0bc; gap: 10px; margin: 15px 0; }
+.experience .inspector .section-index button { font-size: 11px; min-height: 34px; }
+.experience .inspector .entity-stat { align-items: baseline; border-bottom: 1px solid var(--border); padding: 12px 0 18px; gap: 16px; }
+.experience .inspector .entity-stat > strong { font: 36px/1 var(--font-scientific); color: #28593f; }
+.experience .inspector .entity-stat span { font-size: 13px; line-height: 1.6; }
+.experience .inspector .entity-stat small { font-size: 11px; }
+.experience .inspector section { padding: 22px 0; border-top: 1px solid #d4ddce; }
+.experience .inspector h3 { font: 22px/1.2 var(--font-scientific); letter-spacing: -.02em; margin: 5px 0 16px; }
+.experience .inspector p { font-size: 13px; line-height: 1.7; }
+.experience .inspector dl { font-size: 13px; margin: 12px 0; }
+.experience .inspector dl > div { grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); padding: 9px 0; border-bottom: 1px solid #e0e5da; }
+.experience .inspector dt { font-size: 12px; }
+.experience .inspector dd { font-size: 13px; line-height: 1.6; }
+.experience .inspector .interpretation { background: transparent; border: 0; border-top: 1px solid #779c71; padding: 20px 0; margin-top: 10px; }
+.experience .inspector .interpretation h3 { font-size: 30px; }
+.experience .inspector .specimen-placeholder { border: 0; background: #eaf0e2; padding: 12px; margin: 12px 0; border-radius: 3px; }
+.experience .inspector .research-evidence { border-left: 0; padding-left: 0 !important; }
+.experience .inspector .relationship-link { font-size: 13px; min-height: 44px; color: #245a40; }
+.experience .inspector .entity-connections button { padding-block: 12px; border-bottom-color: #dce3d6; }
+.experience .inspector details { font-size: 12px; }
+.experience .inspector .icon-button { min-height: 40px; min-width: 40px; background: #eaf0e2; color: #28593f; border-radius: 50%; }
+.experience .inspector .provenance { background: transparent; }
+.experience .locality-surface .section-index { background: var(--surface); }
+.experience .locality-counts dd { font-size: 36px; }
+.experience .locality-columns { gap: 36px; }
+.experience .locality-time { background: #e0e9d8; border-radius: 5px; }
+.experience .locality-time h3 { font-size: 30px; }
+@media (max-width: 1100px) { .experience .map-workspace:has(.inspector) .catalog-panel { visibility: hidden; pointer-events: none; } }
+@media (max-width: 767px) {
+  .explore-workspace.experience .inspector { top: 10px; right: 8px; left: 8px; bottom: 42px; width: auto; max-width: none; padding: 18px; border-radius: 8px 8px 4px 4px; scroll-padding-top: 90px; }
+  .experience .inspector .inspector-subtitle { font-size: 28px; }
+  .experience .inspector .dossier-title { font-size: 14px; }
+  .experience .inspector .section-index button { min-height: 44px; }
+  .experience .inspector .dossier-breadcrumbs button { min-height: 44px; }
+  .experience .inspector .dossier-edition { padding-bottom: 10px; }
+}

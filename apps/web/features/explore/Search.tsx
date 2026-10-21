@@ -10,8 +10,8 @@ import { prefetchEntity } from "./browseIntent";
 import { IntentButton } from "./IntentButton";
 const EMPTY_RESULTS: EntityRef[] = [];
 
-export function Search({ value, context, onChange, onSelect }: { value: string; context: string; onChange: (value: string) => void; onSelect: (entity: EntityRef) => void }) {
-  const [open, setOpen] = useState(false);
+export function Search({ value, context, initialOpen = false, onChange, onSelect }: { value: string; context: string; initialOpen?: boolean; onChange: (value: string) => void; onSelect: (entity: EntityRef) => void }) {
+  const [open, setOpen] = useState(initialOpen);
   const [active, setActive] = useState(0);
   const [pagination, setPagination] = useState<{ base: string; cursor: string } | null>(null);
   const base = `${context}&q=${encodeURIComponent(value)}`;
