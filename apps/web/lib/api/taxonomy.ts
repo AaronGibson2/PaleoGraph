@@ -22,12 +22,12 @@ export type TaxonomyNode = {
   id: string; parent_id: string | null; name: string; rank: string | null;
   placement: string; identity_hint?: string | null; sources: ("ufvp" | "pbdb")[];
   path: { id: string; name: string; rank: string | null }[]; counts: TaxonomyCounts;
-  classification_path_ids: string[];
+  classification_path_ids: string[]; unified?: boolean; source_disagreement_note?: string | null;
 };
 export type TaxonomyPage = { items: TaxonomyNode[]; total: number; next_offset: number | null; version: string; scope: "florida" };
 export type TaxonomyDetail = {
   node: TaxonomyNode; ancestors: TaxonomyNode[]; concept_total: number; version: string;
-  concepts: { source: "ufvp" | "pbdb"; concept_key: string; taxon_id: string | null; details: { name: string; rank: string | null; qualifiers: string[]; upper_path_placement: boolean; supplied_path: { name: string; rank: string | null }[]; classification_conflict: boolean; hierarchy?: PbdbHierarchy } }[];
+  concepts: { source: "ufvp" | "pbdb"; concept_key: string; taxon_id: string | null; details: { name: string; rank: string | null; qualifiers: string[]; upper_path_placement: boolean; browse_path_adjusted?: boolean; supplied_path: { name: string; rank: string | null }[]; classification_conflict: boolean; hierarchy?: PbdbHierarchy } }[];
   evidence: { id: string; occurrence_id: string; kind: "specimen" | "occurrence"; source: "ufvp" | "pbdb"; label: string; scientific_name: string; locality_id: string | null; locality_name: string | null; older_ma: number | null; younger_ma: number | null; age_basis: string }[];
 };
 export type SourceConcept = TaxonomyDetail["concepts"][number];

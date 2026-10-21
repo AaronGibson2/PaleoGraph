@@ -29,11 +29,11 @@ for (const source of ["all", "ufvp", "pbdb"]) {
 
 test("Animalia, Chordata and Mammalia expand as a tree", async ({ page }, testInfo) => {
   await page.goto("/lineage?source=ufvp");
-  for (const name of ["Animalia", "Chordata", "Mammalia"]) {
+  for (const name of ["Life", "Eucarya", "Opisthokonta", "Animalia", "Chordata", "Mammalia"]) {
     await page.getByRole("button", { name: `Expand ${name}`, exact: true }).click();
     await expect(page.getByRole("button", { name: `Collapse ${name}`, exact: true })).toBeVisible();
   }
-  await expect(page.getByRole("treeitem").filter({ hasText: "Mammalia" }).first()).toHaveAttribute("aria-level", "3");
+  await expect(page.getByRole("treeitem").filter({ hasText: "Mammalia" }).first()).toHaveAttribute("aria-level", "6");
   await page.screenshot({ path: testInfo.outputPath("mammalia-expanded.png") });
 });
 

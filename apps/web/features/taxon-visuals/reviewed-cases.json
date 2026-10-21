@@ -318,7 +318,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "glyptodont"
   },
   {
     "label": "Equus",
@@ -381,7 +382,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "cetacean"
   },
   {
     "label": "Anguilliformes",
@@ -391,7 +393,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "eel"
   },
   {
     "label": "Prorastomidae",
@@ -423,7 +426,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "flatfish"
   },
   {
     "label": "Syngnathidae",
@@ -564,7 +568,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "salamander"
   },
   {
     "label": "Chondrichthyes",
@@ -583,7 +588,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "ray"
   },
   {
     "label": "Squatiniformes",
@@ -593,7 +599,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "angel-shark"
   },
   {
     "label": "Glyptodontidae",
@@ -604,7 +611,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "glyptodont"
   },
   {
     "label": "Protosirenidae",
@@ -647,7 +655,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "eel"
   },
   {
     "label": "Pleuronectiformes",
@@ -657,7 +666,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "archetype",
+    "archetype": "flatfish"
   },
   {
     "label": "Syngnathidae",

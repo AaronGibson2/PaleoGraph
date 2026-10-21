@@ -48,7 +48,7 @@ def test_matching_path_unifies_browse_only_and_is_reversible() -> None:
     "difference", ["parent", "rank", "qualifier", "unknown-rank", "accepted-conflict"]
 )
 def test_incompatible_equal_labels_remain_distinct(difference: str) -> None:
-    a = classification("ufvp", BASE + [("Canis", "genus")])
+    a = classification("ufvp", BASE + [("Canidae", "family"), ("Canis", "genus")])
     values = BASE + [("Canis", "genus")]
     kwargs = {}
     if difference == "parent":

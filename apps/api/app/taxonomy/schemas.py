@@ -45,7 +45,9 @@ class TaxonomyNode(BaseModel):
     path: list[dict[str, Any]]
     sources: list[Literal["ufvp", "pbdb"]]
     counts: EvidenceCounts
-    classification_path_ids: list[UUID] = Field(default_factory=list)
+    classification_path_ids: list[str] = Field(default_factory=list)
+    unified: bool = False
+    source_disagreement_note: str | None = None
 
 
 class TaxonomyPage(BaseModel):

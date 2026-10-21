@@ -13,7 +13,12 @@ from sqlalchemy.orm import Session
 from app.discovery.occurrence_browse import eligibility, query_parameters
 from app.discovery.timescale import POLICY_VERSION
 from app.ingestion.pbdb import POLICY_VERSION as PBDB_POLICY
-from app.models import TaxonomyBrowseConcept, TaxonomyBrowseNode, TaxonomyBrowsePath
+from app.models import (
+    TaxonomyBrowseAlias,
+    TaxonomyBrowseConcept,
+    TaxonomyBrowseNode,
+    TaxonomyBrowsePath,
+)
 from app.taxonomy.pbdb_hierarchy import classification_from_graph
 from app.taxonomy.policy import (
     QUALIFIED,
@@ -25,8 +30,9 @@ from app.taxonomy.policy import (
     normalized,
     pbdb_classification,
 )
+from app.taxonomy.unify import unify
 
-PROJECTION_VERSION = f"{VERSION}:{POLICY_VERSION}:{PBDB_POLICY}:pbdb-hierarchy-v1"
+PROJECTION_VERSION = f"{VERSION}:{POLICY_VERSION}:{PBDB_POLICY}:pbdb-hierarchy-v1:unified-v2"
 
 
 def load_classifications(session: Session) -> list[Classification]:
@@ -261,7 +267,7 @@ def plan(
                 }
             parent = identifier
         leaves[classification.taxon_id] = identifier
-    return nodes, list(concepts.values()), leaves
+    return unify(nodes, list(concepts.values()), leaves)
 
 
 def rebuild(session: Session, scope: str = "florida") -> dict[str, Any]:
@@ -276,7 +282,30 @@ def rebuild(session: Session, scope: str = "florida") -> dict[str, Any]:
         )
         session.execute(text("SET LOCAL jit=off"))
         nodes, concepts, leaves = plan(load_classifications(session), scope)
+        previous: dict[UUID, set[tuple[str, str]]] = defaultdict(set)
+        for previous_row in session.execute(
+            text("SELECT node_id,source,concept_key FROM taxonomy_browse_concept")
+        ):
+            previous[previous_row.node_id].add((previous_row.source, previous_row.concept_key))
+        old_aliases: dict[UUID, UUID] = {
+            alias_row.old_id: alias_row.node_id
+            for alias_row in session.execute(
+                text("SELECT old_id,node_id FROM taxonomy_browse_alias")
+            )
+        }
+        current_concepts: dict[tuple[str, str], set[UUID]] = defaultdict(set)
+        for concept in concepts:
+            current_concepts[concept["source"], concept["concept_key"]].add(concept["node_id"])
+        redirects = {}
+        for old_id, memberships in previous.items():
+            targets = set().union(*(current_concepts[key] for key in memberships))
+            if old_id not in nodes and len(targets) == 1:
+                redirects[old_id] = next(iter(targets))
+        for old_id, target in old_aliases.items():
+            if old_id not in nodes and (target in nodes or target in redirects):
+                redirects[old_id] = redirects.get(target, target)
         for table in (
+            "taxonomy_browse_alias",
             "taxonomy_browse_member",
             "taxonomy_browse_path",
             "taxonomy_browse_concept",
@@ -286,6 +315,10 @@ def rebuild(session: Session, scope: str = "florida") -> dict[str, Any]:
         for model, rows in (
             (TaxonomyBrowseNode, list(nodes.values())),
             (TaxonomyBrowseConcept, concepts),
+            (
+                TaxonomyBrowseAlias,
+                [{"old_id": key, "node_id": value} for key, value in redirects.items()],
+            ),
         ):
             for offset in range(0, len(rows), 1000):
                 session.execute(insert(model), rows[offset : offset + 1000])

@@ -9,6 +9,7 @@ import type { MapOccurrence, Viewport } from "../../lib/api/types";
 import { TimeControl } from "../timeline/TimeControl";
 import { Catalog } from "./Catalog";
 import { NavigationIcon } from "./NavigationIcon";
+import { PaleoGraphBrand } from "../brand/PaleoGraphBrand";
 import { ExplorationToolbar } from "./ExplorationToolbar";
 import { EntityInspector } from "./EntityInspector";
 import { Lineage } from "./Lineage";
@@ -110,7 +111,7 @@ export function ExploreWorkspace({ initial }: { initial: ExploreState }) {
   const hasFilters = active.length > 0 || state.at_lon != null || state.older_ma !== null || !!state.q;
   const clearFilters = () => update({ taxon_id: null, locality_id: null, collection_id: null, institution_id: null, term_id: null, reference_id: null, at_lon: null, at_lat: null, older_ma: null, younger_ma: null, interval_id: null, q: "" }, "push");
   return <div className="explore-workspace experience" data-section={surface}>
-    <header className="atlas-bar"><Link className="atlas-wordmark" href="/" aria-label="PaleoGraph home"><span className="brand-monogram" aria-hidden="true">p<span>g</span><i /></span><span className="sr-only">PaleoGraph</span></Link><div className="workspace-identity"><span>PALEOGRAPH / FLORIDA</span><strong>{surface === "lineage" ? "Taxonomy" : surface === "localities" ? "Localities" : relationships ? "Evidence connections" : "The living archive"}</strong></div>
+    <header className="atlas-bar"><Link className="atlas-wordmark" href="/" aria-label="PaleoGraph home"><PaleoGraphBrand compact /></Link><div className="workspace-identity"><span>PALEOGRAPH / FLORIDA</span><strong>{surface === "lineage" ? "Taxonomy" : surface === "localities" ? "Localities" : relationships ? "Evidence connections" : "The living archive"}</strong></div>
       <Search value={state.q ?? ""} context={context} initialOpen={!!initial.q && !initial.selected} onChange={q => update({ q })} onSelect={pivot} />
       <nav className="surface-tabs" aria-label="Exploration surface"><button aria-pressed={mapVisible && !catalogOpen} onClick={() => update({ surface: "map",catalog:null,inspect:"closed" }, "push")}><NavigationIcon kind="atlas" /><span>Atlas</span></button><button aria-label="Toggle evidence catalog" aria-expanded={catalogOpen} onClick={() => update({catalog:catalogOpen?null:"open"},"push")}><NavigationIcon kind="catalog" /><span>Catalog</span></button><button aria-pressed={surface === "localities"} onClick={() => update({ surface: "localities",catalog:null,inspect:"closed" }, "push")}><NavigationIcon kind="localities" /><span>Localities</span></button><button aria-pressed={surface === "lineage"} title="Florida Taxonomy · source classifications" onClick={() => update({ surface: "lineage", catalog:null, lineage_focus: state.lineage_focus ?? state.taxon_id ?? null,inspect:"closed" }, "push")}><NavigationIcon kind="lineage" /><span>Lineage</span></button></nav>
     </header>

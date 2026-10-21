@@ -1008,6 +1008,16 @@ class TaxonomyBrowseNode(Base):
     summary: Mapped[dict[str, object]] = mapped_column(JSONB)
 
 
+class TaxonomyBrowseAlias(Base):
+    """Derived display redirects, never provider identity aliases."""
+
+    __tablename__ = "taxonomy_browse_alias"
+    old_id: Mapped[UUID] = mapped_column(primary_key=True)
+    node_id: Mapped[UUID] = mapped_column(
+        ForeignKey("taxonomy_browse_node.id", ondelete="CASCADE"), index=True
+    )
+
+
 class TaxonomyBrowseConcept(Base):
     __tablename__ = "taxonomy_browse_concept"
     node_id: Mapped[UUID] = mapped_column(ForeignKey("taxonomy_browse_node.id"), primary_key=True)

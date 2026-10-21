@@ -38,6 +38,7 @@ def resolved(session: Session, identifier: UUID) -> UUID:
     """Old source-taxon URLs resolve through explicit reversible membership only."""
     value = session.scalar(
         text("""SELECT id FROM taxonomy_browse_node WHERE id=:id UNION ALL
+        SELECT node_id FROM taxonomy_browse_alias WHERE old_id=:id UNION ALL
         SELECT node_id FROM taxonomy_browse_concept WHERE taxon_id=:id LIMIT 1"""),
         {"id": identifier},
     )
@@ -132,7 +133,9 @@ def nodes(session: Session, rows: list[Any], query: TaxonomyQuery) -> list[Taxon
                     **row,
                     "counts": summary,
                     "identity_hint": row["summary"].get("identity_hint"),
-                    "classification_path_ids": row["summary"].get("visual_ids", []),
+                    "classification_path_ids": row["summary"].get("visual_ids_nearest", []),
+                    "unified": row["summary"].get("unified", False),
+                    "source_disagreement_note": row["summary"].get("source_disagreement_note"),
                     "sources": [
                         source
                         for source, field in [("ufvp", "ufvp_count"), ("pbdb", "pbdb_count")]
@@ -164,7 +167,9 @@ def listing(
         params["prefix"] = escaped + "%"
         ordering = (
             "CASE WHEN n.search_name=:exact THEN 0 "
-            "WHEN n.search_name LIKE :prefix THEN 1 ELSE 2 END,n.search_name,n.id"
+            "WHEN n.search_name LIKE :prefix THEN 1 ELSE 2 END,n.search_name,"
+            "(n.placement='supported') DESC,(n.ufvp_count>0 AND n.pbdb_count>0) DESC,"
+            "(n.summary->:source->>'evidence_count')::bigint DESC,n.id"
         )
     else:
         clauses.append("n.parent_id=:parent" if parent else "n.parent_id IS NULL")

@@ -46,6 +46,7 @@
 .experience .temporal-coverage { height: 7px; margin: 14px 0 6px; background: #e4e4d8; border-radius: 2px; overflow: hidden; }
 .experience .temporal-coverage > span { display: block; height: 100%; background: #4d7a56; }
 .experience .taxonomy-qualification { padding: 10px 12px; border-left: 2px solid #9c6540; background: #f2ebdf; font-size: 12px; margin-block: 14px; }
+.experience .taxonomy-unified-note { color: var(--text-muted); border-left: 2px solid #799975; padding-left: 10px; }
 .experience .taxonomy-source-actions { gap: 7px; padding-top: 5px; }
 .experience .taxonomy-source-actions select { background: #f2f5ec; font-size: 12px; border-radius: 3px; min-height: 38px; }
 .experience .taxonomy-source-actions label { font-size: 11px; }

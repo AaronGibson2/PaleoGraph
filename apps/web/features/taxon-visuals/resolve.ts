@@ -1,7 +1,8 @@
 import { mammaliaId, taxonomicVisualRules } from "./rules.ts";
+import { expandedVisualRules } from "./expanded-rules.ts";
 import type { ResolvedTaxonVisual } from "./types.ts";
 
-const rules = new Map(taxonomicVisualRules.map(rule => [rule.id, rule]));
+const rules = new Map([...taxonomicVisualRules, ...expandedVisualRules].map(rule => [rule.id, rule]));
 
 /** Source membership only. Path is self/identification first, then nearest parents.
  * Missing context is neutral; labels never determine membership.
@@ -12,7 +13,7 @@ export function resolveTaxonVisual(input: { id?: string; classification_path_ids
     const rule = rules.get(id);
     if (rule && "neutral" in rule) return { kind: "neutral" };
     if (rule && "archetype" in rule && (depth === 0 || rule.inherit)) return { kind: "archetype", archetype: rule.archetype };
-    if (id === mammaliaId) return { kind: "generic", visual: "mammal" };
+    if (id === mammaliaId || id === "pbdb:txn:36651") return { kind: "generic", visual: "mammal" };
   }
   return { kind: "neutral" };
 }
