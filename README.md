@@ -1,18 +1,44 @@
-# PaleoGraph
+<h1 align="center"><img src="docs/brand/readme-header.svg" width="700" alt="PaleoGraph"></h1>
 
-A provenance-aware paleobiology atlas integrating museum material and published occurrence evidence while preserving source identity, uncertainty, taxonomy, temporal interpretation, and the evidence behind each record.
+<p align="center"><strong>Life, recorded.</strong><br>Explore fossil evidence through place, deep time, and the source record.</p>
 
-![PaleoGraph Atlas with evidence catalog and geological time selection](docs/screenshots/atlas.png)
+<p align="center"><a href="https://github.com/AaronGibson2/PaleoGraph/actions/workflows/ci.yml"><img src="https://github.com/AaronGibson2/PaleoGraph/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a> · <a href="docs/scientific-semantics.md">Scientific semantics</a> · <a href="#running-locally">Run locally</a> · <a href="LICENSE">AGPL-3.0-only</a></p>
+
+PaleoGraph is a provenance-aware paleobiology workspace for Florida's fossil record. Explore museum material and published occurrence evidence while preserving source identity, uncertainty, classification, temporal interpretation, and the evidence behind each record.
+
+![PaleoGraph Home with the branching P logo, natural-history composition, and Atlas, Catalog, and Lineage entry points](docs/screenshots/home.png)
 
 ## What it does
 
-Explore Florida's fossil evidence through an interactive Atlas, locality dossiers, a unified Florida taxonomy explorer, geological time selection, and a shared evidence catalog. Search taxa, places, and catalog numbers; inspect identifications, age evidence, source revisions, and explicit bibliographic relationships.
+Move between an interactive Atlas, a shared evidence Catalog, unified Florida Taxonomy in Lineage, and layered source dossiers. Search taxa, places, and catalog numbers; inspect identifications, age evidence, source revisions, and explicit bibliographic relationships.
+
+- **Atlas:** explore represented museum evidence on present-day geography, with locality context and a compact geological time selector.
+- **Catalog:** switch between dense List and visual Records presentations, with source-specific labels and decorative animal forms.
+- **Lineage:** expand a shared classification tree, inspect combined and source-specific counts, and follow complete retained source paths. Hover and keyboard-focus previews offer context before opening a dossier.
+- **Dossiers:** follow section navigation through classification, time, material, provenance, and references without losing the exploration context.
+
+The branching **P** and strata mark, evergreen navigation rail, editorial typography, and 27 decorative animal archetypes form the current [visual identity](docs/visual-identity.md). Responsive layouts and reduced-motion support carry the same workspace across screen sizes. Animal forms are orientation aids, not specimen photographs or species reconstructions.
 
 The validated local scientific dataset contains **462,280 UFVP records**, **18,915 Florida PBDB occurrences**, and **1,118 PBDB collections**. Museum catalog assertions can describe multiple pieces. Published occurrences remain distinct from physical specimens; PBDB ingestion creates **zero canonical Specimens**.
 
-| Search across sources | Florida taxonomy explorer |
+![Current PaleoGraph Atlas with the evergreen navigation rail, museum catalog, attributed basemap, and compact geological timeline](docs/screenshots/atlas.png)
+
+| Catalog · Records presentation | Lineage · unified source evidence |
 | --- | --- |
-| ![Mixed-source search](docs/screenshots/search.png) | ![Expandable Florida classification tree and source-specific evidence](docs/screenshots/lineage.png) |
+| ![Visual Catalog records with source labels and decorative animal forms](docs/screenshots/catalog.png) | ![Shared Crocodylia browse node with crocodilian imagery, UFVP and PBDB counts, and retained source classifications](docs/screenshots/lineage.png) |
+
+| Search across sources | Source dossiers and references |
+| --- | --- |
+| ![Current search presentation with separately typed museum and published evidence](docs/screenshots/search.png) | ![Published occurrence dossier with source-linked bibliographic evidence and section navigation](docs/screenshots/source-references.png) |
+
+<details>
+<summary>Phone-width Catalog</summary>
+
+<img src="docs/screenshots/mobile.png" width="390" alt="PaleoGraph evidence Catalog at phone width, with the current brand mark and accessible navigation controls">
+
+</details>
+
+Screenshots show the current local application with retained Florida evidence; they are not mockups. The complete dataset is not bundled with a fresh clone. Source and map attribution remain visible; [rights and screenshot scope](docs/data-sources.md#interface-artwork-screenshots-and-maps) apply.
 
 ## Engineering highlights
 
@@ -40,7 +66,9 @@ Design C separates cold raw archives from queryable normalized evidence while re
 
 Occurrence is distinct from specimen; taxonomy is distinct from phylogeny. Source assertions remain separate from PaleoGraph interpretation. Source numeric ages remain separate from derived reference envelopes; uncertainty and qualifiers remain visible. Reconciliation candidates do not establish deterministic identity.
 
-The **Lineage** navigation opens **Florida Taxonomy**: an expandable classification tree over compatible UFVP/PBDB evidence, with search, stable focused links, source filters and separate material/occurrence counts. Temporal evidence is secondary node detail. [Explorer semantics and API](docs/taxonomy-explorer.md) describes grouping and unresolved paths. It does not establish evolutionary origin, divergence, extinction timing, or complete geographic range. **PBDB coordinates are withheld from Atlas until datum/CRS semantics are sufficiently verified**; occurrences remain available through nonspatial browsing. See [scientific semantics](docs/scientific-semantics.md).
+The **Lineage** navigation opens **Florida Taxonomy**: compatible UFVP/PBDB classifications share reversible browse nodes despite extra intermediate source levels. Source identities and complete supplied paths remain inspectable; meaningful conflicts and partial/unresolved branches remain explicit. Search favors supported shared groups, source filters keep stable node identities, and redirects preserve merged browse URLs. Combined counts retain separate museum-material and published-occurrence breakdowns.
+
+Temporal evidence is secondary node detail. [Explorer semantics and API](docs/taxonomy-explorer.md) describes grouping and unresolved paths. The tree does not establish evolutionary origin, divergence, extinction timing, or complete geographic range. **PBDB coordinates are withheld from Atlas until datum/CRS semantics are sufficiently verified**; occurrences remain available through nonspatial browsing. See [scientific semantics](docs/scientific-semantics.md).
 
 ## Performance
 
@@ -126,4 +154,6 @@ Coverage reflects retained snapshots and their omissions. Missing evidence does 
 
 ## Current status
 
-Florida multi-source browsing is implemented and locally validated. Global PBDB ingestion architecture has been validated with a retained scale fixture containing 1,507,657 typed source records, 262,144 occurrences, and 29,982,936 proof edges, including replay, recovery, and coupled database/archive restore. **The actual global PBDB import has not been performed.** This is a development application; no production deployment is claimed.
+Florida multi-source browsing, the current visual identity, expanded animal coverage, and unified Lineage are implemented and validated. [CI](https://github.com/AaronGibson2/PaleoGraph/actions/workflows/ci.yml) runs frontend, full API/database, migration, and fixture-backed Chromium checks; retained-Florida browser checks run separately against the local scientific snapshot.
+
+Global PBDB ingestion architecture has been validated with a retained scale fixture containing 1,507,657 typed source records, 262,144 occurrences, and 29,982,936 proof edges, including replay, recovery, and coupled database/archive restore. **The actual global PBDB import has not been performed.** This is a development application; no production deployment is claimed.

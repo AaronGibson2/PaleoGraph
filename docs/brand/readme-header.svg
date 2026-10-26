@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 164" fill="none" role="img" aria-labelledby="title description">
+  <title id="title">PaleoGraph</title>
+  <desc id="description">The branching P and geological strata mark, with the PaleoGraph wordmark on mineral paper.</desc>
+  <rect x=".5" y=".5" width="699" height="163" rx="12" fill="#f1f2e9" stroke="#d0d7c7"/>
+  <g transform="translate(124 22) scale(2)">
+    <g transform="translate(2 4)"><path d="M10 33V7h12a9 9 0 0 1 0 18H10m0 0 12-10M19 31h13M19 36h8" stroke="#153d34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="23" cy="14" r="2.5" fill="#153d34"/></g>
+    <text x="53" y="33" fill="#153d34" font-family="Georgia,serif" font-size="32" letter-spacing="-1.5">PaleoGraph</text>
+  </g>
+  <text x="350" y="134" text-anchor="middle" fill="#53684e" font-family="monospace" font-size="11" letter-spacing="2">PLACE / DEEP TIME / SOURCE EVIDENCE</text>
+</svg>
