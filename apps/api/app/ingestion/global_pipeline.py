@@ -628,6 +628,7 @@ def ingest_global(
                     "0014_design_c_native_cache",
                     "0015_taxonomy_browse",
                     "0016_pbdb_taxonomy_hierarchy",
+                    "0017_taxonomy_browse_alias",
                 }:
                     raise ValueError(
                         "Design C ingestion requires the validated 0013/0014 migrations"
