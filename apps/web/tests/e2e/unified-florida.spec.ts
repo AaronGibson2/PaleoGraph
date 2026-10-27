@@ -18,7 +18,7 @@ test("ordinary Animalia search selects the shared kingdom before unresolved same
   await expect(page.locator(".taxonomy-focus .eyebrow").first()).toContainText("kingdom");
 });
 
-for (const [name, archetype] of [["Crocodylia", "crocodilian"], ["Testudines", "turtle"], ["Anura", "frog"], ["Canis", "carnivoran"], ["Alligator mississippiensis", "crocodilian"], ["Phalacrocorax", "bird"], ["Centrarchidae", "bony-fish"]]) {
+for (const [name, archetype] of [["Crocodylia", "crocodilian"], ["Testudines", "turtle"], ["Anura", "frog"], ["Canis", "dog"], ["Alligator mississippiensis", "crocodilian"], ["Phalacrocorax", "bird"], ["Centrarchidae", "bony-fish"]]) {
   test(`${name} has one shared search destination, recognizable visual and reversible source paths`, async ({ page, request }) => {
     const found = await (await request.get(`${apiBase}/taxonomy/search?source=all&q=${encodeURIComponent(name)}`)).json();
     const exact: TaxonomyNode[] = found.items.filter((node: TaxonomyNode) => node.name === name);

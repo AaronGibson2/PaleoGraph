@@ -18,7 +18,7 @@ Move between an interactive Atlas, a shared evidence Catalog, unified Florida Ta
 - **Lineage:** expand a shared classification tree, inspect combined and source-specific counts, and follow complete retained source paths. Hover and keyboard-focus previews offer context before opening a dossier.
 - **Dossiers:** follow section navigation through classification, time, material, provenance, and references without losing the exploration context.
 
-The **molar and raised atlas arc** mark, evergreen navigation rail, editorial typography, and 27 decorative animal archetypes form the current [visual identity](docs/visual-identity.md). The tooth connects the identity to vertebrate paleontology; the atlas arc connects it to place and exploration. Responsive layouts and reduced-motion support carry the same workspace across screen sizes. Animal forms are orientation aids, not specimen photographs or species reconstructions.
+The **molar and raised atlas arc** mark, evergreen navigation rail, editorial typography, and 58 decorative taxon archetypes form the current [visual identity](docs/visual-identity.md). Ten broad-group symbols and a classification fallback keep every taxon visually represented, including on phones. The tooth connects the identity to vertebrate paleontology; the atlas arc connects it to place and exploration. Responsive layouts and reduced-motion support carry the same workspace across screen sizes. Taxon forms are orientation aids, not specimen photographs or species reconstructions.
 
 <details>
 <summary>View the expanded introduction and creator section</summary>

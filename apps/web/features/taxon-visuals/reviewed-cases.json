@@ -61,7 +61,7 @@
       "4998685a-6fae-48c9-858a-afe33f6fbf8c"
     ],
     "kind": "archetype",
-    "archetype": "terrestrial-ungulate"
+    "archetype": "deer"
   },
   {
     "label": "Bovidae",
@@ -69,7 +69,7 @@
       "a9cc760b-bfe5-42c3-844d-4bc3bb224148"
     ],
     "kind": "archetype",
-    "archetype": "terrestrial-ungulate"
+    "archetype": "bison"
   },
   {
     "label": "Antilocapridae",
@@ -77,7 +77,7 @@
       "dde13772-7d38-4f2c-808f-2683da52b8f0"
     ],
     "kind": "archetype",
-    "archetype": "terrestrial-ungulate"
+    "archetype": "deer"
   },
   {
     "label": "Dromomerycidae",
@@ -101,7 +101,7 @@
       "1891594b-df45-495f-855c-1174915306f0"
     ],
     "kind": "archetype",
-    "archetype": "terrestrial-ungulate"
+    "archetype": "camel"
   },
   {
     "label": "Tayassuidae",
@@ -109,7 +109,7 @@
       "927f8d51-2728-48f5-8874-aee017d19864"
     ],
     "kind": "archetype",
-    "archetype": "terrestrial-ungulate"
+    "archetype": "peccary"
   },
   {
     "label": "Testudines",
@@ -332,7 +332,7 @@
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
     "kind": "archetype",
-    "archetype": "terrestrial-ungulate"
+    "archetype": "horse"
   },
   {
     "label": "Cervus",
@@ -345,7 +345,7 @@
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
     "kind": "archetype",
-    "archetype": "terrestrial-ungulate"
+    "archetype": "deer"
   },
   {
     "label": "Platygonus",
@@ -358,7 +358,7 @@
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
     "kind": "archetype",
-    "archetype": "terrestrial-ungulate"
+    "archetype": "peccary"
   },
   {
     "label": "Trachemys",
@@ -416,7 +416,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Pleuronectiformes",
@@ -448,7 +449,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Mammalia",
@@ -480,7 +482,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Ferae",
@@ -490,7 +493,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Pilosa",
@@ -500,7 +504,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Eulipotyphla",
@@ -510,7 +515,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Desmostylia",
@@ -520,7 +526,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Apatotheria",
@@ -530,7 +537,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Reptilia",
@@ -539,7 +547,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "reptile"
   },
   {
     "label": "Squamata",
@@ -549,7 +558,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "reptile"
   },
   {
     "label": "Amphibia",
@@ -558,7 +568,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "amphibian"
   },
   {
     "label": "Urodela",
@@ -578,7 +589,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "cartilaginous-fish"
   },
   {
     "label": "Rhinopristiformes",
@@ -623,7 +635,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Prorastomidae",
@@ -645,7 +658,8 @@
       "4583ea82-5ca4-44c0-8101-5efe972c72fe",
       "2b5c8b16-1ead-4527-8f34-43cda7973999"
     ],
-    "kind": "neutral"
+    "kind": "generic",
+    "visual": "mammal"
   },
   {
     "label": "Anguilliformes",

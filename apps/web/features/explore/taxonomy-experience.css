@@ -14,7 +14,7 @@
 .experience .taxonomy-row[aria-selected=true] { background-color: #dce8d7; box-shadow: inset 3px 0 #2d654a; }
 .experience .taxonomy-row .taxon-visual { width: 34px; height: 32px; flex-basis: 34px; opacity: .85; }
 .experience .taxonomy-name strong { font: 400 19px/1.25 var(--font-scientific); letter-spacing: -.02em; }
-.experience .taxonomy-name small { font: 10px/1.4 var(--font-accession); letter-spacing: .07em; margin-top: 3px; }
+.experience .taxonomy-name small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 10px/1.4 var(--font-accession); letter-spacing: .07em; margin-top: 3px; }
 .experience .taxonomy-count { flex-basis: 88px; }
 .experience .taxonomy-count strong { font: 500 16px/1.2 var(--font-body); font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
 .experience .taxonomy-count small { font-size: 10px; }
@@ -81,7 +81,7 @@
   .experience .taxonomy-name strong { font-size: 18px; }
   .experience .taxonomy-name small { font-size: 10px; }
   .experience .taxonomy-row { gap: 5px; }
-  .experience .taxonomy-row .taxon-visual { display: none; }
+  .experience .taxonomy-row .taxon-visual { display: inline-flex; width: 24px; height: 28px; flex-basis: 24px; }
   .experience .taxonomy-count { flex-basis: 70px; }
   .experience .taxonomy-count strong { font-size: 14px; }
   .experience .taxonomy-presence { font-size: 9px; }
