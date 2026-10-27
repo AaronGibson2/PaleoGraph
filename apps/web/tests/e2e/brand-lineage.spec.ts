@@ -10,13 +10,29 @@ test("brand mark identifies Home, the workspace and the browser at desktop and p
     await page.goto("/");
     await expect(page.getByRole("link", { name: "PaleoGraph home", exact: true })).toBeVisible();
     await expect(page.locator(".site-header .brand-mark")).toBeVisible();
+    await expect(page.locator(".site-header .brand-mark")).toHaveAttribute("aria-hidden", "true");
+    const fullMark = await page.locator(".site-header .brand-mark").innerHTML();
     const icon = await page.locator('link[rel="icon"]').getAttribute("href");
     expect(icon).toContain("icon.svg");
     const response = await request.get(icon!);
     expect(response.ok()).toBe(true);
     expect(response.headers()["content-type"]).toContain("image/svg+xml");
+    const standalone = await request.get("/brand/paleograph-mark.svg");
+    expect(standalone.ok()).toBe(true);
+    // Published and inline marks must retain the same approved contour.
+    const markGeometry = fullMark.match(/<path[^>]+d="([^"]+)"/g);
+    expect(markGeometry?.length).toBeGreaterThan(0);
+    for (const path of markGeometry ?? []) {
+      expect(await standalone.text()).toContain(path);
+      expect(await response.text()).toContain(path);
+    }
     await page.goto("/explore?catalog=open");
     await expect(page.locator(".atlas-wordmark .brand-mark")).toBeVisible();
+    expect(await page.locator(".atlas-wordmark .brand-mark").innerHTML()).toBe(fullMark);
+    const markBounds = await page.locator(".atlas-wordmark .brand-mark").boundingBox();
+    const linkBounds = await page.getByRole("link", { name: "PaleoGraph home", exact: true }).boundingBox();
+    expect(markBounds!.x).toBeGreaterThanOrEqual(linkBounds!.x);
+    expect(markBounds!.x + markBounds!.width).toBeLessThanOrEqual(linkBounds!.x + linkBounds!.width);
     await expect(page.locator(".catalog-entry").first()).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.getByRole("link", { name: "PaleoGraph home", exact: true }).click();

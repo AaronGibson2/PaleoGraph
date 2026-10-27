@@ -1,13 +1,15 @@
 # PaleoGraph visual identity
 
-The branching **P** connects a classification branch to two short geological strata. Its open bowl and single evidence point work as a compact mark, without illustrating a particular organism or implying a phylogenetic relationship. Evergreen ink, mineral paper and the existing editorial wordmark connect it to the field-atlas interface.
+The **occlusal molar and raised atlas arc** connect vertebrate paleontology to place and exploration. A broad enamel rim and internal wear folds give the tooth its character; the open globe, curved meridian and evidence point extend it into an atlas. The compact proboscidean-inspired form also connects to the creator's related morphometrics work. Evergreen ink, mineral paper and the editorial wordmark carry it into the field-atlas interface.
+
+The approved GPT Image study was converted to single-ink vector paths, preserving its tooth contour and raised arc. It is decorative brand artwork, not a diagnostic tooth diagram, specimen image, taxonomic identification or reconstructed phylogeny. No museum photograph is embedded in the assets.
 
 - [Primary logo](../apps/web/public/brand/paleograph-logo.svg): mark and Georgia wordmark; text remains editable and depends on a serif font.
-- [Standalone mark](../apps/web/public/brand/paleograph-mark.svg): transparent, original vector geometry.
+- [Standalone mark](../apps/web/public/brand/paleograph-mark.svg): transparent, traced vector geometry with enamel folds and the raised atlas arc.
 - The shared `PaleoGraphBrand` component supplies the Home wordmark and compact workspace rail treatment. Parent links provide accessible names; the SVG is decorative.
-- [Browser/app mark](../apps/web/app/icon.svg): a simplified light mark on an evergreen rounded square, served through Next's icon metadata.
+- [Browser/app mark](../apps/web/app/icon.svg): the same light mark on an evergreen rounded square, served through Next's icon metadata.
 
-Use the full signature where space permits and the compact mark in navigation. Keep the silhouette clear at small sizes; avoid additional animation or repeated logos in scientific records.
+Use the full signature where space permits and the compact mark in navigation. Preserve the wider proportions and clear space around the outer rim and arc; do not stretch the tooth into a square. Fine enamel detail naturally recedes at favicon sizes. Parent links retain the accessible PaleoGraph name, so recognition does not depend on interpreting the tooth. Avoid additional animation or repeated logos in scientific records.
 
 ## Decorative animal coverage
 

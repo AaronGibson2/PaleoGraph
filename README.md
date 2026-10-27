@@ -6,7 +6,7 @@
 
 PaleoGraph is a provenance-aware paleobiology workspace for Florida's fossil record. Explore museum material and published occurrence evidence while preserving source identity, uncertainty, classification, temporal interpretation, and the evidence behind each record.
 
-![PaleoGraph Home with the branching P logo, natural-history composition, and Atlas, Catalog, and Lineage entry points](docs/screenshots/home.png)
+![PaleoGraph Home with the molar and atlas arc logo, natural-history composition, and Atlas, Catalog, and Lineage entry points](docs/screenshots/home.png)
 
 ## What it does
 
@@ -17,7 +17,7 @@ Move between an interactive Atlas, a shared evidence Catalog, unified Florida Ta
 - **Lineage:** expand a shared classification tree, inspect combined and source-specific counts, and follow complete retained source paths. Hover and keyboard-focus previews offer context before opening a dossier.
 - **Dossiers:** follow section navigation through classification, time, material, provenance, and references without losing the exploration context.
 
-The branching **P** and strata mark, evergreen navigation rail, editorial typography, and 27 decorative animal archetypes form the current [visual identity](docs/visual-identity.md). Responsive layouts and reduced-motion support carry the same workspace across screen sizes. Animal forms are orientation aids, not specimen photographs or species reconstructions.
+The **molar and raised atlas arc** mark, evergreen navigation rail, editorial typography, and 27 decorative animal archetypes form the current [visual identity](docs/visual-identity.md). The tooth connects the identity to vertebrate paleontology; the atlas arc connects it to place and exploration. Responsive layouts and reduced-motion support carry the same workspace across screen sizes. Animal forms are orientation aids, not specimen photographs or species reconstructions.
 
 The validated local scientific dataset contains **462,280 UFVP records**, **18,915 Florida PBDB occurrences**, and **1,118 PBDB collections**. Museum catalog assertions can describe multiple pieces. Published occurrences remain distinct from physical specimens; PBDB ingestion creates **zero canonical Specimens**.
 
