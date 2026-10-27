@@ -11,6 +11,12 @@ The approved GPT Image study was converted to single-ink vector paths, preservin
 
 Use the full signature where space permits and the compact mark in navigation. Preserve the wider proportions and clear space around the outer rim and arc; do not stretch the tooth into a square. Fine enamel detail naturally recedes at favicon sizes. Parent links retain the accessible PaleoGraph name, so recognition does not depend on interpreting the tooth. Avoid additional animation or repeated logos in scientific records.
 
+## Introductory atlas
+
+Home extends the opening field plate into an editorial collection gallery, an interactive Place / Material / Lineage study, source-context principles, and a creator colophon for Aaron Gibson. Gallery links open ordinary source search; the diagrams are labeled schematic and contain no invented records, ages, or map positions. Existing animal silhouettes remain decorative.
+
+One-time section reveals, a scroll progress rule, enamel-mark branding, and hover/focus responses provide motion without scroll interception or a new animation framework. The study supports arrow, Home, and End keys. Reduced motion removes nonessential movement, including an active section reveal when the preference changes. Main content and exploration links render without JavaScript; the initial search never waits for the editorial effects.
+
 ## Decorative animal coverage
 
 The renderer has 27 reusable body forms: the existing 14 transparent raster masks and 13 original filled vector silhouettes. New forms cover rays, salamanders, lizards, carnivorans, ground sloths, glyptodonts, eels, flatfishes, small insectivores, marsupials, angel sharks, pinnipeds and cetaceans. They share the existing single-ink mask treatment and fit dense rows without new image frameworks or network services.

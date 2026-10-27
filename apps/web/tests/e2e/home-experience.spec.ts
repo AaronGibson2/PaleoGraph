@@ -65,3 +65,58 @@ test("Home remains navigable when live source totals are unavailable", async ({ 
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Atlas", exact: true }).click();
   await expect(page.locator(".maplibregl-canvas")).toBeVisible();
 });
+
+test("Home editorial studies offer keyboard navigation, source search and a creator credit", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: /There is more beneath the surface/ }).click();
+  await expect(page.getByRole("heading", { name: "A past worth looking into." })).toBeInViewport();
+  await expect(page.getByRole("link", { name: "Explore proboscideans in the evidence archive" })).toHaveAttribute("href", "/explore?source=all&q=Proboscidea");
+  await expect(page.getByRole("link", { name: "Explore crocodilians in the evidence archive" })).toHaveAttribute("href", "/explore?source=all&q=Crocodylia");
+  await expect(page.getByRole("link", { name: /Aaron Gibson/ })).toHaveAttribute("href", "https://github.com/AaronGibson2");
+  const place = page.getByRole("tab", { name: /Place/ });
+  await place.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: /Material/ })).toBeFocused();
+  await expect(page.getByRole("tabpanel")).toContainText("Get closer to the record.");
+  await expect(page.getByRole("tabpanel").getByRole("link")).toHaveAttribute("href", "/explore?catalog=open&source=all");
+  await page.keyboard.press("End");
+  await expect(page.getByRole("tab", { name: /Lineage/ })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText("Follow another branch.");
+  await page.keyboard.press("Home");
+  await expect(place).toBeFocused();
+  await expect(page.getByRole("tabpanel")).toContainText("Begin with a landscape.");
+  await page.keyboard.press("ArrowLeft");
+  await page.getByRole("tabpanel").getByRole("link", { name: /Explore Lineage/ }).click();
+  await expect(page.getByRole("treeitem").first()).toBeVisible();
+});
+
+test("Home extended sections stay readable on phones and stop motion when preferences change", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.locator(".home-collection").scrollIntoViewIfNeeded();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect.poll(() => page.locator(".home-experience").evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === "running").length)).toBe(0);
+  for (const selector of [".home-cabinet", ".home-pathways", ".home-principles", ".home-maker"]) {
+    await page.locator(selector).scrollIntoViewIfNeeded();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+  await page.getByRole("tab", { name: /Material/ }).click();
+  expect(await page.locator(".home-study-content").evaluate(element => getComputedStyle(element).animationName)).toBe("none");
+  expect((await page.getByRole("tab", { name: /Material/ }).boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await expect(page.getByRole("tabpanel")).toContainText("Get closer to the record.");
+});
+
+test("Home story and primary exploration remain available without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto("/");
+    await expect(page.getByRole("heading", { name: /For the curious\.\s*For the record\./ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Aaron Gibson/ })).toBeVisible();
+    await expect(page.getByRole("searchbox")).toBeEditable();
+    await expect(page.getByRole("link", { name: /Begin exploring/ })).toHaveAttribute("href", "/explore");
+    await expect(page.locator("[data-home-reveal]").first()).toHaveCSS("opacity", "1");
+  } finally {
+    await context.close();
+  }
+});

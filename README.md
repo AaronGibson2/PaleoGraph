@@ -12,12 +12,20 @@ PaleoGraph is a provenance-aware paleobiology workspace for Florida's fossil rec
 
 Move between an interactive Atlas, a shared evidence Catalog, unified Florida Taxonomy in Lineage, and layered source dossiers. Search taxa, places, and catalog numbers; inspect identifications, age evidence, source revisions, and explicit bibliographic relationships.
 
+- **Introduction:** an editorial field atlas with a vertebrate gallery, an interactive Place / Material / Lineage study, scroll reveals, and a creator credit for Aaron Gibson. Search and primary destinations remain immediately available; reduced motion and no-JavaScript reading are supported.
 - **Atlas:** explore represented museum evidence on present-day geography, with locality context and a compact geological time selector.
 - **Catalog:** switch between dense List and visual Records presentations, with source-specific labels and decorative animal forms.
 - **Lineage:** expand a shared classification tree, inspect combined and source-specific counts, and follow complete retained source paths. Hover and keyboard-focus previews offer context before opening a dossier.
 - **Dossiers:** follow section navigation through classification, time, material, provenance, and references without losing the exploration context.
 
 The **molar and raised atlas arc** mark, evergreen navigation rail, editorial typography, and 27 decorative animal archetypes form the current [visual identity](docs/visual-identity.md). The tooth connects the identity to vertebrate paleontology; the atlas arc connects it to place and exploration. Responsive layouts and reduced-motion support carry the same workspace across screen sizes. Animal forms are orientation aids, not specimen photographs or species reconstructions.
+
+<details>
+<summary>View the expanded introduction and creator section</summary>
+
+![Full PaleoGraph introduction with the vertebrate collection gallery, interactive exploration study, evidence principles, and Aaron Gibson creator credit](docs/screenshots/home-story.png)
+
+</details>
 
 The validated local scientific dataset contains **462,280 UFVP records**, **18,915 Florida PBDB occurrences**, and **1,118 PBDB collections**. Museum catalog assertions can describe multiple pieces. Published occurrences remain distinct from physical specimens; PBDB ingestion creates **zero canonical Specimens**.
 
