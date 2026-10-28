@@ -1,9 +1,10 @@
 {
   "version": 8,
-  "name": "PaleoGraph / Limestone atlas v1",
+  "name": "PaleoGraph / Botanical field atlas",
   "metadata": {
-    "paleograph:version": "1",
-    "paleograph:description": "Project-owned editorial style; present-day geography, not paleogeography."
+    "paleograph:version": 2,
+    "paleograph:geography": "Present-day geographic context, not paleogeography. No fabricated relief or bathymetry.",
+    "paleograph:style-origin": "Original PaleoGraph cartography using OpenMapTiles geographic layers. See docs/cartography.md."
   },
   "glyphs": "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
   "sources": {
@@ -15,20 +16,34 @@
   },
   "layers": [
     {
-      "id": "atlas-paper",
+      "id": "atlas-mineral",
       "type": "background",
       "paint": {
-        "background-color": "#ede5d2"
+        "background-color": "#e5dec6"
       }
     },
     {
-      "id": "woodland",
+      "id": "atlas-wood",
       "type": "fill",
       "source": "atlas",
       "source-layer": "landcover",
       "paint": {
-        "fill-color": "#b5bca2",
-        "fill-opacity": 0.35
+        "fill-color": "#aeb79a",
+        "fill-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          0.12,
+          7,
+          0.22,
+          11,
+          0.38
+        ]
       },
       "filter": [
         "==",
@@ -40,13 +55,158 @@
       ]
     },
     {
-      "id": "water",
+      "id": "atlas-grass",
+      "type": "fill",
+      "source": "atlas",
+      "source-layer": "landcover",
+      "paint": {
+        "fill-color": "#c7c8a9",
+        "fill-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          0.12,
+          7,
+          0.22,
+          11,
+          0.38
+        ]
+      },
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "grass"
+      ]
+    },
+    {
+      "id": "atlas-wetland",
+      "type": "fill",
+      "source": "atlas",
+      "source-layer": "landcover",
+      "paint": {
+        "fill-color": "#89a69c",
+        "fill-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          0.12,
+          7,
+          0.22,
+          11,
+          0.38
+        ]
+      },
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "wetland"
+      ]
+    },
+    {
+      "id": "atlas-sand",
+      "type": "fill",
+      "source": "atlas",
+      "source-layer": "landcover",
+      "paint": {
+        "fill-color": "#e0cda7",
+        "fill-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          0.12,
+          7,
+          0.22,
+          11,
+          0.38
+        ]
+      },
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "sand"
+      ]
+    },
+    {
+      "id": "atlas-settlement",
+      "type": "fill",
+      "source": "atlas",
+      "source-layer": "landuse",
+      "paint": {
+        "fill-color": "#d4c9b4",
+        "fill-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          5,
+          0.25,
+          10,
+          0.65
+        ]
+      },
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "residential",
+            "commercial",
+            "industrial",
+            "suburb"
+          ]
+        ]
+      ],
+      "minzoom": 6
+    },
+    {
+      "id": "atlas-protected-land",
+      "type": "fill",
+      "source": "atlas",
+      "source-layer": "park",
+      "paint": {
+        "fill-color": "#b7bca1",
+        "fill-opacity": 0.22
+      },
+      "minzoom": 7
+    },
+    {
+      "id": "atlas-water",
       "type": "fill",
       "source": "atlas",
       "source-layer": "water",
       "paint": {
-        "fill-color": "#86aaa1",
-        "fill-antialias": true
+        "fill-color": "#173f3c"
       },
       "filter": [
         "!=",
@@ -58,12 +218,12 @@
       ]
     },
     {
-      "id": "shoreline",
+      "id": "atlas-coast",
       "type": "line",
       "source": "atlas",
       "source-layer": "water",
       "paint": {
-        "line-color": "#658b81",
+        "line-color": "#abc0a8",
         "line-width": [
           "interpolate",
           [
@@ -72,21 +232,31 @@
           [
             "zoom"
           ],
-          3,
-          0.4,
-          10,
-          1.2
+          4,
+          0.6,
+          8,
+          1,
+          12,
+          1.6
         ],
-        "line-opacity": 0.6
-      }
+        "line-opacity": 0.85
+      },
+      "filter": [
+        "!=",
+        [
+          "get",
+          "brunnel"
+        ],
+        "tunnel"
+      ]
     },
     {
-      "id": "rivers",
+      "id": "atlas-waterways",
       "type": "line",
       "source": "atlas",
       "source-layer": "waterway",
       "paint": {
-        "line-color": "#7fa49b",
+        "line-color": "#3b7369",
         "line-width": [
           "interpolate",
           [
@@ -95,57 +265,30 @@
           [
             "zoom"
           ],
-          5,
-          0.3,
-          12,
-          1.4
-        ]
+          6,
+          0.4,
+          10,
+          1.15,
+          15,
+          2
+        ],
+        "line-opacity": 0.8
       },
       "minzoom": 6
     },
     {
-      "id": "state-boundaries",
+      "id": "atlas-boundary-2",
       "type": "line",
       "source": "atlas",
       "source-layer": "boundary",
       "paint": {
-        "line-color": "#8a7b62",
-        "line-width": 0.8,
+        "line-color": "#877d65",
+        "line-width": 1,
         "line-dasharray": [
           3,
           3
         ],
-        "line-opacity": 0.6
-      },
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "admin_level"
-          ],
-          4
-        ],
-        [
-          "!=",
-          [
-            "get",
-            "maritime"
-          ],
-          1
-        ]
-      ]
-    },
-    {
-      "id": "country-boundaries",
-      "type": "line",
-      "source": "atlas",
-      "source-layer": "boundary",
-      "paint": {
-        "line-color": "#766954",
-        "line-width": 1,
-        "line-opacity": 0.6
+        "line-opacity": 0.45
       },
       "filter": [
         "all",
@@ -165,15 +308,86 @@
           ],
           1
         ]
-      ]
+      ],
+      "minzoom": 2
     },
     {
-      "id": "quiet-roads",
+      "id": "atlas-boundary-4",
+      "type": "line",
+      "source": "atlas",
+      "source-layer": "boundary",
+      "paint": {
+        "line-color": "#877d65",
+        "line-width": 0.8,
+        "line-dasharray": [
+          3,
+          3
+        ],
+        "line-opacity": 0.45
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "get",
+            "admin_level"
+          ],
+          4
+        ],
+        [
+          "!=",
+          [
+            "get",
+            "maritime"
+          ],
+          1
+        ]
+      ],
+      "minzoom": 4
+    },
+    {
+      "id": "atlas-boundary-6",
+      "type": "line",
+      "source": "atlas",
+      "source-layer": "boundary",
+      "paint": {
+        "line-color": "#877d65",
+        "line-width": 0.5,
+        "line-dasharray": [
+          3,
+          3
+        ],
+        "line-opacity": 0.45
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "get",
+            "admin_level"
+          ],
+          6
+        ],
+        [
+          "!=",
+          [
+            "get",
+            "maritime"
+          ],
+          1
+        ]
+      ],
+      "minzoom": 8
+    },
+    {
+      "id": "atlas-road-casing",
       "type": "line",
       "source": "atlas",
       "source-layer": "transportation",
       "paint": {
-        "line-color": "#c2b698",
+        "line-color": "#e5dec6",
         "line-width": [
           "interpolate",
           [
@@ -182,94 +396,135 @@
           [
             "zoom"
           ],
-          8,
-          0.4,
-          14,
-          1.5
+          7,
+          1,
+          12,
+          3.5,
+          16,
+          6
         ],
-        "line-opacity": 0.55
+        "line-opacity": 0.7
       },
       "filter": [
-        "match",
+        "in",
         [
           "get",
           "class"
         ],
         [
-          "motorway",
-          "trunk",
-          "primary"
-        ],
-        true,
-        false
-      ],
-      "minzoom": 8
-    },
-    {
-      "id": "labels-country",
-      "type": "symbol",
-      "source": "atlas",
-      "source-layer": "place",
-      "paint": {
-        "text-color": "#535c4f",
-        "text-halo-color": "#ede5d2",
-        "text-halo-width": 1.3
-      },
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "country"
-      ],
-      "minzoom": 1,
-      "maxzoom": 6,
-      "layout": {
-        "text-field": [
-          "coalesce",
+          "literal",
           [
-            "get",
-            "name:en"
-          ],
-          [
-            "get",
-            "name_en"
-          ],
-          [
-            "get",
-            "name"
+            "motorway",
+            "trunk",
+            "primary"
           ]
-        ],
-        "text-font": [
-          "Noto Sans Regular"
-        ],
-        "text-size": 13,
-        "text-letter-spacing": 0.14,
-        "text-transform": "uppercase",
-        "text-padding": 12
-      }
+        ]
+      ],
+      "minzoom": 7
     },
     {
-      "id": "labels-state",
-      "type": "symbol",
+      "id": "atlas-major-roads",
+      "type": "line",
       "source": "atlas",
-      "source-layer": "place",
+      "source-layer": "transportation",
       "paint": {
-        "text-color": "#535c4f",
-        "text-halo-color": "#ede5d2",
-        "text-halo-width": 1.3
+        "line-color": "#aa997c",
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          7,
+          0.45,
+          12,
+          1.1,
+          16,
+          2
+        ],
+        "line-opacity": 0.65
       },
       "filter": [
-        "==",
+        "in",
         [
           "get",
           "class"
         ],
-        "state"
+        [
+          "literal",
+          [
+            "motorway",
+            "trunk",
+            "primary"
+          ]
+        ]
       ],
-      "minzoom": 5,
-      "maxzoom": 9,
+      "minzoom": 7
+    },
+    {
+      "id": "atlas-local-roads",
+      "type": "line",
+      "source": "atlas",
+      "source-layer": "transportation",
+      "paint": {
+        "line-color": "#aa997c",
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          0.4,
+          16,
+          1.1
+        ],
+        "line-opacity": 0.4
+      },
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "secondary",
+            "tertiary",
+            "minor",
+            "service"
+          ]
+        ]
+      ],
+      "minzoom": 11
+    },
+    {
+      "id": "atlas-buildings",
+      "type": "fill",
+      "source": "atlas",
+      "source-layer": "building",
+      "paint": {
+        "fill-color": "#d4c9b4",
+        "fill-opacity": 0.65
+      },
+      "minzoom": 14
+    },
+    {
+      "id": "atlas-country-names",
+      "type": "symbol",
+      "source": "atlas",
+      "source-layer": "place",
+      "paint": {
+        "text-color": "#33483f",
+        "text-halo-color": "#e5dec6",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
       "layout": {
         "text-field": [
           "coalesce",
@@ -290,20 +545,139 @@
           "Noto Sans Regular"
         ],
         "text-size": 12,
-        "text-letter-spacing": 0.14,
-        "text-transform": "uppercase",
-        "text-padding": 12
-      }
+        "text-padding": 9,
+        "text-max-width": 10,
+        "text-letter-spacing": 0.13
+      },
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "country"
+      ],
+      "minzoom": 2,
+      "maxzoom": 6
     },
     {
-      "id": "labels-city",
+      "id": "atlas-state-names",
       "type": "symbol",
       "source": "atlas",
       "source-layer": "place",
       "paint": {
-        "text-color": "#535c4f",
-        "text-halo-color": "#ede5d2",
-        "text-halo-width": 1.3
+        "text-color": "#33483f",
+        "text-halo-color": "#e5dec6",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:en"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          12,
+          8,
+          17
+        ],
+        "text-padding": 9,
+        "text-max-width": 10,
+        "text-letter-spacing": 0.12
+      },
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "state"
+      ],
+      "minzoom": 4,
+      "maxzoom": 9
+    },
+    {
+      "id": "atlas-city-names",
+      "type": "symbol",
+      "source": "atlas",
+      "source-layer": "place",
+      "paint": {
+        "text-color": "#33483f",
+        "text-halo-color": "#e5dec6",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:en"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          5,
+          11,
+          10,
+          14
+        ],
+        "text-padding": 14,
+        "text-max-width": 10,
+        "text-variable-anchor": [
+          "top",
+          "bottom",
+          "left",
+          "right"
+        ],
+        "text-radial-offset": 0.55,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          10
+        ]
       },
       "filter": [
         "==",
@@ -313,8 +687,20 @@
         ],
         "city"
       ],
-      "minzoom": 6,
-      "maxzoom": 14,
+      "minzoom": 5,
+      "maxzoom": 18
+    },
+    {
+      "id": "atlas-town-names",
+      "type": "symbol",
+      "source": "atlas",
+      "source-layer": "place",
+      "paint": {
+        "text-color": "#33483f",
+        "text-halo-color": "#e5dec6",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
       "layout": {
         "text-field": [
           "coalesce",
@@ -334,21 +720,205 @@
         "text-font": [
           "Noto Sans Regular"
         ],
-        "text-size": 11,
-        "text-letter-spacing": 0.02,
-        "text-transform": "none",
-        "text-padding": 12
-      }
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          11,
+          14,
+          13
+        ],
+        "text-padding": 9,
+        "text-max-width": 10,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          10
+        ]
+      },
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "town",
+            "village"
+          ]
+        ]
+      ],
+      "minzoom": 10,
+      "maxzoom": 18
     },
     {
-      "id": "labels-town",
+      "id": "atlas-water-names",
+      "type": "symbol",
+      "source": "atlas",
+      "source-layer": "water_name",
+      "paint": {
+        "text-color": "#c9d6c6",
+        "text-halo-color": "#173f3c",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:en"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Noto Sans Italic"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          12,
+          10,
+          14
+        ],
+        "text-padding": 9,
+        "text-max-width": 10,
+        "text-letter-spacing": 0.07
+      },
+      "minzoom": 4,
+      "maxzoom": 18
+    },
+    {
+      "id": "atlas-river-names",
+      "type": "symbol",
+      "source": "atlas",
+      "source-layer": "waterway",
+      "paint": {
+        "text-color": "#c9d6c6",
+        "text-halo-color": "#173f3c",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:en"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Noto Sans Italic"
+        ],
+        "text-size": 11,
+        "text-padding": 9,
+        "text-max-width": 10,
+        "symbol-placement": "line"
+      },
+      "minzoom": 10,
+      "maxzoom": 18
+    },
+    {
+      "id": "atlas-natural-names",
+      "type": "symbol",
+      "source": "atlas",
+      "source-layer": "park",
+      "paint": {
+        "text-color": "#33483f",
+        "text-halo-color": "#e5dec6",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:en"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Noto Sans Italic"
+        ],
+        "text-size": 10,
+        "text-padding": 24,
+        "text-max-width": 10
+      },
+      "minzoom": 12,
+      "maxzoom": 18
+    },
+    {
+      "id": "atlas-island-names",
       "type": "symbol",
       "source": "atlas",
       "source-layer": "place",
       "paint": {
-        "text-color": "#535c4f",
-        "text-halo-color": "#ede5d2",
-        "text-halo-width": 1.3
+        "text-color": "#33483f",
+        "text-halo-color": "#e5dec6",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:en"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Noto Sans Italic"
+        ],
+        "text-size": 11,
+        "text-padding": 9,
+        "text-max-width": 10
       },
       "filter": [
         "==",
@@ -356,10 +926,22 @@
           "get",
           "class"
         ],
-        "town"
+        "island"
       ],
-      "minzoom": 10,
-      "maxzoom": 18,
+      "minzoom": 9,
+      "maxzoom": 18
+    },
+    {
+      "id": "atlas-road-names",
+      "type": "symbol",
+      "source": "atlas",
+      "source-layer": "transportation_name",
+      "paint": {
+        "text-color": "#33483f",
+        "text-halo-color": "#e5dec6",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.3
+      },
       "layout": {
         "text-field": [
           "coalesce",
@@ -379,11 +961,31 @@
         "text-font": [
           "Noto Sans Regular"
         ],
-        "text-size": 11,
-        "text-letter-spacing": 0.02,
-        "text-transform": "none",
-        "text-padding": 12
-      }
+        "text-size": 10,
+        "text-padding": 9,
+        "text-max-width": 10,
+        "symbol-placement": "line",
+        "text-max-angle": 25
+      },
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "motorway",
+            "trunk",
+            "primary",
+            "secondary",
+            "tertiary"
+          ]
+        ]
+      ],
+      "minzoom": 13,
+      "maxzoom": 18
     }
   ]
 }

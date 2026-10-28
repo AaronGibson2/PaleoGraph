@@ -1,0 +1,164 @@
+/* Geographic field, evidence and edge furniture share one Atlas-specific instrument. */
+.experience[data-section=map] { --atlas-edge: 24px; --atlas-ink: #173f3c; }
+.experience[data-section=map] .map-workspace { background: #173f3c; isolation: isolate; }
+.experience[data-section=map] .atlas-caption { top: 24px; left: var(--atlas-edge); padding: 16px 20px 18px; width: 302px; color: #f5edd7; background: #173f3cee; border-left: 1px solid #b7bc94; text-shadow: none; }
+.experience[data-section=map] .atlas-caption .eyebrow { color: #d0c6a2; font: 9px var(--font-accession); letter-spacing: .14em; }
+.experience[data-section=map] .atlas-caption h1 { font-size: 34px; margin: 10px 0; font-weight: 400; }
+.experience[data-section=map] .atlas-caption > p:last-child { color: #d4decf; font-size: 11px; margin: 0; }
+.atlas-position-index { position: absolute; z-index: 5; left: var(--atlas-edge); top: 166px; width: 302px; }
+.atlas-index-toggle { display: flex; align-items: center; gap: 9px; width: 100%; padding: 10px 13px; min-height: 44px; border: 1px solid #c0c3aa; background: #f3eedeea; color: #173f3c; text-align: left; font-size: 12px; }
+.atlas-index-toggle > small { margin-left: auto; font-variant-numeric: tabular-nums; }
+.atlas-position-list { background: #f3eedff5; color: #173f3c; padding: 12px; border: 1px solid #b5baa4; border-top: 0; max-height: min(510px,calc(100dvh - 460px)); overflow-y: auto; overscroll-behavior: contain; }
+.atlas-position-list > p { font-size: 11px; line-height: 1.6; margin: 0 0 10px; }
+.atlas-position-list ol, .atlas-position-selection ol { margin: 0; padding: 0; list-style: none; }
+.atlas-position-list li button { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 54px; padding: 9px 4px; width: 100%; border: 0; border-top: 1px solid #c9cbb8; background: transparent; color: inherit; text-align: left; }
+.atlas-position-list strong { font: 19px var(--font-scientific); }
+.atlas-position-list small { display: block; font-size: 10px; margin-top: 3px; }
+.atlas-coordinate { font: 10px/1.6 var(--font-accession); text-align: right; }
+.atlas-position-list li button:is(:hover,:focus-visible,[aria-pressed=true]) { background: #dce2cd; }
+.atlas-index-pagination { display: flex; gap: 8px; border-top: 1px solid #c0c6b0; padding-top: 8px; }
+.atlas-index-pagination button { min-height: 44px; background: transparent; color: inherit; border: 0; font-size: 10px; flex: 1; }
+.atlas-focus-preview { border-top: 1px solid #a2b09a; padding: 12px 0 2px; font-size: 11px; }
+.atlas-focus-preview > * { display: block; margin-top: 4px; }
+.atlas-focus-preview strong { font-size: 20px; }
+.atlas-position-selection, .atlas-locality-dossier { position: absolute; z-index: 7; right: 64px; top: 16px; bottom: 54px; width: min(414px,calc(100% - 100px)); overflow: auto; overscroll-behavior: contain; color: #173f3c; background: #f4efdfF5; border: 1px solid #c0bba1; box-shadow: -10px 8px 34px #0b282726; scrollbar-gutter: stable; }
+.atlas-position-selection { bottom: auto; max-height: calc(100% - 80px); padding: 0 20px 20px; }
+.atlas-drawer-edition { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 48px; border-bottom: 1px solid #b6bea7; font: 9px var(--font-accession); letter-spacing: .1em; }
+.atlas-drawer-edition button { min-width: 44px; min-height: 44px; border: 0; color: #173f3c; background: transparent; font: 24px var(--font-scientific); }
+.atlas-position-selection h2 { font: 32px/1.05 var(--font-scientific); letter-spacing: -.025em; margin: 20px 0 12px; }
+.atlas-position-selection > p { font-size: 12px; line-height: 1.65; margin-bottom: 16px; }
+.atlas-position-selection li button { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 13px 0; color: inherit; text-align: left; border: 0; border-top: 1px solid #c4c8b3; background: transparent; }
+.atlas-position-selection li button:hover { background: #e6e6d4; }
+.atlas-position-selection li strong { display: block; font: 20px var(--font-scientific); margin: 5px 0; }
+.atlas-position-selection li small { display: block; font-size: 10px; line-height: 1.6; }
+.atlas-position-selection li button > span:last-child { text-align: right; font: 20px var(--font-scientific); }
+.atlas-position-selection > button { min-height: 44px; border: 0; border-top: 1px solid #a9b69d; color: #173f3c; background: transparent; width: 100%; text-align: left; font-size: 12px; }
+.atlas-position-selection > small { display: block; font-size: 10px; line-height: 1.6; color: #54654e; }
+.atlas-locality-dossier > .atlas-drawer-edition { position: sticky; top: 0; z-index: 5; padding-left: 20px; background: #f4efdf; }
+.atlas-drawer-edition .atlas-dossier-graph { min-width: auto; min-height: 44px; padding: 6px; margin-left: auto; font: 10px sans-serif; }
+.experience[data-section=map] .atlas-locality-dossier .scientific-surface { position: static; inset: auto; width: auto; height: auto; padding: 14px 20px 28px; overflow: visible; background: transparent; }
+.atlas-locality-dossier .surface-introduction { padding: 14px 0; }
+.experience .atlas-locality-dossier .surface-introduction h2 { font: 34px/1.1 var(--font-scientific); letter-spacing: -.03em; overflow-wrap: anywhere; }
+.atlas-locality-dossier :is(.plate-number,.locality-actions > button:nth-child(2)) { display: none; }
+.atlas-locality-dossier .locality-actions > button:first-child { display: none; }
+.atlas-locality-dossier .surface-introduction p:not(.eyebrow) { font-size: 11px; line-height: 1.65; }
+.atlas-locality-dossier .locality-columns { display: block; }
+.atlas-locality-dossier .locality-columns > div { min-width: 0; }
+.atlas-locality-dossier .locality-counts { grid-template-columns: 1fr 1fr; gap: 14px; }
+.atlas-locality-dossier .locality-counts dd { font-size: 25px; }
+.atlas-locality-dossier .locality-counts dt { font-size: 10px; }
+.atlas-locality-dossier .section-index { top: 48px; background: #f4efdf; flex-wrap: wrap; }
+.atlas-locality-dossier section { scroll-margin-top: 140px; }
+.atlas-locality-dossier .locality-actions { flex-wrap: wrap; }
+.atlas-locality-dossier .locality-actions button { min-height: 44px; font-size: 10px; }
+.atlas-locality-dossier .association-list-heading { flex-wrap: wrap; gap: 6px; }
+.atlas-locality-dossier .association-tools { flex-wrap: wrap; gap: 6px; }
+.atlas-locality-dossier .association-tools label { flex-basis: 100%; }
+.atlas-locality-dossier .association-rows li button { grid-template-columns: 24px minmax(0,1fr) 54px; gap: 8px; }
+.atlas-locality-dossier .association-rows li button > span:last-child { display: none; }
+.atlas-locality-dossier .association-rows strong { font-size: 14px; }
+.atlas-locality-dossier .association-rows small { font-size: 10px; }
+.atlas-locality-dossier .locality-time { padding: 14px!important; }
+.atlas-locality-dossier .locality-time li { gap: 8px; font-size: 11px; }
+.atlas-locality-dossier .scientific-caveat { margin-top: 16px; }
+.atlas-locality-dossier #locality-provenance dd { overflow-wrap: anywhere; }
+.atlas-locality-dossier :is(#locality-provenance,#locality-references) { border-top: 1px solid #bcc3ac; padding-top: 18px; margin-top: 20px; }
+.atlas-locality-dossier .scientific-facts > div { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid #d4d5c1; font-size: 12px; }
+.atlas-locality-dossier .scientific-facts dt { color: #53634e; font-size: 10px; }
+.atlas-locality-dossier .scientific-facts dd { margin: 0; }
+.experience[data-section=map] .map-workspace:has(.atlas-position-list) :is(.map-legend,.canvas-toolbar) { visibility: hidden; }
+.experience[data-section=map] .map-workspace:has(.atlas-locality-dossier,.atlas-position-selection,.inspector) .atlas-position-index { display: none; }
+.experience[data-section=map] .map-workspace:has(.catalog-panel:not([hidden])) :is(.atlas-caption,.atlas-position-index,.atlas-position-selection) { display: none; }
+.experience[data-section=map] .map-workspace:has(.atlas-locality-dossier) .atlas-caption { opacity: .65; }
+.experience[data-section=map] .canvas-toolbar { left: var(--atlas-edge); bottom: 38px; }
+.experience[data-section=map] .canvas-toolbar button { min-height: 44px; border-radius: 0; color: #f2e9cf; border-color: #a9b89d; background: #173f3cf2; box-shadow: none; }
+.experience[data-section=map] .map-legend { display: block; left: var(--atlas-edge); bottom: 92px; padding: 0; max-width: 285px; color: #f3ecd6; background: #173f3cf2; border: 1px solid #9bab93; border-radius: 0; }
+.experience[data-section=map] .map-legend summary { cursor: pointer; min-height: 44px; padding: 13px; font-size: 11px; }
+.experience[data-section=map] .map-legend > span { display: flex; padding: 5px 13px; font-size: 10px; }
+.experience[data-section=map] .map-legend > p { padding: 4px 13px 12px; font-size: 10px; line-height: 1.6; }
+.experience[data-section=map] .map-legend .legend-point { border-color: #e5d9b6; }
+.experience[data-section=map] .canvas-source { bottom: 0; left: var(--atlas-edge); max-width: calc(100% - 480px); background: #173f3cf2; color: #d9e0cf; padding: 5px 8px; font-size: 9px; gap: 6px; }
+.experience[data-section=map] .canvas-source a { color: #e3e7d7; }
+.experience[data-section=map] .canvas-source > span { display: none; }
+.experience[data-section=map] .map-status, .experience[data-section=map] .map-notice { left: 352px; bottom: 40px; max-width: 300px; padding: 10px 12px; background: #f3eedf; color: #173f3c; font-size: 11px; }
+.experience[data-section=map] .maplibregl-ctrl-top-right { top: 6px; right: 6px; }
+.experience[data-section=map] .maplibregl-ctrl-group { border-radius: 0; box-shadow: 0 0 0 1px #b6c0ac; background: #f3eedf; }
+.experience[data-section=map] .maplibregl-ctrl-group button { width: 44px; height: 44px; }
+.experience[data-section=map] .maplibregl-ctrl-bottom-left { left: auto; right: 12px; bottom: 36px; }
+.experience[data-section=map] .maplibregl-ctrl-scale { color: #173f3c; background: #f3eedfe6; border-color: #728477; }
+.experience[data-section=map] .maplibregl-ctrl-attrib { background: #f3eedff2; font: 10px/20px sans-serif; }
+.atlas-hover-preview .maplibregl-popup-content { padding: 14px 16px; color: #173f3c; border: 1px solid #acb89d; border-radius: 0; background: #f3eedf; box-shadow: 0 4px 20px #112f3426; }
+.atlas-hover-preview .maplibregl-popup-content > div > * { display: block; margin-top: 5px; }
+.atlas-hover-preview strong { font: 23px var(--font-scientific); }
+.atlas-hover-preview small, .atlas-hover-preview span { font-size: 10px; line-height: 1.6; }
+.experience[data-section=map] .unmapped-evidence { top: 24px; bottom: auto; right: 78px; max-width: 270px; padding: 13px 16px; color: #f5edd7; border: 1px solid #93a38a; background: #173f3cf2; z-index: 4; font-size: 11px; }
+.experience[data-section=map] .unmapped-evidence strong { font: 21px var(--font-scientific); font-weight: 400; }
+.experience[data-section=map] .unmapped-evidence p { line-height: 1.6; }
+.experience[data-section=map] .unmapped-evidence summary { min-height: 44px; cursor: pointer; font: 18px/1.3 var(--font-scientific); }
+.experience[data-section=map] .unmapped-evidence summary small { display: block; margin-top: 6px; font: 10px/1.5 sans-serif; }
+.experience[data-section=map] .unmapped-evidence button { min-height: 44px; color: #f3ecd6; border: 0; border-top: 1px solid #a3b293; background: transparent; }
+.experience[data-section=map] .map-workspace:has(.atlas-position-selection,.atlas-locality-dossier,.inspector,.catalog-panel:not([hidden])) .unmapped-evidence { display: none; }
+.experience[data-section=map] .time-control { border-top: 1px solid #b6bf9f; background: #173f3c; color: #e9e5cc; padding-top: 10px; box-shadow: 0 -10px 32px #122f3014; }
+.experience[data-section=map] .time-title h2 { color: #f3ecd6; }
+.experience[data-section=map] .time-control :is(.eyebrow,.time-direction,.time-handle-label,.time-footnote,.time-reference-note,.time-help) { color: #d6dec9; }
+.experience[data-section=map] .time-title :is(.quiet-button,.time-expand) { color: #f3ecd6; border-color: #a2ae94; border-radius: 0; background: #244e46; min-height: 40px; }
+.experience[data-section=map] .time-handle { border-color: #173f3c; background: #e3d2a6; box-shadow: 0 0 0 1px #e3d2a6; }
+.experience[data-section=map] .time-selection { background: #d6c08e44; border-color: #dfd2a4; }
+.experience[data-section=map] .time-bottom a { color: inherit; }
+.experience[data-section=map] .time-ancestry button { color: #e9e5cc; }
+.experience[data-section=map] .time-explanation { color: #d6dec9; }
+@keyframes atlas-field-enter { from { opacity: .15; } to { opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+ .experience[data-section=map] .map-surface { animation: atlas-field-enter 560ms var(--ease-out) both; }
+ .atlas-position-selection, .atlas-locality-dossier { animation: dossier-arrive 320ms var(--ease-out) both; }
+ .atlas-hover-preview .maplibregl-popup-content { animation: context-arrive 140ms var(--ease-out) both; }
+}
+@media (max-width: 1100px) {
+ .experience[data-section=map] .map-workspace:has(.atlas-locality-dossier) .catalog-panel { display: none; }
+ .experience[data-section=map] { --atlas-edge: 16px; }
+ .experience[data-section=map] .atlas-caption { width: 260px; padding: 14px 16px; }
+ .experience[data-section=map] .atlas-caption h1 { font-size: 29px; }
+ .atlas-position-index { width: 260px; top: 151px; }
+ .atlas-position-selection, .atlas-locality-dossier { width: 360px; }
+ .experience[data-section=map] .map-workspace:has(.atlas-locality-dossier,.atlas-position-selection) .atlas-caption { display: none; }
+ .experience[data-section=map] .map-workspace:has(.catalog-panel:not([hidden])) .canvas-toolbar { display: none; }
+ .experience[data-section=map] .unmapped-evidence { max-width: 245px; }
+}
+@media (max-width: 767px) {
+ .experience[data-section=map] { --atlas-edge: 12px; }
+ .experience[data-section=map] .atlas-context { max-height: 94px; flex-wrap: nowrap; overflow: auto; }
+ .experience[data-section=map] .atlas-context > span:not(.context-assertion) { display: none; }
+ .experience[data-section=map] .context-assertion { flex: none; max-width: 240px; }
+ .experience[data-section=map] .context-assertion > small:not(:first-child) { display: none; }
+ .experience[data-section=map] .atlas-caption { display: block; top: 12px; left: 12px; width: min(260px,calc(100% - 90px)); padding: 10px 12px; }
+ .experience[data-section=map] .atlas-caption h1 { font-size: 24px; margin: 6px 0 0; }
+ .experience[data-section=map] .atlas-caption .eyebrow { font-size: 8px; }
+ .experience[data-section=map] .atlas-caption > p:last-child { display: none; }
+ .atlas-position-index { left: 12px; top: 92px; width: min(280px,calc(100% - 84px)); }
+ .atlas-position-list { max-height: 240px; }
+ .atlas-position-selection, .atlas-locality-dossier { left: 8px; right: 8px; top: auto; bottom: 64px; width: auto; max-height: 48%; border-top: 2px solid #a8b697; background: #f4efdf; }
+ .atlas-position-selection { padding: 0 14px 14px; }
+ .atlas-position-selection h2 { font-size: 25px; margin: 12px 0; }
+ .atlas-position-selection h2 br { display: none; }
+ .atlas-position-selection li strong { font-size: 19px; }
+ .experience[data-section=map] .atlas-locality-dossier .scientific-surface { padding: 10px 14px 24px; }
+ .experience .atlas-locality-dossier .surface-introduction h2 { font-size: 29px; }
+ .atlas-locality-dossier .section-index { top: 48px; flex-wrap: nowrap; margin-block: 8px; }
+ .atlas-locality-dossier .section-index button { min-height: 36px; }
+ .atlas-locality-dossier .surface-introduction { padding: 8px 0; }
+ .atlas-locality-dossier .surface-introduction p:not(.eyebrow) { display: none; }
+ .atlas-locality-dossier .dossier-breadcrumbs { font-size: 10px; margin: 0; }
+ .experience[data-section=map] .map-workspace:has(.atlas-position-selection,.atlas-locality-dossier,.inspector,.catalog-panel:not([hidden])) :is(.atlas-caption,.atlas-position-index,.map-legend,.canvas-toolbar) { display: none; }
+ .experience[data-section=map] .inspector { top: auto; bottom: 64px; height: 48%; max-height: 48%; left: 8px; right: 8px; width: auto; }
+ .experience[data-section=map] .map-legend { bottom: 128px; left: 12px; max-width: 265px; }
+ .experience[data-section=map] .map-legend summary { font-size: 10px; }
+ .experience[data-section=map] .canvas-toolbar { left: 12px; bottom: 76px; gap: 5px; }
+ .experience[data-section=map] .canvas-toolbar button { padding: 7px 9px; font-size: 10px; }
+ .experience[data-section=map] .canvas-source { left: 0; bottom: 0; max-width: 100%; width: 100%; font-size: 8px; justify-content: center; padding: 4px; min-height: 24px; visibility: visible!important; }
+ .experience[data-section=map] .maplibregl-ctrl-bottom-right { bottom: 26px; }
+ .experience[data-section=map] .maplibregl-ctrl-bottom-left { bottom: 62px; right: 0; }
+ .experience[data-section=map] .map-status, .experience[data-section=map] .map-notice { left: 12px; right: 12px; bottom: 182px; max-width: 250px; }
+ .experience[data-section=map] .unmapped-evidence { top: 149px; left: 12px; right: 72px; bottom: auto; max-width: 260px; max-height: calc(100% - 270px); overflow: auto; font-size: 10px; }
+ .experience[data-section=map] .unmapped-evidence strong { font-size: 18px; }
+ .experience[data-section=map] .time-title :is(.quiet-button,.time-expand) { min-height: 44px; }
+}

@@ -6,14 +6,14 @@
 
 PaleoGraph is a provenance-aware paleobiology workspace for Florida's fossil record. Explore museum material and published occurrence evidence while preserving source identity, uncertainty, classification, temporal interpretation, and the evidence behind each record.
 
-![PaleoGraph Home with the molar and atlas arc logo, natural-history composition, and Atlas, Catalog, and Lineage entry points](docs/screenshots/home.png)
+![PaleoGraph Home with an imagined stratified Florida landform, the molar and atlas emblem, and immediately usable search and exploration destinations](docs/screenshots/home.png)
 
 ## What it does
 
 Move between an interactive Atlas, a shared evidence Catalog, unified Florida Taxonomy in Lineage, and layered source dossiers. Search taxa, places, and catalog numbers; inspect identifications, age evidence, source revisions, and explicit bibliographic relationships.
 
-- **Introduction:** an editorial field atlas with a vertebrate gallery, an interactive Place / Material / Lineage study, scroll reveals, and a creator credit for Aaron Gibson. Search and primary destinations remain immediately available; reduced motion and no-JavaScript reading are supported.
-- **Atlas:** explore represented museum evidence on present-day geography, with locality context and a compact geological time selector.
+- **Introduction:** an imagined geological Florida landscape unfolds through strata, life impressions, and evidence connections into the molar-and-atlas emblem. Search and destinations are usable immediately. Touch layer controls, a distinct portrait composition, reduced motion, and no-JavaScript reading are supported. A vertebrate gallery, interactive Place / Material / Lineage study, and Aaron Gibson creator credit continue below.
+- **Atlas:** explore a custom botanical field atlas with mineral land, deep green water, evidence clusters, keyboard-accessible position previews, map-edge locality dossiers, and an integrated geological timeline. Present-day geography provides context for source evidence.
 - **Catalog:** switch between dense List and visual Records presentations, with source-specific labels and decorative animal forms.
 - **Lineage:** expand a shared classification tree, inspect combined and source-specific counts, and follow complete retained source paths. Hover and keyboard-focus previews offer context before opening a dossier.
 - **Dossiers:** follow section navigation through classification, time, material, provenance, and references without losing the exploration context.
@@ -29,7 +29,9 @@ The **molar and raised atlas arc** mark, evergreen navigation rail, editorial ty
 
 The validated local scientific dataset contains **462,280 UFVP records**, **18,915 Florida PBDB occurrences**, and **1,118 PBDB collections**. Museum catalog assertions can describe multiple pieces. Published occurrences remain distinct from physical specimens; PBDB ingestion creates **zero canonical Specimens**.
 
-![Current PaleoGraph Atlas with the evergreen navigation rail, museum catalog, attributed basemap, and compact geological timeline](docs/screenshots/atlas.png)
+![PaleoGraph botanical field atlas with Florida and the Keys, evidence clusters, mapped-position navigation, visible map attribution, and the integrated geological timeline](docs/screenshots/atlas.png)
+
+Read the [cartography guide](docs/cartography.md) for the project-owned style, geographic layers, evidence notation, attribution, and maintenance instructions.
 
 | Catalog · Records presentation | Lineage · unified source evidence |
 | --- | --- |

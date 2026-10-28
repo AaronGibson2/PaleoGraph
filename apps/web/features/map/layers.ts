@@ -19,9 +19,10 @@ function addNotation(map: MapLibreMap, name: string, color: string, hollow: bool
   const canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
   const context = canvas.getContext("2d");
   if (!context) return;
-  context.strokeStyle = color; context.fillStyle = hollow ? "#fbf6e8" : color; context.lineWidth = 2.5;
-  if (stack) { context.strokeRect(10, 6, 17, 17); context.fillStyle = "#fbf6e8"; }
-  context.beginPath(); context.moveTo(15, 8); context.lineTo(24, 17); context.lineTo(15, 26); context.lineTo(6, 17); context.closePath(); context.fill(); context.stroke();
+  context.strokeStyle = "#f3ebd4"; context.fillStyle = hollow ? "#f3ebd4" : color; context.lineWidth = 6;
+  context.beginPath(); context.moveTo(16, 7); context.lineTo(25, 16); context.lineTo(16, 25); context.lineTo(7, 16); context.closePath(); context.fill(); context.stroke();
+  context.strokeStyle = color; context.lineWidth = 2.5; context.stroke();
+  if (stack) { context.beginPath(); context.moveTo(9,23); context.lineTo(16,29); context.lineTo(23,23); context.stroke(); }
   const pixels = context.getImageData(0, 0, 32, 32);
   map.addImage(name, { width: 32, height: 32, data: pixels.data }, { pixelRatio: 2 });
 }
@@ -66,8 +67,9 @@ export function addOccurrenceLayers(map: MapLibreMap) {
   addNotation(map, "atlas-record", color("--map-point"), false);
   addNotation(map, "atlas-unknown", color("--map-point"), true);
   addNotation(map, "atlas-stack", color("--map-point"), true, true);
-  map.addSource("occurrences", { type: "geojson", cluster: true, clusterMaxZoom: 9, clusterRadius: 38, clusterProperties: { record_count: ["+", ["get", "record_count"]] }, data: { type: "FeatureCollection", features: [] } });
-  map.addLayer({ id: "place-clusters", type: "circle", source: "occurrences", filter: ["has", "point_count"], paint: { "circle-radius": ["step", ["get", "record_count"], 17, 100, 21, 1000, 25], "circle-color": color("--map-point"), "circle-stroke-color": "#f5ebd3", "circle-stroke-width": 2 } });
+  map.addSource("occurrences", { type: "geojson", cluster: true, clusterMaxZoom: 10, clusterRadius: 42, clusterProperties: { record_count: ["+", ["get", "record_count"]] }, data: { type: "FeatureCollection", features: [] } });
+  map.addLayer({ id: "cluster-rims", type: "circle", source: "occurrences", filter: ["has", "point_count"], paint: { "circle-radius": ["step", ["get", "record_count"], 17, 100, 21, 10000, 25], "circle-color": "#f3ebd4", "circle-opacity": 0, "circle-stroke-color": "#e3d4af", "circle-stroke-width": 1, "circle-stroke-opacity": .75 } });
+  map.addLayer({ id: "place-clusters", type: "circle", source: "occurrences", filter: ["has", "point_count"], paint: { "circle-radius": ["step", ["get", "record_count"], 14, 100, 18, 10000, 22], "circle-color": "#143d35", "circle-stroke-color": "#f5ebd3", "circle-stroke-width": 1.5 } });
   map.addLayer({ id: "place-counts", type: "symbol", source: "occurrences", filter: ["has", "point_count"], layout: { "text-field": ["to-string", ["get", "record_count"]], "text-font": ["Noto Sans Regular"], "text-size": 11, "text-allow-overlap": true }, paint: { "text-color": "#fff5dd" } });
   map.addLayer({
     id: "generalized-locations", type: "circle", source: "occurrences",
@@ -79,7 +81,8 @@ export function addOccurrenceLayers(map: MapLibreMap) {
     filter: ["!", ["has", "point_count"]],
     layout: { "icon-image": ["get", "glyph"], "icon-allow-overlap": true, "icon-ignore-placement": true, "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.8, 10, 1.15] },
   });
-  map.addLayer({ id: "co-location-counts", type: "symbol", source: "occurrences", filter: ["all", ["!", ["has", "point_count"]], [">", ["get", "record_count"], 1]], layout: { "text-field": ["to-string", ["get", "record_count"]], "text-font": ["Noto Sans Regular"], "text-size": 10, "text-offset": [1.25, -1], "text-anchor": "left", "text-allow-overlap": true }, paint: { "text-color": color("--map-point"), "text-halo-color": "#f4efdf", "text-halo-width": 2 } });
+  map.addLayer({ id: "co-location-counts", type: "symbol", source: "occurrences", minzoom: 9, filter: ["all", ["!", ["has", "point_count"]], [">", ["get", "record_count"], 1]], layout: { "text-field": ["to-string", ["get", "record_count"]], "text-font": ["Noto Sans Regular"], "text-size": 10, "text-offset": [1.1, -.8], "text-anchor": "left", "text-allow-overlap": false, "text-padding": 3 }, paint: { "text-color": color("--map-point"), "text-halo-color": "#f4efdf", "text-halo-width": 2 } });
+  map.addLayer({ id: "focused-occurrence", type: "circle", source: "occurrences", filter: ["==", ["get", "id"], ""], paint: { "circle-radius": 17, "circle-color": "#fff5dd", "circle-opacity": .15, "circle-stroke-width": 2, "circle-stroke-color": "#84512c" } });
   map.addLayer({
     id: "selected-occurrence", type: "circle", source: "occurrences",
     filter: ["==", ["get", "id"], ""],

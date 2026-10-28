@@ -24,6 +24,8 @@ test("scientific revision refreshes the timescale configuration alongside materi
   });
   await page.goto("/explore");
   await expect(page.locator(".time-footnote")).toBeVisible();
+  // The revision snapshot and timescale load independently; finish both initial reads.
+  await expect(page.locator(".canvas-source > span")).toContainText("assertions");
   const initial = referenceRequests;
   changed = true;
   await page.evaluate(() => {

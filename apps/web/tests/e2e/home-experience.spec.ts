@@ -3,15 +3,43 @@ import { apiBase, stubBasemap } from "./helpers";
 
 test.beforeEach(async ({ page }) => stubBasemap(page));
 
-test("Home entrance leaves search usable and shows live source totals", async ({ page, request }) => {
+test("a real hard refresh replays the entrance despite the previous session marker", async ({ page, context }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  await expect(page.locator(".opening-scene")).toHaveAttribute("data-phase", "playing");
+  await page.evaluate(() => sessionStorage.setItem("paleograph:opening:atlas-beneath:v1", "seen"));
+  const cdp = await context.newCDPSession(page);
+  await cdp.send("Network.setCacheDisabled", { cacheDisabled: true });
+  await Promise.all([page.waitForEvent("domcontentloaded"), cdp.send("Page.reload", { ignoreCache: true })]);
+  expect(await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)).toBe(false);
+  await expect(page.locator(".opening-scene")).toHaveAttribute("data-phase", "playing", { timeout: 2500 });
+  const names = await page.locator(".opening-art").evaluate(element => element.getAnimations().map(animation => (animation as CSSAnimation).animationName));
+  expect(names).toContain("opening-earth-uncover");
+  await expect(page.getByRole("searchbox")).toBeEditable();
+});
+
+test("late artwork gets its own visible reveal while search remains usable", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.route("**/home/atlas-beneath-*", async route => {
+    await new Promise(resolve => setTimeout(resolve, 2200));
+    await route.continue();
+  });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("searchbox")).toBeEditable();
+  await expect(page.locator(".opening-scene")).toHaveAttribute("data-phase", "playing", { timeout: 4000 });
+  await expect(page.locator(".opening-art")).toHaveJSProperty("complete", true);
+  const progress = await page.locator(".opening-art").evaluate(element => element.getAnimations().find(animation => (animation as CSSAnimation).animationName.startsWith("opening-earth-"))?.currentTime);
+  expect(typeof progress).toBe("number");
+  expect(progress).toBeLessThan(1000);
+});
+
+test("Home opening leaves search and destinations immediately usable and shows live source totals", async ({ page, request }) => {
   const dataset = await (await request.get(`${apiBase}/datasets/ufvp`)).json();
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Life,recorded.");
   await expect(page.getByRole("searchbox")).toBeEditable();
-  const entrance = await page.locator("#home-title").evaluate(element => ({ name: getComputedStyle(element).animationName, duration: parseFloat(getComputedStyle(element).animationDuration) }));
-  expect(entrance.name).toBe("home-reveal");
-  expect(entrance.duration).toBeGreaterThanOrEqual(.45);
-  expect(entrance.duration).toBeLessThanOrEqual(.7);
+  await expect(page.locator("#home-title")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".home-search")).toHaveCSS("animation-name", "none");
   const context = page.getByRole("region", { name: "Current Florida evidence" });
   await expect(context).toContainText(dataset.current_records.toLocaleString("en-US"));
   await expect(context).toContainText(dataset.published_occurrences.toLocaleString("en-US"));
@@ -19,14 +47,14 @@ test("Home entrance leaves search usable and shows live source totals", async ({
   await expect(destinations.getByRole("link", { name: /Atlas/ })).toHaveAttribute("href", "/explore");
   await expect(destinations.getByRole("link", { name: /Catalog/ })).toHaveAttribute("href", "/explore?catalog=open");
   await expect(destinations.getByRole("link", { name: /Lineage/ })).toHaveAttribute("href", "/lineage");
-  expect(await page.locator("video,canvas").count()).toBe(0);
+  expect(await page.locator("video,audio,canvas").count()).toBe(0);
 });
 
 test("Home reduced motion keeps content immediate, focus visible and phone navigation usable", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  for (const selector of ["#home-title", ".home-specimen-silhouette", ".home-strata i", ".home-destinations"]) {
+  for (const selector of ["#home-title", ".opening-art", ".opening-brand-bands i", ".home-destinations"]) {
     const styles = await page.locator(selector).first().evaluate(element => ({ animation: getComputedStyle(element).animationName, opacity: getComputedStyle(element).opacity }));
     expect(styles).toEqual({ animation: "none", opacity: "1" });
   }
@@ -41,6 +69,67 @@ test("Home reduced motion keeps content immediate, focus visible and phone navig
   await expect(input).toBeVisible();
   await page.goForward();
   await expect(page.getByRole("treeitem").first()).toBeVisible();
+});
+
+test("the illustration can fail without blocking entry to the working Atlas", async ({ page }) => {
+  await page.route("**/home/atlas-beneath-*", route => route.abort());
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("searchbox")).toBeEditable();
+  await expect(page.locator(".opening-scene")).toHaveAttribute("data-art", "fallback");
+  await expect(page.locator(".opening-fallback")).toBeVisible();
+  await page.getByRole("navigation", { name: "Choose an exploration destination" }).getByRole("link", { name: "Atlas", exact: true }).click();
+  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
+});
+
+test("the finite opening settles on return, supports replay, and stops for reduced motion", async ({ page }) => {
+  await page.goto("/");
+  const scene = page.locator(".opening-scene");
+  await expect(scene).toHaveAttribute("data-phase", "playing");
+  await expect(page.locator(".home-opening")).toHaveAttribute("data-uncovered", "true", { timeout: 2500 });
+  await expect(scene).toHaveAttribute("data-phase", "playing");
+  await expect(page.locator(".opening-uncover-window")).toHaveCSS("animation-name", "none");
+  await expect(scene).toHaveAttribute("data-phase", "still", { timeout: 6000 });
+  expect(await page.locator(".opening-world").evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === "running").length)).toBe(0);
+  await page.mouse.move(1300, 400);
+  await expect.poll(() => page.locator(".opening-art-depth").evaluate(element => new DOMMatrixReadOnly(getComputedStyle(element).transform).m41)).toBeGreaterThan(1);
+  expect(await page.locator(".opening-art-depth").evaluate(element => Math.abs(new DOMMatrixReadOnly(getComputedStyle(element).transform).m41))).toBeLessThanOrEqual(5);
+  const life = page.getByRole("button", { name: "Life", exact: true });
+  await life.focus();
+  expect(await life.evaluate(element => getComputedStyle(element).outlineStyle)).not.toBe("none");
+  await page.keyboard.press("Space");
+  await expect(life).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Atlas", exact: true }).click();
+  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
+  await page.goBack();
+  await expect(scene).toHaveAttribute("data-phase", "still");
+  await page.getByRole("button", { name: "Replay the opening illustration" }).click();
+  await expect(scene).toHaveAttribute("data-phase", "playing");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(scene).toHaveAttribute("data-phase", "still");
+  expect(await page.locator(".opening-world").evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === "running").length)).toBe(0);
+  await expect(page.locator(".opening-art")).toHaveCSS("opacity", "1");
+});
+
+test("the mobile composition chooses one portrait asset and supports touch without hover", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: "reduce" });
+  try {
+    const page = await context.newPage();
+    const artwork: string[] = [];
+    page.on("request", request => { if (/\/home\/atlas-beneath-/.test(request.url())) artwork.push(request.url()); });
+    await page.goto("/");
+    expect(await page.locator(".opening-art").evaluate(element => (element as HTMLImageElement).currentSrc)).toContain("atlas-beneath-mobile.avif");
+    expect(artwork).toHaveLength(1);
+    await page.getByRole("button", { name: "Life", exact: true }).tap();
+    await expect(page.locator(".opening-scene")).toHaveAttribute("data-focus", "life");
+    await expect(page.locator(".opening-layer-caption")).toHaveText("Life leaves an impression.");
+    await expect(page.getByRole("button", { name: "Life", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Evidence", exact: true }).tap();
+    await expect(page.locator(".opening-layer-caption")).toContainText("A trace becomes a record.");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect((await page.getByRole("button", { name: "Evidence", exact: true }).boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  } finally {
+    await context.close();
+  }
 });
 
 test("Home search opens source search results with a shareable query", async ({ page }) => {

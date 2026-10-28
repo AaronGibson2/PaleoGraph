@@ -21,7 +21,7 @@ test("UFVP inspector separates source geology, derived interpretation, identifie
 
 test("museum marker and catalog inspector fit a 390px viewport with visible attribution",async({page})=>{
  await page.setViewportSize({width:390,height:844});await page.emulateMedia({reducedMotion:"reduce"});await page.goto(`/explore?lat=${fixture.decimalLatitude}&lng=${fixture.decimalLongitude}&zoom=12`);
- const canvas=page.locator(".maplibregl-canvas");await expect(async()=>{await canvas.click();await expect(page.locator(".catalog-panel")).toBeVisible({timeout:500});}).toPass();
+ const canvas=page.locator(".maplibregl-canvas");await expect(async()=>{await canvas.click();await expect(page.locator(".atlas-position-selection")).toBeVisible({timeout:500});}).toPass();
  await openCatalog(page);await page.locator(".catalog-entry").first().click();await expect(page.locator("#inspection-heading")).toBeFocused();
  await expect(page.locator(".maplibregl-ctrl-attrib")).toBeVisible();
  expect(await page.evaluate(()=>document.querySelector(".maplibregl-ctrl-attrib")!.getBoundingClientRect().top>=document.querySelector(".inspector")!.getBoundingClientRect().bottom)).toBe(true);

@@ -14,6 +14,8 @@ import { ExplorationToolbar } from "./ExplorationToolbar";
 import { EntityInspector } from "./EntityInspector";
 import { Lineage } from "./Lineage";
 import { Localities } from "./Localities";
+import { AtlasPlaces, AtlasPositionSelection } from "../map/AtlasPlaces";
+import { AtlasLocalityDossier } from "../map/AtlasLocalityDossier";
 import { Relationships } from "./Relationships";
 import { Search } from "./Search";
 import { DEFAULT_VIEW, FLORIDA_VIEWPORT, parseExploreState, type ExploreState } from "./state";
@@ -26,6 +28,7 @@ import "./explore.css";
 import "./workspace-shell.css";
 import "./experience-shell.css";
 import "./experience-motion.css";
+import "../map/atlas-experience.css";
 
 const ExploreMap = dynamic(() => import("../map/ExploreMap"), { ssr: false, loading: () => <p className="map-loading" role="status">Preparing the atlas...</p> });
 const EMPTY: MapOccurrence[] = [];
@@ -40,6 +43,8 @@ export function ExploreWorkspace({ initial }: { initial: ExploreState }) {
   const { state, update } = useExploreState(initial);
   const [viewport, setViewport] = useState<Viewport>(FLORIDA_VIEWPORT);
   const [retry, setRetry] = useState(0);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [mapReset, setMapReset] = useState(0);
   const catalogOpen=state.catalog==="open";
   const inspectionOpen=state.inspect!=="closed";
   const [identity,setIdentity] = useState<BrowseTarget>();
@@ -65,8 +70,12 @@ export function ExploreWorkspace({ initial }: { initial: ExploreState }) {
   const place = useResource<PlacePage>(state.at_lon != null ? context : null, signal => discovery.places(context, signal));
   const pointSummary=place.data?.items.find(item=>item.longitude===state.at_lon && item.latitude===state.at_lat);
   const selectedKind = state.selected_kind ?? "specimen";
-  const selectedPlace = selectedKind === "specimen" && selectedPosition?.id === state.selected
+  const selectedPlace = state.at_lon != null
+    ? results.mapItems?.find(item => item.longitude === state.at_lon && item.latitude === state.at_lat)?.id
+    : (selectedKind === "specimen" || selectedKind === "locality") && selectedPosition?.id === state.selected
     ? results.mapItems?.find(item => item.longitude === selectedPosition.longitude && item.latitude === selectedPosition.latitude)?.id
+    : selectedKind === "locality" && state.selected && results.mapItems?.length === 1
+    ? results.mapItems[0].id
     : undefined;
   const pivot = useCallback((entity: BrowseTarget) => {
     setIdentity(entity);
@@ -87,14 +96,19 @@ export function ExploreWorkspace({ initial }: { initial: ExploreState }) {
           lon = occurrence.longitude; lat = occurrence.latitude;
         }
         const current=parseExploreState(new URLSearchParams(window.location.search));
-        if (focusSerial.current === serial && current.selected===entity.id && (current.selected_kind??"specimen")===entity.kind && (current.surface??"map")===(state.surface??"map") && typeof lon === "number" && typeof lat === "number") update({ lng: lon, lat, zoom: 10 });
+        if (focusSerial.current === serial && current.selected===entity.id && (current.selected_kind??"specimen")===entity.kind && (current.surface??"map")===(state.surface??"map") && typeof lon === "number" && typeof lat === "number") {
+          setSelectedPosition({id:entity.id,longitude:lon,latitude:lat});
+          // Keep the user's scale and camera when selected evidence is already in view.
+          const outside = lat < viewport.south || lat > viewport.north || (viewport.west <= viewport.east ? lon < viewport.west || lon > viewport.east : lon < viewport.west && lon > viewport.east);
+          if (outside) update({ lng: lon, lat });
+        }
       }).catch(() => { /* Inspector presents recoverable errors. */ });
     }
-  }, [update, state.surface]);
+  }, [update, state.surface, viewport]);
   const selectPlace = useCallback((id: string) => {
     const point = results.mapItems?.find(item => item.id === id);
     if (!point) return;
-    update({ at_lon: point.longitude, at_lat: point.latitude, catalog:"open" }, "push");
+    update({ at_lon: point.longitude, at_lat: point.latitude, catalog: null, selected: null, selected_kind: undefined, inspect: "closed" }, "push");
   }, [results.mapItems, update]);
   const onView = useCallback((view: Pick<ExploreState, "lat" | "lng" | "zoom">, bounds: Viewport) => { setViewport(bounds); update(view); }, [update]);
   const close = () => {
@@ -117,8 +131,9 @@ export function ExploreWorkspace({ initial }: { initial: ExploreState }) {
     </header>
     <ExplorationToolbar label="Exploration controls" className="atlas-context"><label className="source-filter"><span className="sr-only">Evidence source</span><select aria-label="Evidence source" value={state.source ?? (surface === "lineage" ? "all" : "ufvp")} onChange={event => update({source:event.target.value as ExploreState["source"],...(event.target.value === "pbdb" ? {catalog:"open"} : {})},"push")}><option value="all">All evidence</option><option value="ufvp">Museum material · UFVP</option><option value="pbdb">Published occurrences · PBDB</option></select></label><span className="context-label">EXPLORING</span>{active.length === 0 && state.older_ma === null && state.at_lon == null && <span>{state.source === "all" || state.source === "pbdb" ? "Florida’s paleobiological evidence" : "Florida’s vertebrate collections"}</span>}{active.map(key => <ContextLink key={key} identity={identity} kind={key.replace("_id", "") as EntityKind} id={String(state[key])} onRemove={() => update({ [key]: null }, "push")} />)}{state.at_lon != null && <span className="context-assertion"><small>published position</small><strong>{state.at_lat}&deg;, {state.at_lon}&deg;</strong>{pointSummary && <small>{pointSummary.record_count.toLocaleString("en-US")} evidence records / {pointSummary.locality_count} distinct localities / {pointSummary.interpreted_count.toLocaleString("en-US")} with numeric bounds / {(pointSummary.record_count - pointSummary.interpreted_count).toLocaleString("en-US")} unresolved{place.loading ? " / last loaded counts, updating" : place.error ? " / last loaded counts, refresh unavailable" : ""}</small>}<button aria-label="Remove place context" onClick={() => update({ at_lon: null, at_lat: null }, "push")}>&times;</button></span>}{state.older_ma !== null && <span className="context-assertion"><small>time</small><strong>{interval?.name ?? "Custom range"}</strong><button aria-label="Remove time context" onClick={() => update({ older_ma: null, younger_ma: null, interval_id: null }, "push")}>&times;</button></span>}{hasFilters && <button className="toolbar-reset" onClick={clearFilters}>Clear filters</button>}</ExplorationToolbar>
     <div className="atlas-layout"><section className="map-workspace" aria-label={mapVisible ? "Interactive occurrence map" : surface === "lineage" ? "Interactive source classification" : surface === "localities" ? "Locality associations" : "Source-supported relationships"} data-surface={surface}>
-      {mapVisible && <div className="atlas-caption"><p className="eyebrow">Florida / Natural history atlas</p><h1>Evidence, in place.</h1><p>Explore the collections beneath the landscape.</p></div>}
-      <div className="map-surface" aria-hidden={!mapVisible} inert={!mapVisible}><ExploreMap view={{ ...state, selected: selectedPlace ?? null }} items={results.mapItems ?? EMPTY} onView={onView} onSelect={selectPlace} /></div>
+      {mapVisible && <div className="atlas-caption"><p className="eyebrow">01 / Florida field atlas</p><h1>Evidence, in place.</h1><p>Present-day geography. Deep-time evidence.</p></div>}
+      <div className="map-surface" aria-hidden={!mapVisible} inert={!mapVisible}><ExploreMap view={{ ...state, selected: selectedPlace ?? null }} items={results.mapItems ?? EMPTY} preview={preview} reset={mapReset} onPreview={setPreview} onView={onView} onSelect={selectPlace} /></div>
+      {mapVisible && <AtlasPlaces items={results.mapItems ?? EMPTY} viewport={viewport} selected={selectedPlace} preview={preview} onPreview={setPreview} onSelect={selectPlace} />}
       {relationships && (state.selected ? <Relationships kind={selectedKind} id={state.selected} context={context} retry={retry} onPivot={pivot} /> : <div className="graph-welcome"><p className="eyebrow">Connections / not conjecture</p><h2>Every record has a context.</h2><p>Select museum material, a taxon or a locality to follow its source-supported relationships.</p><button onClick={() => update({catalog:"open"},"push")}>Open the museum catalog &rarr;</button></div>)}
       {surface === "localities" && <Localities id={state.locality_id} identity={identity} context={context} onClear={() => update({ locality_id: null, selected: null }, "push")} onPivot={entity => {
         if(entity.kind === "reference" || entity.kind === "occurrence") { pivot(entity); return; }
@@ -126,13 +141,14 @@ export function ExploreWorkspace({ initial }: { initial: ExploreState }) {
         update({ selected: entity.id, selected_kind: entity.kind, inspect:"closed", [`${entity.kind}_id`]: entity.id, at_lon: null, at_lat: null, ...(entity.kind === "taxon" ? { surface: "lineage", lineage_focus: entity.id, taxonomy_focus: null } : {}) }, "push");
       }} onAtlas={() => update({ surface: "map" }, "push")} onLineage={() => update({ surface: "lineage", lineage_focus: state.taxon_id ?? null, taxonomy_focus: null, inspect:"closed" }, "push")} onMaterial={() => update({catalog:"open"},"push")} />}
       {surface === "lineage" && <Lineage focus={state.taxonomy_focus ?? state.lineage_focus} activeTaxon={state.taxon_id} context={context} age={state} intervals={time.data?.units ?? []} onFocus={taxonomy_focus => update({ taxonomy_focus, lineage_focus: null }, "push")} onResolved={resolveTaxonomy} onSelect={pivot} onAtlas={taxon_id => { setViewport(FLORIDA_VIEWPORT); update({ ...DEFAULT_VIEW, surface: "map", taxon_id, inspect:"closed" }, "push"); }} onLocalities={taxon_id => update({ surface: "localities", taxon_id, inspect:"closed" }, "push")} onMaterial={taxon_id => update({ taxon_id,catalog:"open" },"push")} />}
-      <div className="canvas-toolbar"><button id="catalog-toggle" aria-expanded={catalogOpen} onClick={() => update({catalog:catalogOpen?null:"open"},"push")}><span aria-hidden="true">&#8801;</span> {state.source === undefined || state.source === "ufvp" ? "Museum catalog" : "Evidence catalog"}</button><button onClick={() => { setViewport(FLORIDA_VIEWPORT); update(DEFAULT_VIEW, "push"); }}>Return to Florida</button></div>
-      {mapVisible && state.at_lon != null && <div className="atlas-selection" role="status"><strong>Selected published position</strong><span>{pointSummary ? `${pointSummary.locality_count} distinct localities · ${pointSummary.record_count.toLocaleString("en-US")} evidence records` : "Reading related evidence…"}</span><button onClick={() => update({catalog:"open"},"push")}>Inspect related evidence</button><button onClick={() => update({surface:"localities",catalog:null,inspect:"closed"},"push")}>Localities at this position</button></div>}
-      {mapVisible && <div className="map-legend"><span><i className="legend-stack" />Counts represent mapped evidence records</span><span><i className="legend-point unknown" />Age unresolved</span><span><i className="legend-ring" />Generalized location</span></div>}
-      {mapVisible && (state.source === "all" || state.source === "pbdb") && <div className="unmapped-evidence"><strong>Published evidence beyond the map</strong><p>PBDB collection coordinates have an unverified datum. {dataset.data?.published_occurrences?.toLocaleString("en-US")} published occurrences are available through source contexts; they are not assigned to this viewport.</p>{state.source !== "pbdb" ? <button onClick={() => update({source:"pbdb",at_lon:null,at_lat:null,catalog:"open"},"push")}>Browse published occurrences</button> : <p>Catalog scope: selected source and filters, without a map viewport.{state.at_lon != null && " Remove the selected position to browse unmapped evidence."}</p>}</div>}
+      <div className="canvas-toolbar"><button id="catalog-toggle" aria-expanded={catalogOpen} onClick={() => update({catalog:catalogOpen?null:"open"},"push")}><span aria-hidden="true">&#8801;</span> {state.source === undefined || state.source === "ufvp" ? "Museum catalog" : "Evidence catalog"}</button><button onClick={() => { setViewport(FLORIDA_VIEWPORT); update(DEFAULT_VIEW, "push"); setMapReset(value => value + 1); }}>Return to Florida</button></div>
+      {mapVisible && state.at_lon != null && !state.selected && <AtlasPositionSelection context={context} onPivot={pivot} onEvidence={() => update({catalog:"open"},"push")} onClear={() => { update({at_lon:null,at_lat:null},"push"); requestAnimationFrame(() => document.querySelector<HTMLElement>(".atlas-index-toggle")?.focus()); }} />}
+      {mapVisible && <details className="map-legend"><summary>Reading the map</summary><span><i className="legend-stack" />Counts represent mapped evidence records</span><span><i className="legend-point unknown" />Age unresolved</span><span><i className="legend-ring" />Generalized location</span><p>Positions retain source precision. Present-day landscapes do not reconstruct ancient habitats.</p></details>}
+      {mapVisible && (state.source === "all" || state.source === "pbdb") && <details className="unmapped-evidence"><summary>PBDB / unmapped evidence<small>{dataset.data?.published_occurrences?.toLocaleString("en-US")} published occurrences</small></summary><p>PBDB collection coordinates have an unverified datum. {dataset.data?.published_occurrences?.toLocaleString("en-US")} published occurrences are available through source contexts; they are not assigned to this viewport.</p>{state.source !== "pbdb" ? <button onClick={() => update({source:"pbdb",at_lon:null,at_lat:null,catalog:"open"},"push")}>Browse published occurrences</button> : <p>Catalog scope: selected source and filters, without a map viewport.{state.at_lon != null && " Remove the selected position to browse unmapped evidence."}</p>}</details>}
       <Catalog selected={state.selected} open={catalogOpen} query={catalogQuery} onSelect={pivot} onClose={() => update({catalog:null},"push")} retry={retry} />
       {relationships && state.selected && !inspectionOpen && <button className="graph-inspect" onClick={() => update({inspect:null},"push")}>Inspect selected {selectedKind} ↗</button>}
-      {state.selected && inspectionOpen && <EntityInspector kind={selectedKind} id={state.selected} identity={identity} context={context} viewport={viewport} onPivot={pivot} onClose={close} onPosition={onPosition} onInterval={interval => update({ older_ma: interval.older_ma, younger_ma: interval.younger_ma, interval_id: interval.id, time_focus: interval.parent ?? interval.id }, "push")} onLocality={() => update({ surface: "localities",catalog:null,inspect:"closed" }, "push")} onLineage={() => update({ surface: "lineage", lineage_focus: selectedKind === "taxon" ? state.selected : state.taxon_id ?? null,taxonomy_focus:null,inspect:"closed" }, "push")} onGraph={() => update({ surface: "relationships",inspect:"closed" }, "push")} retry={retry} />}
+      {state.selected && inspectionOpen && mapVisible && selectedKind === "locality" && <AtlasLocalityDossier onClear={() => update({locality_id:null,selected:null,selected_kind:undefined,inspect:"closed",at_lon:null,at_lat:null},"push")} onGraph={() => update({surface:"relationships",inspect:"closed"},"push")} id={state.selected} identity={identity} context={context} onPivot={pivot} onClose={close} onMaterial={() => update({catalog:"open",inspect:"closed"},"push")} onLineage={() => update({surface:"lineage",catalog:null,inspect:"closed",taxonomy_focus:null},"push")} />}
+      {state.selected && inspectionOpen && !(mapVisible && selectedKind === "locality") && <EntityInspector kind={selectedKind} id={state.selected} identity={identity} context={context} viewport={viewport} onPivot={pivot} onClose={close} onPosition={onPosition} onInterval={interval => update({ older_ma: interval.older_ma, younger_ma: interval.younger_ma, interval_id: interval.id, time_focus: interval.parent ?? interval.id }, "push")} onLocality={() => update({ surface: "localities",catalog:null,inspect:"closed" }, "push")} onLineage={() => update({ surface: "lineage", lineage_focus: selectedKind === "taxon" ? state.selected : state.taxon_id ?? null,taxonomy_focus:null,inspect:"closed" }, "push")} onGraph={() => update({ surface: "relationships",inspect:"closed" }, "push")} retry={retry} />}
       {mapVisible && (results.loading || results.error) && <div className="map-status" role={results.error ? "alert" : "status"}>{results.error ? "Map data unavailable. Last loaded positions retained." : results.data ? "Updating - last loaded positions remain visible" : "Reading local museum material..."}{results.error && <button onClick={() => setRetry(value => value + 1)}>Retry data</button>}</div>}
       <div className="canvas-source"><a href="https://ipt.floridamuseum.ufl.edu/ipt/resource?r=ufvp" target="_blank" rel="noopener noreferrer">{dataset.data?.creator ? `${dataset.data.creator} / ` : ""}Florida Museum / UFVP</a><a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><a href="https://paleobiodb.org/" target="_blank" rel="noopener noreferrer">PBDB · CC0 1.0</a><span role={dataset.error ? "status" : undefined}>{total ? `${dataset.error ? "Last loaded import status / refresh unavailable / " : ""}${total} assertions / ${dataset.data?.latest_scope?.startsWith("florida-sample") ? "bounded import" : dataset.data?.latest_status ?? "import status unknown"} / v${dataset.data?.version}` : dataset.error ? "Import status unavailable" : "Local import status pending"}</span></div>
     </section></div>

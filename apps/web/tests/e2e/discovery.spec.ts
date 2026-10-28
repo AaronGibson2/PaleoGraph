@@ -18,7 +18,7 @@ test("dense material pagination exposes totals and distinct localities",async({p
  await expect(page.locator(".catalog-pagination")).toContainText("31\u201360 of 73");
  const second=await page.locator(".catalog-entry").evaluateAll(rows=>rows.map(row=>row.id));expect(second.every(id=>!first.includes(id))).toBe(true);
  await page.locator(".entry-pivots button").filter({hasText:"Locality"}).first().click();
- await expect(page.locator(".atlas-context")).toContainText("Fictional automated test locality");await expect(page.locator(".entity-stat")).toContainText("catalog assertions");
+ await expect(page.locator(".atlas-context")).toContainText("Fictional automated test locality");await expect(page.locator(".atlas-locality-dossier .locality-counts")).toContainText("Catalog assertions");
 });
 
 test("specimen relationships are bounded, progressive, accessible and coordinated with context",async({page})=>{
@@ -57,7 +57,7 @@ test("mobile keyboard search opens a locality and retains its context across map
  await page.setViewportSize({width:390,height:844});await page.emulateMedia({reducedMotion:"reduce"});await page.goto("/explore");
  const input=page.getByRole("combobox",{name:/Search/});await input.fill("Fictional automated test locality 0");
  await expect(page.locator("#search-results [role=option]").first()).toContainText("locality");await input.press("Enter");
- await expect(page.locator("#inspection-heading")).toHaveText("Fictional automated test locality 0");
+ await expect(page.locator(".atlas-locality-dossier h2")).toHaveText("Fictional automated test locality 0");
  const id=new URL(page.url()).searchParams.get("locality_id");expect(id).toBeTruthy();
  await page.getByRole("button",{name:"Explore relationships",exact:false}).click();await expect(page.locator(".graph-root")).toContainText("Fictional automated test locality 0");
  await page.getByRole("button",{name:"Atlas",exact:true}).click();expect(new URL(page.url()).searchParams.get("locality_id")).toBe(id);

@@ -46,7 +46,8 @@ test("rendered dense marker opens every co-located record and history restores c
  expect(response.ok()).toBe(true); expect((await response.json()).items[0].record_count).toBe(73);
  await page.goto("/explore?lat=29.36&lng=-82.19&zoom=12");
  const canvas=page.locator(".maplibregl-canvas");
- await expect(async()=>{await canvas.click();await expect(page.locator(".catalog-panel")).toBeVisible({timeout:500});}).toPass();
+ await expect(async()=>{await canvas.click();await expect(page.getByRole("complementary",{name:"Selected published position"})).toBeVisible({timeout:500});}).toPass();
+ await page.getByRole("button",{name:"Inspect related evidence",exact:false}).click();
  await expect(page.locator(".result-count")).toHaveText("73 assertions");
  expect(new URL(page.url()).searchParams.get("at_lon")).toBe("-82.19");
  await page.locator(".catalog-entry").first().click(); await expect(page.locator(".provenance")).toBeVisible();

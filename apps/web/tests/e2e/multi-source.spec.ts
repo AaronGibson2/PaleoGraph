@@ -8,6 +8,7 @@ test("source selection restores URL/history and published evidence remains unmap
  const source=page.getByRole("combobox",{name:"Evidence source"});
  await source.selectOption("all");
  await expect(page.locator(".unmapped-evidence")).toContainText("unverified datum");
+ await page.locator(".unmapped-evidence summary").click();
  await page.getByRole("button",{name:"Browse published occurrences"}).click();
  await expect(page.locator(".result-count")).toHaveText("8 published occurrences");
  expect(new URL(page.url()).searchParams.get("source")).toBe("pbdb");
