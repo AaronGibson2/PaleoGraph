@@ -31,13 +31,13 @@ test("focused material prepares detail and evidence; inspection and history pres
   const detail=page.waitForResponse(r=>r.url().includes('/entities/specimen/'));
   const evidence=page.waitForResponse(r=>/\/occurrences\/[^?]+$/.test(r.url()));
   await first.focus();await Promise.all([detail,evidence]);expect(page.url()).toBe(url);expect(inspected).toHaveLength(2);
-  await first.press('Enter');await expect(page.locator('.provenance')).toBeVisible();
+  await first.press('Enter');await expect(page.locator('#record-material')).toBeVisible();await expect(page.locator('.provenance')).toBeHidden();
   expect(new URL(page.url()).searchParams.get('selected')).toBe(selection?.replace('result-',''));
   for(const key of ['lat','lng','zoom'])expect(new URL(page.url()).searchParams.get(key)).toBe(camera.get(key));
   await page.goBack();await expect(page.locator('.inspector')).toHaveCount(0);
   expect(await page.locator('.catalog-entry').evaluateAll(rows=>rows.map(row=>row.id))).toEqual(rowIds);
-  await page.goForward();await expect(page.locator('.provenance')).toBeVisible();expect(inspected).toHaveLength(2);
-  await page.reload();await expect(page.locator('.provenance')).toBeVisible();await expect(page.locator('.catalog-panel')).toBeVisible();
+  await page.goForward();await expect(page.locator('#record-material')).toBeVisible();expect(inspected).toHaveLength(2);
+  await page.reload();await expect(page.locator('#record-material')).toBeVisible();await expect(page.locator('.catalog-panel')).toBeVisible();
   for(const key of ['lat','lng','zoom'])expect(new URL(page.url()).searchParams.get(key)).toBe(camera.get(key));
 });
 
@@ -91,7 +91,7 @@ test("closing and reopening material preserves pagination without another reques
 
 test("failed import metadata refresh keeps the count and labels its last loaded status",async({page})=>{
   await page.addInitScript(()=>{Object.assign(window,{metadataTestTime:Date.now()});Date.now=()=>Reflect.get(window,'metadataTestTime');});
-  await page.goto('/explore');const status=page.locator('.canvas-source > span');await expect(status).toContainText('81 assertions');
+  await page.goto('/explore');const status=page.locator('.source-import-status');await expect(status).toContainText('81 assertions');
   await page.route('**/api/v1/datasets/ufvp',route=>route.fulfill({status:503,json:{error:{message:'Status temporarily unavailable'}}}));
   await page.evaluate(()=>{Reflect.set(window,'metadataTestTime',Reflect.get(window,'metadataTestTime')+61000);window.dispatchEvent(new Event('focus'));});
   await expect(status).toContainText('Last loaded import status / refresh unavailable');await expect(status).toContainText('81 assertions');

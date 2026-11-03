@@ -37,12 +37,13 @@ test("section index moves keyboard focus without changing the browse URL", async
   await openCatalog(page);
   await page.locator(".catalog-entry").first().click();
   const index = page.locator(".inspector").getByRole("navigation", { name: "Dossier sections" });
-  await expect(index.getByRole("button", {name:"Provenance",exact:true})).toBeVisible();
+  await expect(index.getByRole("button", {name:"Sources",exact:true})).toBeVisible();
   const url=page.url();
   const history=await page.evaluate(()=>window.history.length);
-  await index.getByRole("button", {name:"Provenance",exact:true}).focus();
+  await index.getByRole("button", {name:"Sources",exact:true}).focus();
   await page.keyboard.press("Enter");
-  await expect(page.locator("#record-provenance h3")).toBeFocused();
+  await expect(page.locator("#record-details")).toHaveAttribute("open", "");
+  await expect(page.locator("#record-details > summary")).toBeFocused();
   await expect(page).toHaveURL(url);
   expect(await page.evaluate(()=>window.history.length)).toBe(history);
   await page.keyboard.press("Escape");

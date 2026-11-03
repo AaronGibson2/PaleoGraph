@@ -33,6 +33,10 @@ test("Explore and shareable URLs render on direct navigation and reload", async 
       if (key === "lineage_focus") {
         const resolved = await (await request.get(`${apiBase}/taxonomy/nodes/${value}`)).json();
         await expect.poll(() => new URL(page.url()).searchParams.get("taxonomy_focus")).toBe(resolved.node.id);
+      } else if (["lat", "lng", "zoom"].includes(key)) {
+        const actual = new URL(page.url()).searchParams.get(key);
+        expect(actual).not.toBeNull();
+        expect(Number(actual)).toBe(Number(value));
       } else expect(new URL(page.url()).searchParams.get(key)).toBe(value);
     }
     if (expected.get("surface") === "lineage") {
@@ -40,7 +44,7 @@ test("Explore and shareable URLs render on direct navigation and reload", async 
       await expect(page.locator(".lineage-focus")).toBeVisible();
     }
     if (expected.get("locality_id")) await expect(page.locator(".locality-counts")).toBeVisible();
-    if (expected.get("selected")) await expect(page.locator(".provenance")).toBeVisible();
+    if (expected.get("selected")) await expect(page.locator("#record-material")).toBeVisible();
   }
 });
 
@@ -57,7 +61,7 @@ test("locality, material, specimen and Lineage restore through history and refre
   await expect(associated).toBeEnabled();
   await associated.click();
   await page.locator(".catalog-entry").first().click();
-  await expect(page.locator(".provenance")).toBeVisible();
+  await expect(page.locator("#record-material")).toBeVisible();
   const specimenURL = page.url();
   await page.getByRole("button", { name: "Lineage", exact: true }).click();
   await expect(page.locator(".lineage-surface")).toHaveAttribute("aria-busy", "false");
@@ -65,7 +69,7 @@ test("locality, material, specimen and Lineage restore through history and refre
   const lineageURL = page.url();
   await page.goBack();
   await expect(page).toHaveURL(specimenURL);
-  await expect(page.locator(".provenance")).toBeVisible();
+  await expect(page.locator("#record-material")).toBeVisible();
   await page.goForward();
   await expect(page).toHaveURL(lineageURL);
   expect((await page.reload())?.status()).toBe(200);

@@ -41,3 +41,9 @@ test("map area is bounded, PBDB remains nonspatial, and global search never filt
   assert.equal(new URLSearchParams(catalogContext({ ...state, source: "pbdb" }, viewport)).get("west"), null);
   assert.equal(catalogScope({ ...state, source: "pbdb" }, true), "archive");
 });
+
+test("Catalog preserves the effective all-source scope of an implicit Lineage context", () => {
+  const state = parseExploreState(new URLSearchParams("surface=lineage&discover=open"));
+  assert.equal(new URLSearchParams(catalogContext(state)).get("source"), "all");
+  assert.equal(new URLSearchParams(catalogContext({ ...state, source: "pbdb" })).get("source"), "pbdb");
+});

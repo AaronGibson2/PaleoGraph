@@ -8,6 +8,8 @@ test("database material, inspection, geological filtering and URL restoration", 
  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
  expect(await page.locator(".map-canvas").evaluate(e=>e.getBoundingClientRect().height)).toBeGreaterThan(400);
  await page.locator(".catalog-entry").first().click();
+ await expect(page.locator("#record-details")).not.toHaveAttribute("open");
+ await page.locator("#record-details > summary").click();
  await expect(page.getByRole("heading",{name:"Sources & evidence"})).toBeVisible();
  await expect(page.locator(".interpretation")).toContainText("not a measured specimen age");
  const selected=new URL(page.url()).searchParams.get("selected");
@@ -50,9 +52,9 @@ test("rendered dense marker opens every co-located record and history restores c
  await page.getByRole("button",{name:"Inspect related evidence",exact:false}).click();
  await expect(page.locator(".result-count")).toHaveText("73 assertions");
  expect(new URL(page.url()).searchParams.get("at_lon")).toBe("-82.19");
- await page.locator(".catalog-entry").first().click(); await expect(page.locator(".provenance")).toBeVisible();
+ await page.locator(".catalog-entry").first().click(); await expect(page.locator("#record-material")).toBeVisible();
  const selected=new URL(page.url()).searchParams.get("selected");
  await page.goBack(); await expect(page.locator(".inspector")).toHaveCount(0);
- await page.goForward(); await expect(page.locator(".provenance")).toBeVisible();
+ await page.goForward(); await expect(page.locator("#record-material")).toBeVisible();
  expect(new URL(page.url()).searchParams.get("selected")).toBe(selected);
 });

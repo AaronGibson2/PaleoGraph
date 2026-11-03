@@ -11,6 +11,9 @@ test("UFVP inspector separates source geology, derived interpretation, identifie
  await page.goto(`/explore?selected_kind=specimen&selected=${stable("specimen")}`);
  await expect(page.locator("#inspection-heading")).toContainText(fixture.catalogNumber);
  await expect(page.locator(".inspector-subtitle")).toHaveText(fixture.scientificName);
+ await expect(page.locator("#record-details")).not.toHaveAttribute("open");
+ await expect(page.locator("#record-identifiers")).toBeHidden();
+ await page.locator("#record-details > summary").click();
  await expect(page.locator(".source-values")).toContainText(fixture.earliestEpochOrLowestSeries);
  await expect(page.locator(".interpretation")).toContainText("0.129\u20130.0117 Ma");
  await expect(page.locator(".specimen-identifiers")).toContainText(fixture.occurrenceID);

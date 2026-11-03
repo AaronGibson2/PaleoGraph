@@ -66,7 +66,10 @@ test("archive presentation preserves filters and opens an animated source dossie
   const url = page.url();
   await page.getByRole("group", { name: "Catalog presentation" }).getByRole("button", { name: "Records", exact: true }).click();
   await expect(page.locator(".catalog-panel")).toHaveAttribute("data-view", "records");
-  await expect(page).toHaveURL(url);
+  const restored = new URL(page.url());
+  expect(restored.searchParams.get("catalog_view")).toBe("records");
+  restored.searchParams.delete("catalog_view");
+  expect(restored.href).toBe(url);
   await page.locator(".catalog-entry").first().click();
   await expect(page.locator(".inspector")).toBeVisible();
   expect(await page.locator(".inspector").evaluate(element => getComputedStyle(element).animationName)).toBe("dossier-arrive");

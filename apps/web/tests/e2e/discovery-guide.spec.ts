@@ -83,9 +83,12 @@ test("phone discovery remains usable without horizontal overflow", async ({ page
   await expect(page.locator("#discovery-toggle")).toBeFocused();
 });
 
-test("phone catalog leaves room for records with secondary refinements collapsed", async ({ page }) => {
+test("phone catalog leaves room for records with secondary refinements collapsed", async ({ page, request }) => {
+  const sample = await (await request.get(`${apiBase}/catalog?source=all&limit=1`)).json();
+  expect(sample.items.length).toBeGreaterThan(0);
+  const needle = sample.items[0].scientific_name;
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/explore?source=all&catalog=open&catalog_scope=archive&catalog_q=Canis");
+  await page.goto(`/explore?source=all&catalog=open&catalog_scope=archive&catalog_q=${encodeURIComponent(needle)}`);
   await expect(page.locator(".catalog-entry").first()).toBeVisible();
   const list = await page.locator(".catalog-list").boundingBox();
   expect(list?.height).toBeGreaterThan(150);
@@ -93,5 +96,20 @@ test("phone catalog leaves room for records with secondary refinements collapsed
   await page.locator(".catalog-options summary").click();
   await expect(page.getByLabel("Catalog area", { exact: true })).toBeVisible();
   await page.locator(".catalog-options summary").click();
+  await expect(page.locator(".catalog-entry").first()).toBeVisible();
+});
+
+test("guide transitions retain the effective source instead of changing surface defaults", async ({ page }) => {
+  await page.goto("/explore?discover=open");
+  await expect(page.getByLabel("Evidence source", { exact: true })).toHaveValue("ufvp");
+  await page.locator(".discovery-cards li > button").first().click();
+  await expect(page.locator(".lineage-surface")).toBeVisible();
+  await expect(page.getByLabel("Evidence source", { exact: true })).toHaveValue("ufvp");
+  expect(new URL(page.url()).searchParams.get("source")).toBe("ufvp");
+  await page.goto("/lineage?discover=open");
+  await expect(page.getByLabel("Evidence source", { exact: true })).toHaveValue("all");
+  const response = page.waitForResponse(response => new URL(response.url()).pathname.endsWith("/catalog"));
+  await page.getByRole("button", { name: "Open the full Catalog", exact: false }).click();
+  expect(new URL((await response).url()).searchParams.get("source")).toBe("all");
   await expect(page.locator(".catalog-entry").first()).toBeVisible();
 });

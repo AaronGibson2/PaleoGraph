@@ -45,3 +45,15 @@
   .experience .inspector .dossier-breadcrumbs button { min-height: 44px; }
   .experience .inspector .dossier-edition { padding-bottom: 10px; }
 }
+
+.experience .inspector .record-details { margin-top: 18px; border: 1px solid #c6d2bd; border-radius: 5px; background: #f4f6ee; }
+.experience .inspector .record-details > summary { padding: 14px; min-height: 44px; cursor: pointer; color: #2b583d; font-size: 13px; }
+.experience .inspector .record-details > summary small { display: block; margin: 5px 0 0 15px; font-size: 10px; color: #61745a; }
+.experience .inspector .record-details[open] > summary { border-bottom: 1px solid #c6d2bd; }
+.experience .inspector .record-details-body { padding: 0 14px 14px; }
+.experience .inspector .record-details-body section { padding-block: 16px; }
+.experience .inspector .record-details-body section:first-child { border-top: 0; }
+.experience .inspector .record-details-body h3 { font-size: 18px; margin-bottom: 12px; }
+.experience .inspector .record-details-body :is(p,dd,dt) { font-size: 11px; overflow-wrap: anywhere; }
+.experience .inspector .source-identifier-value { display: block; margin-bottom: 8px; }
+.experience .inspector .source-identifier-value small { display: block; color: #61745a; }

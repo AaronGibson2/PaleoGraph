@@ -34,6 +34,8 @@ PBDB coordinates remain unassigned to the map while coordinate semantics await s
 
 The vector source preserves linked **OpenFreeMap**, **OpenMapTiles** and **OpenStreetMap contributors** attribution. MapLibre's attribution control remains visible and usable at all reviewed sizes and below the mobile drawer. Preserve these credits in screenshots and any future hosted deployment. See [OpenFreeMap attribution guidance](https://openfreemap.org/quick_start/) and [OpenStreetMap copyright and database licensing](https://www.openstreetmap.org/copyright).
 
+The Atlas keeps museum/PBDB credits, licenses, retained dataset counts, version and import status in the compact **Sources & data** disclosure. It opens without changing exploration context, closes with Escape or an outside click, and restores keyboard focus when dismissed from its controls. Basemap attribution and timeline reference credits remain in their own controls. Other exploration surfaces retain their source footer.
+
 Museum/PBDB evidence and ICS timescale credits remain separate from cartographic credits. The repository's AGPL-3.0-only license and upstream data licenses are unchanged.
 
 ## Editing and validation
