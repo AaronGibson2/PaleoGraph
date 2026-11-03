@@ -14,7 +14,8 @@ Move between an interactive Atlas, a shared evidence Catalog, unified Florida Ta
 
 - **Introduction:** an imagined geological Florida landscape unfolds through strata, life impressions, and evidence connections into the molar-and-atlas emblem. Search and destinations are usable immediately. Touch layer controls, a distinct portrait composition, reduced motion, and no-JavaScript reading are supported. A vertebrate gallery, interactive Place / Material / Lineage study, and Aaron Gibson creator credit continue below.
 - **Atlas:** explore a custom botanical field atlas with mineral land, deep green water, evidence clusters, keyboard-accessible position previews, map-edge locality dossiers, and an integrated geological timeline. Present-day geography provides context for source evidence.
-- **Catalog:** switch between dense List and visual Records presentations, with source-specific labels and decorative animal forms.
+- **Discover:** start with live taxonomic groups or pinned geological interval shortcuts, inspect inclusive/source-specific evidence counts, and open the retained classification path.
+- **Catalog:** search evidence by taxon, locality, or catalog number; switch between the current mapped area and the retained Florida archive, including unmapped evidence. List/Records presentation, search, area, and discovery state survive URLs and browser history.
 - **Lineage:** expand a shared classification tree, inspect combined and source-specific counts, and follow complete retained source paths. Hover and keyboard-focus previews offer context before opening a dossier.
 - **Dossiers:** follow section navigation through classification, time, material, provenance, and references without losing the exploration context.
 

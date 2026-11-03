@@ -1,0 +1,83 @@
+.experience .discovery-panel { position: absolute; z-index: 11; inset: 16px auto 24px 18px; width: min(880px, calc(100% - 36px)); display: flex; flex-direction: column; background: #fcfcf7; border: 1px solid #bdccba; border-radius: 7px; box-shadow: var(--shadow-panel); color: var(--text); }
+.experience .discovery-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 24px 28px 18px; border-bottom: 1px solid var(--border); background: #edf2e6; border-radius: 7px 7px 0 0; }
+.experience .discovery-header h2 { font: 36px/1.1 var(--font-scientific); letter-spacing: -.035em; margin: 7px 0 10px; }
+.experience .discovery-header p { margin-bottom: 0; font-size: 13px; }
+.experience .discovery-header .icon-button { min-width: 44px; min-height: 44px; border: 1px solid var(--border); border-radius: 50%; }
+.experience .discovery-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 24px 28px; }
+.experience .discovery-body h3 { font: 25px/1.2 var(--font-scientific); margin: 7px 0 12px; }
+.experience .discovery-body section + section { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
+.experience .discovery-body p { font-size: 12px; line-height: 1.6; }
+.experience .discovery-section-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.experience .discovery-section-title > span { font: 11px var(--font-accession); white-space: nowrap; color: #47644a; }
+.experience .discovery-starters { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 18px; }
+.experience .discovery-starters button { border: 1px solid #bdccba; border-radius: 24px; padding: 7px 12px; min-height: 38px; font-size: 12px; background: #f4f6ef; color: #31563c; }
+.experience .discovery-starters button[aria-pressed=true] { color: #fffce8; background: #214f3e; border-color: #214f3e; }
+.experience .discovery-search { display: grid; gap: 7px; font-size: 12px; }
+.experience .discovery-search input { width: 100%; padding: 11px 12px; min-height: 44px; background: white; border: 1px solid #9cad97; border-radius: 4px; font-size: 14px; color: var(--text); }
+.experience .discovery-context, .experience .discovery-status { color: #5a6b57; font-size: 11px; line-height: 1.6; }
+.experience .discovery-cards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; padding: 0; margin: 12px 0; list-style: none; }
+.experience .discovery-cards li { min-width: 0; }
+.experience .discovery-cards li > button { width: 100%; height: 100%; text-align: left; display: grid; grid-template-columns: 48px minmax(0,1fr); gap: 9px 12px; padding: 18px; border: 1px solid #cad5c3; background: #f6f7f0; border-radius: 5px; color: var(--text); }
+.experience .discovery-cards li > button:hover { background: #eaf0e1; border-color: #6d8e6b; }
+.experience .discovery-cards .taxon-visual { width: 48px; height: 48px; }
+.experience .discovery-card-title { display: grid; gap: 5px; min-width: 0; overflow-wrap: anywhere; }
+.experience .discovery-card-title strong { font: 24px/1.1 var(--font-scientific); }
+.experience .discovery-card-title small, .experience .discovery-card-title > span { font-size: 10px; color: #596d56; }
+.experience :is(.discovery-card-count,.discovery-card-sources,.discovery-card-age,.discovery-card-action) { grid-column: 1 / -1; }
+.experience .discovery-card-count { display: flex; align-items: baseline; gap: 8px; padding-top: 6px; }
+.experience .discovery-card-count strong { font: 25px var(--font-scientific); font-variant-numeric: tabular-nums; }
+.experience .discovery-card-count small, .experience .discovery-card-sources, .experience .discovery-card-age { font-size: 11px; color: #52664f; }
+.experience .discovery-card-age small { display: block; margin-top: 4px; }
+.experience .discovery-card-action { display: flex; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; font-size: 12px; color: #28573e; }
+.experience .discovery-intervals { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; }
+.experience .discovery-intervals button { display: grid; gap: 6px; padding: 12px; text-align: left; background: #f4f6ed; border: 1px solid var(--border); border-left: 5px solid; border-radius: 3px; color: var(--text); }
+.experience .discovery-intervals strong { font: 19px var(--font-scientific); }
+.experience .discovery-intervals :is(span,small) { font-size: 10px; }
+.experience .discovery-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 28px; padding: 18px; border: 1px solid var(--border); background: #edf1e6; border-radius: 4px; }
+.experience .discovery-footer h3 { font-size: 21px; }
+.experience .discovery-footer p { margin-bottom: 0; }
+.experience .discovery-footer button, .experience .discovery-empty button { min-height: 44px; padding: 9px 12px; background: #214f3e; color: #fffce8; border: 0; border-radius: 3px; flex-shrink: 0; font-size: 12px; }
+.experience .discovery-empty { padding: 16px; background: #eef2e7; border-radius: 4px; }
+.experience .catalog-refinements { padding: 2px 20px 10px; display: grid; gap: 7px; }
+.experience .catalog-refinements label { display: grid; gap: 5px; font-size: 11px; color: #486047; }
+.experience .catalog-refinements :is(input,select) { width: 100%; min-width: 0; min-height: 38px; padding: 7px 9px; border: 1px solid #b5c4ae; background: #fffefa; border-radius: 4px; font-size: 12px; color: var(--text); }
+.experience .catalog-text-search { display: flex; gap: 5px; }
+.experience .catalog-text-search button { font-size: 11px; min-width: 44px; min-height: 38px; border: 1px solid var(--border); border-radius: 4px; }
+.experience .catalog-refinements > small { color: #586c53; font-size: 10px; line-height: 1.5; }
+.experience .catalog-discovery-link { background: none; border: 0; text-align: left; padding: 4px 0; min-height: 32px; font-size: 11px; color: #2b5b3f; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 767px) {
+  .experience .discovery-panel { inset: 8px 8px 12px; width: auto; }
+  .experience .discovery-header { padding: 16px; }
+  .experience .discovery-header h2 { font-size: 29px; }
+  .experience .discovery-header p { font-size: 11px; }
+  .experience .discovery-body { padding: 16px; }
+  .experience .discovery-cards { grid-template-columns: minmax(0,1fr); }
+  .experience .discovery-intervals { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .experience .discovery-starters button { min-height: 44px; }
+  .experience .discovery-footer { display: grid; }
+  .experience .catalog-refinements { padding: 2px 16px 8px; }
+  .experience .catalog-refinements :is(input,select), .experience .catalog-text-search button { min-height: 44px; }
+  .explore-workspace.experience .surface-tabs button { font-size: 10px; gap: 3px; }
+}
+
+.experience .catalog-options { font-size: 11px; border-top: 1px solid var(--border); }
+.experience .catalog-options summary { min-height: 36px; padding: 9px 0; cursor: pointer; color: #315b3f; }
+.experience .catalog-options-body { display: grid; gap: 7px; padding-bottom: 4px; }
+.experience .catalog-options-body > small { color: #586c53; font-size: 10px; line-height: 1.5; }
+@media (max-width: 767px) {
+  .experience .catalog-options summary { min-height: 44px; padding-block: 12px; }
+  .explore-workspace.experience .catalog-panel .panel-heading { padding-top: 12px; }
+  .experience .catalog-panel .catalog-tools { padding-block: 4px; }
+  .experience .catalog-refinements { gap: 4px; padding-bottom: 0; }
+  .experience .catalog-panel > .evidence-source { font-size: 10px; line-height: 1.4; padding-block: 5px; margin-block: 0; }
+  .experience .discovery-header p:not(.eyebrow) { display: none; }
+  .experience .discovery-header h2 { margin-bottom: 0; }
+  .experience .discovery-body h3 { font-size: 22px; }
+  .experience .discovery-section-title { align-items: flex-start; }
+  .experience .discovery-starters { margin-bottom: 12px; }
+}
+
+@media (max-width: 767px) {
+  .experience .discovery-starters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; }
+  .experience .discovery-starters button { flex-shrink: 0; }
+}

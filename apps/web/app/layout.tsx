@@ -17,7 +17,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <a className="skip-link" href="#main">Skip to content</a>
         <header className="site-header">
           <Link className="wordmark" href="/" aria-label="PaleoGraph home"><PaleoGraphBrand /></Link>
-          <nav aria-label="Main navigation"><Link href="/explore">Atlas</Link><Link href="/explore?catalog=open">Catalog</Link><Link href="/lineage">Lineage</Link></nav>
+          <nav aria-label="Main navigation"><Link href="/explore?discover=open">Discover</Link><Link href="/explore">Atlas</Link><Link href="/explore?catalog=open">Catalog</Link><Link href="/lineage">Lineage</Link></nav>
         </header>
         <main id="main" tabIndex={-1}>{children}</main>
       </body>

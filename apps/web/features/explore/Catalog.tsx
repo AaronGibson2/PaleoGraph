@@ -11,20 +11,26 @@ import { IntentButton } from "./IntentButton";
 import { ExplorationToolbar } from "./ExplorationToolbar";
 import "./catalog.css";
 import "./catalog-experience.css";
+import "./discovery.css";
 
-export function Catalog({ query, open, selected, onSelect, onClose, retry }: { selected?: string | null; query: string; open: boolean; onSelect: (entity: BrowseTarget) => void; onClose: () => void; retry: number }) {
+export function Catalog({ query, open, selected, onSelect, onClose, retry, search, scope, canScope, view, onSearch, onScope, onView, onDiscover }: { search: string; scope: "map" | "archive"; canScope: boolean; view: "list" | "records"; onSearch: (value: string) => void; onScope: (value: "map" | "archive") => void; onView: (value: "list" | "records") => void; onDiscover: () => void; selected?: string | null; query: string; open: boolean; onSelect: (entity: BrowseTarget) => void; onClose: () => void; retry: number }) {
   const [navigation, setNavigation] = useState<{ base: string; cursors: string[] }>({ base: "", cursors: [] });
   const [catalogRetry, setCatalogRetry] = useState(0);
-  const [view, setView] = useState<"list" | "records">("list");
   const cursors = navigation.base === query ? navigation.cursors : [];
   const pageQuery = `${query}&limit=30${cursors.length ? `&cursor=${encodeURIComponent(cursors.at(-1)!)}` : ""}`;
-  const debounce = /(?:^|&)(?:locality_id|taxon_id)=/.test(query) ? 0 : 180;
+  const debounce = search.trim() ? 220 : /(?:^|&)(?:locality_id|taxon_id)=/.test(query) ? 0 : 180;
   const result = useResource<Page<CatalogItem> & { offset: number }>(open ? browseKey("/catalog",pageQuery) : null, async signal => ({ ...await discovery.catalog(pageQuery, signal), offset: cursors.length * 30 }), debounce, retry + catalogRetry);
   const items = result.data?.items ?? [];
   const source=new URLSearchParams(query).get("source") ?? "ufvp";
   return <aside hidden={!open} inert={!open} style={open ? undefined : { display: "none" }} className="catalog-panel" data-view={view} aria-labelledby="results-heading" aria-busy={result.loading}>
     <div className="panel-heading"><div><p className="eyebrow">Source evidence</p><h2 id="results-heading" tabIndex={-1}>{source === "ufvp" ? "Museum catalog" : source === "pbdb" ? "Published occurrences" : "Evidence catalog"}</h2></div><button className="icon-button" aria-label="Close catalog" onClick={onClose}>×</button></div>
-    <ExplorationToolbar label="Catalog results" className="catalog-tools"><p className="result-count" role="status">{result.data ? `${result.data.total.toLocaleString("en-US")} ${source === "ufvp" ? "assertions" : source === "pbdb" ? "published occurrences" : "evidence records"}` : "Loading catalog…"}{result.loading && result.data ? " · Updating…" : ""}</p><div className="catalog-view-switch" role="group" aria-label="Catalog presentation"><button aria-pressed={view === "list"} onClick={() => setView("list")}>List</button><button aria-pressed={view === "records"} onClick={() => setView("records")}>Records</button></div></ExplorationToolbar>
+    <ExplorationToolbar label="Catalog results" className="catalog-tools"><p className="result-count" role="status">{result.data ? `${result.data.total.toLocaleString("en-US")} ${source === "ufvp" ? "assertions" : source === "pbdb" ? "published occurrences" : "evidence records"}` : "Loading catalog…"}{result.loading && result.data ? " · Updating…" : ""}</p><div className="catalog-view-switch" role="group" aria-label="Catalog presentation"><button aria-pressed={view === "list"} onClick={() => onView("list")}>List</button><button aria-pressed={view === "records"} onClick={() => onView("records")}>Records</button></div></ExplorationToolbar>
+    <div className="catalog-refinements">
+      <label htmlFor="catalog-search">Search these evidence records</label><div className="catalog-text-search"><input id="catalog-search" type="search" value={search} maxLength={160} placeholder="Taxon, locality, catalog number…" onChange={event => onSearch(event.target.value)} />{search && <button aria-label="Clear catalog search" onClick={() => onSearch("")}>Clear</button>}</div>
+      <details className="catalog-options"><summary>{scope === "map" ? "Map area" : "Florida archive"} · filters &amp; discovery</summary><div className="catalog-options-body"><label>Catalog area<select aria-label="Catalog area" value={scope} disabled={!canScope} onChange={event => onScope(event.target.value as "map" | "archive")}><option value="map">Current map area · mapped evidence</option><option value="archive">Florida archive · includes unmapped evidence</option></select></label>
+      <small>{scope === "map" ? "Follows the map viewport. Unmapped evidence is excluded." : "Across the retained Florida archive. Source, time, and selected context filters still apply."}</small>
+      <button className="catalog-discovery-link" onClick={onDiscover}>Explore groups and geological intervals ↗</button></div></details>
+    </div>
     {source === "all" && result.data?.counts && <p className="evidence-source">UFVP museum material: {result.data.counts.museum_material.toLocaleString("en-US")} / PBDB published occurrences: {result.data.counts.published_occurrences.toLocaleString("en-US")}</p>}
     {source === "pbdb" && <p className="context-note catalog-scope">Published occurrences under selected source filters. No map viewport is applied; an exact selected position remains a filter.</p>}
     <p className="continuity-note" role={result.error ? "alert" : undefined}>{result.loading && result.data ? "Showing last loaded results." : result.error ?? "Museum assertions may contain multiple pieces. Published occurrences describe source evidence."}{result.error && <button className="catalog-retry" onClick={() => setCatalogRetry(value => value + 1)}>Retry catalog</button>}</p>
@@ -36,7 +42,7 @@ export function Catalog({ query, open, selected, onSelect, onClose, retry }: { s
         <div className="entry-pivots"><button onClick={() => onSelect({ kind: "taxon", id: item.taxon_id, label: item.scientific_name, source:item.source, subtitle: "Source identification" })}>Taxon</button>{item.locality_id && <button onClick={() => onSelect({ kind: "locality", id: item.locality_id!, label: item.locality_name ?? "Locality", source:item.source, subtitle: null })}>{item.source === "pbdb" ? "Collection context" : "Locality"}</button>}</div>
       </li>)}
     </ol>
-    {!result.loading && !result.error && items.length === 0 && <p className="panel-message">{source === "ufvp" ? "No material matches this view and context." : "No evidence matches this view and context."} Unknown ages are excluded by a time filter.</p>}
+    {!result.loading && !result.error && items.length === 0 && <p className="panel-message">{source === "ufvp" ? "No material matches this view and context." : "No evidence matches this view and context."} Unknown ages are excluded by a time filter.{search && <button className="catalog-retry" onClick={() => onSearch("")}>Clear catalog search</button>}{scope === "map" && <button className="catalog-retry" onClick={() => onScope("archive")}>Search the Florida archive</button>}</p>}
     <div className="catalog-pagination"><span>{result.data ? `${result.data.offset + (items.length ? 1 : 0)}–${result.data.offset + items.length} of ${result.data.total.toLocaleString("en-US")}` : ""}</span><button disabled={!cursors.length || result.loading} onClick={() => setNavigation({ base: query, cursors: cursors.slice(0, -1) })}>← Previous</button><button disabled={!result.data?.next_cursor || result.loading} onClick={() => setNavigation({ base: query, cursors: [...cursors, result.data!.next_cursor!] })}>Next →</button></div>
   </aside>;
 }
