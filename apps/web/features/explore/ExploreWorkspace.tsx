@@ -14,6 +14,7 @@ import { NavigationIcon } from "./NavigationIcon";
 import { PaleoGraphBrand } from "../brand/PaleoGraphBrand";
 import { ExplorationToolbar } from "./ExplorationToolbar";
 import { EntityInspector } from "./EntityInspector";
+import { recordNavigationPatch, type RecordAction } from "./recordOverview";
 import { Lineage } from "./Lineage";
 import { Localities } from "./Localities";
 import { AtlasPlaces, AtlasPositionSelection } from "../map/AtlasPlaces";
@@ -124,6 +125,12 @@ export function ExploreWorkspace({ initial }: { initial: ExploreState }) {
     update({ selected: null, selected_kind: undefined, inspect:"closed" }, "push");
     requestAnimationFrame(() => (document.getElementById(`result-${previous}`) ?? document.getElementById("catalog-toggle"))?.focus());
   };
+  const exploreRecord = (action: RecordAction) => {
+    focusSerial.current++;
+    cameraRequest.current?.abort();
+    setIdentity(action.target);
+    update(recordNavigationPatch(state, action), "push");
+  };
   const active = [...contextKeys.slice(0, 5), "reference_id" as const].filter(key => state[key]);
   const interval = time.data?.units.find(unit => unit.id === state.interval_id);
   const total = dataset.data?.current_records.toLocaleString("en-US");
@@ -159,7 +166,7 @@ export function ExploreWorkspace({ initial }: { initial: ExploreState }) {
       <Catalog search={state.catalog_q ?? ""} scope={catalogScope(state, mapVisible)} canScope={mapVisible && state.source !== "pbdb"} view={state.catalog_view ?? "list"} onSearch={catalog_q => update({ catalog_q })} onScope={scope => update({ catalog_scope: scope === "archive" ? "archive" : null }, "push")} onView={view => update({ catalog_view: view === "records" ? "records" : null }, "push")} onDiscover={openDiscovery} selected={state.selected} open={catalogOpen} query={catalogQuery} onSelect={pivot} onClose={() => update({catalog:null},"push")} retry={retry} />
       {relationships && state.selected && !inspectionOpen && <button className="graph-inspect" onClick={() => update({inspect:null},"push")}>Inspect selected {selectedKind} ↗</button>}
       {state.selected && inspectionOpen && mapVisible && selectedKind === "locality" && <AtlasLocalityDossier onClear={() => update({locality_id:null,selected:null,selected_kind:undefined,inspect:"closed",at_lon:null,at_lat:null},"push")} onGraph={() => update({surface:"relationships",inspect:"closed"},"push")} id={state.selected} identity={identity} context={context} onPivot={pivot} onClose={close} onMaterial={() => update({catalog:"open",inspect:"closed"},"push")} onLineage={() => update({surface:"lineage",catalog:null,inspect:"closed",taxonomy_focus:null},"push")} />}
-      {state.selected && inspectionOpen && !(mapVisible && selectedKind === "locality") && <EntityInspector kind={selectedKind} id={state.selected} identity={identity} context={context} viewport={viewport} onPivot={pivot} onClose={close} onPosition={onPosition} onInterval={interval => update({ older_ma: interval.older_ma, younger_ma: interval.younger_ma, interval_id: interval.id, time_focus: interval.parent ?? interval.id }, "push")} onLocality={() => update({ surface: "localities",catalog:null,inspect:"closed" }, "push")} onLineage={() => update({ surface: "lineage", lineage_focus: selectedKind === "taxon" ? state.selected : state.taxon_id ?? null,taxonomy_focus:null,inspect:"closed" }, "push")} onGraph={() => update({ surface: "relationships",inspect:"closed" }, "push")} retry={retry} />}
+      {state.selected && inspectionOpen && !(mapVisible && selectedKind === "locality") && <EntityInspector onExploreRecord={exploreRecord} kind={selectedKind} id={state.selected} identity={identity} context={context} viewport={viewport} onPivot={pivot} onClose={close} onPosition={onPosition} onInterval={interval => update({ older_ma: interval.older_ma, younger_ma: interval.younger_ma, interval_id: interval.id, time_focus: interval.parent ?? interval.id }, "push")} onLocality={() => update({ surface: "localities",catalog:null,inspect:"closed" }, "push")} onLineage={() => update({ surface: "lineage", lineage_focus: selectedKind === "taxon" ? state.selected : state.taxon_id ?? null,taxonomy_focus:null,inspect:"closed" }, "push")} onGraph={() => update({ surface: "relationships",inspect:"closed" }, "push")} retry={retry} />}
       {mapVisible && (results.loading || results.error) && <div className="map-status" role={results.error ? "alert" : "status"}>{results.error ? "Map data unavailable. Last loaded positions retained." : results.data ? "Updating - last loaded positions remain visible" : "Reading local museum material..."}{results.error && <button onClick={() => setRetry(value => value + 1)}>Retry data</button>}</div>}
       {mapVisible ? !discoveryOpen && <AtlasSources dataset={dataset.data} error={dataset.error} /> : <div className="canvas-source"><a href="https://ipt.floridamuseum.ufl.edu/ipt/resource?r=ufvp" target="_blank" rel="noopener noreferrer">{dataset.data?.creator ? `${dataset.data.creator} / ` : ""}Florida Museum / UFVP</a><a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><a href="https://paleobiodb.org/" target="_blank" rel="noopener noreferrer">PBDB · CC0 1.0</a><span role={dataset.error ? "status" : undefined}>{total ? `${dataset.error ? "Last loaded import status / refresh unavailable / " : ""}${total} assertions / ${dataset.data?.latest_scope?.startsWith("florida-sample") ? "bounded import" : dataset.data?.latest_status ?? "import status unknown"} / v${dataset.data?.version}` : dataset.error ? "Import status unavailable" : "Local import status pending"}</span></div>}
     </section></div>

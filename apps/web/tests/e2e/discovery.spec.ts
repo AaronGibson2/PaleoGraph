@@ -45,7 +45,7 @@ test("large and laptop canvases use the viewport and expose authoritative time",
 test("search opens a specimen, its geological interpretation filters, and supported higher ranks pivot",async({page})=>{
  await page.goto("/explore");const input=page.getByRole("combobox",{name:/Search/});await input.fill("TEST-000");
  await expect(page.locator("#search-results [role=option]").first()).toContainText("specimen");await input.press("Enter");
- await expect(page.locator("#inspection-heading")).toContainText("TEST-000");
+ await expect(page.locator(".record-accession strong")).toContainText("TEST-000");
  await page.locator(".interpretation .scientific-link").click();await expect(page.locator("#time-heading")).toHaveText("11.63\u20135.333 Ma");
  await page.locator("#record-details > summary").click();
  await page.locator(".source-values .scientific-link").filter({hasText:"Mammalia"}).click();

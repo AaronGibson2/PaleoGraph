@@ -29,6 +29,6 @@ for (const width of [1440, 390]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
     await details.locator(":scope > summary").click();
     await expect(details.locator(".record-details-body")).toBeHidden();
-    await expect(inspector.locator("#inspection-heading")).toHaveText(item.label);
+    await expect(inspector.locator(".record-accession strong")).toHaveText(item.label);
   });
 }

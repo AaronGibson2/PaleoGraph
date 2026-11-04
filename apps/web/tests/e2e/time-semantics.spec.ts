@@ -48,7 +48,9 @@ test("source wording, reference provenance, and unresolved label evidence remain
   await expect(page.locator(".source-values")).toContainText(derived.source_age_label!);
   await expect(page.locator(".interpretation")).toContainText("Reference interval envelope, not a measured specimen age");
   await expect(page.locator(".interpretation")).toContainText("ufvp-geology-v1:ics-2026-06");
-  await expect(page.getByText("Source numeric bounds · Ma", { exact: true })).toBeVisible();
+  await expect(page.locator("#record-material")).not.toContainText("Source numeric bounds");
+  await page.locator("#record-details > summary").click();
+  await expect(page.locator(".raw-material-fields").getByText("Source numeric bounds · Ma", { exact: true })).toBeVisible();
   await page.goto(`/explore?selected_kind=specimen&selected=${unresolved.specimen_id}`);
   await expect(page.locator(".source-values")).toContainText(unresolved.source_age_label!);
   await expect(page.locator("#interpretation-heading")).toHaveText("Geological label unresolved");

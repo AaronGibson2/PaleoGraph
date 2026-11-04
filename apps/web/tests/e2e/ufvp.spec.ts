@@ -9,8 +9,8 @@ test.beforeEach(async({page})=>stubBasemap(page));
 test("UFVP inspector separates source geology, derived interpretation, identifiers, rights and research",async({page,request})=>{
  const response=await request.get(`${apiBase}/map/occurrences?west=-88&south=24&east=-79&north=32`);expect(response.ok()).toBe(true);expect((await response.json()).items.every((item:{is_synthetic:boolean})=>!item.is_synthetic)).toBe(true);
  await page.goto(`/explore?selected_kind=specimen&selected=${stable("specimen")}`);
- await expect(page.locator("#inspection-heading")).toContainText(fixture.catalogNumber);
- await expect(page.locator(".inspector-subtitle")).toHaveText(fixture.scientificName);
+ await expect(page.locator(".record-accession strong")).toContainText(fixture.catalogNumber);
+ await expect(page.locator("#inspection-heading")).toHaveText(fixture.scientificName);
  await expect(page.locator("#record-details")).not.toHaveAttribute("open");
  await expect(page.locator("#record-identifiers")).toBeHidden();
  await page.locator("#record-details > summary").click();

@@ -49,7 +49,7 @@ test("keyboard search intent prepares its target without re-querying the closed 
   const url=page.url();const evidence=page.waitForResponse(r=>r.url().includes('/entities/'));
   await input.press('Home');await evidence;expect(page.url()).toBe(url);expect(searches).toBe(1);
   await page.clock.install();await input.press('Enter');await page.clock.fastForward(500);
-  await expect(page.locator('.entity-stat')).toBeVisible();expect(searches).toBe(1);await expect(input).toHaveAttribute('aria-expanded','false');
+  await expect(page.locator('.entity-stat, .record-overview').first()).toBeVisible();expect(searches).toBe(1);await expect(input).toHaveAttribute('aria-expanded','false');
 });
 
 test("late detail from A never replaces B or puts A evidence under B identity",async({page})=>{
@@ -61,8 +61,8 @@ test("late detail from A never replaces B or puts A evidence under B identity",a
   await rows.nth(0).click();await seen;
   // The inspector overlaps the list; the visible row is still the actual navigation target.
   await page.getByRole('button',{name:'Close occurrence inspection'}).click();await rows.nth(1).click();
-  await expect(page.locator('#inspection-heading')).toHaveText(label!);await expect(page.locator('.specimen-identifiers')).toContainText(b);
-  release();await expect(page.locator('.specimen-identifiers')).not.toContainText(a);await expect(page.locator('#inspection-heading')).toHaveText(label!);
+  await expect(page.locator('.record-accession strong')).toHaveText(label!);await expect(page.locator('.specimen-identifiers')).toContainText(b);
+  release();await expect(page.locator('.specimen-identifiers')).not.toContainText(a);await expect(page.locator('.record-accession strong')).toHaveText(label!);
 });
 
 test("cached classification survives a failed stale refresh, and explicit retry recovers",async({page})=>{

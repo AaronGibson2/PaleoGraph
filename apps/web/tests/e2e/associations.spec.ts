@@ -55,7 +55,8 @@ test("locality counts, fauna pivot, material and surface history share scientifi
   await page.getByRole("button", { name: "Associated material", exact: false }).click();
   await expect(page.locator(".catalog-entry").first()).toBeVisible();
   await page.locator(".catalog-entry").first().click();
-  await expect(page.locator(".specimen-placeholder:not(.compact)")).toContainText("Specimen image unavailable");
+  await expect(page.locator(".record-overview")).toBeVisible();
+  await expect(page.locator(".specimen-placeholder:not(.compact)")).toHaveCount(0);
   expect(new URL(page.url()).searchParams.get("locality_id")).toBe(site.id);
   await page.getByRole("button", { name: "Close occurrence inspection" }).click();
   await page.getByRole("button", { name: "Close catalog" }).click();

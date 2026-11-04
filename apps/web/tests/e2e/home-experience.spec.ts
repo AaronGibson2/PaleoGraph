@@ -143,7 +143,7 @@ test("Home search opens source search results with a shareable query", async ({ 
   await expect(page.locator("#search-results [role=option]").first()).toContainText("TEST-000");
   await page.getByRole("combobox", { name: /Search material/ }).focus();
   await page.keyboard.press("Enter");
-  await expect(page.locator("#inspection-heading")).toContainText("TEST-000");
+  await expect(page.locator(".record-accession strong")).toContainText("TEST-000");
 });
 
 test("Home remains navigable when live source totals are unavailable", async ({ page }) => {

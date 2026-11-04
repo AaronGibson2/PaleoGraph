@@ -25,7 +25,7 @@ test("published occurrence inspection loads explicit reference roles on demand",
  const search=page.getByRole("combobox",{name:/Search material/});
  await search.fill("187885");await expect(page.locator("#search-results [role=option]").first()).toContainText("Published occurrence");
  await search.press("Enter");
- await expect(page.locator("#inspection-heading")).toContainText("187885");
+ await expect(page.locator(".record-accession strong")).toContainText("187885");
  await expect(page.locator(".inspector")).toContainText("Original identification");
  await expect(page.locator(".inspector")).toContainText("datum unverified");
  expect(refs).toBe(0);
