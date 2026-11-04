@@ -19,3 +19,9 @@ export async function pan(page: Page, fraction: number) {
  await page.mouse.move(x+box.width*fraction,y,{steps:12});
  await page.waitForTimeout(150); await page.mouse.up();
 }
+
+export async function openTimeDetails(page: Page) {
+ const toggle = page.locator(".time-expand");
+ if (await toggle.getAttribute("aria-expanded") !== "true") await toggle.click();
+ await expect(page.locator("#time-details")).toBeVisible();
+}

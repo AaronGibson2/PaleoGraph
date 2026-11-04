@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { expect, test } from "@playwright/test";
-import { openCatalog, placeEndpoint, stubBasemap, pan } from "./helpers";
+import { openTimeDetails, openCatalog, placeEndpoint, stubBasemap, pan } from "./helpers";
 test.beforeEach(async({page})=>stubBasemap(page));
 
 test("small pans reuse map coverage and rapid larger pans reject late data",async({page})=>{
@@ -25,7 +25,7 @@ test("small pans reuse map coverage and rapid larger pans reject late data",asyn
 
 test("long timeline drag previews, commits once and retains rows and map until completion",async({page})=>{
  const requests:string[]=[]; page.on("request",r=>{if(r.url().includes("/map/places?"))requests.push(r.url());});
- await page.goto("/explore?older_ma=12&younger_ma=2&lat=29.36&lng=-82.19&zoom=12"); await openCatalog(page); await page.waitForTimeout(350);
+ await page.goto("/explore?older_ma=12&younger_ma=2&lat=29.36&lng=-82.19&zoom=12"); await openCatalog(page); await openTimeDetails(page); await page.waitForTimeout(350);
  const oldRows=await page.locator(".catalog-entry").evaluateAll(rows=>rows.map(e=>e.id));
  const image=createHash("sha256").update(await page.screenshot({clip:{x:650,y:375,width:140,height:140}})).digest("hex");
  let release!:()=>void; const gate=new Promise<void>(resolve=>{release=resolve;});
@@ -47,7 +47,7 @@ test("long timeline drag previews, commits once and retains rows and map until c
 });
 
 test("failed background queries retain data and rapid keyboard changes settle once",async({page})=>{
- await page.goto("/explore?older_ma=12&younger_ma=2&lat=29.36&lng=-82.19&zoom=12");await openCatalog(page);
+ await page.goto("/explore?older_ma=12&younger_ma=2&lat=29.36&lng=-82.19&zoom=12");await openCatalog(page);await openTimeDetails(page);
  const ids=await page.locator(".catalog-entry").evaluateAll(rows=>rows.map(e=>e.id));let queries=0;
  await page.route("**/api/v1/catalog?**",route=>route.fulfill({status:503,json:{error:{message:"Temporary outage"}}}));
  await page.route(placeEndpoint,route=>{queries++;return route.fulfill({status:503,json:{error:{message:"Temporary outage"}}});});

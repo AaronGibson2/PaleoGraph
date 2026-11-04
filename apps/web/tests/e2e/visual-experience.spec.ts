@@ -117,7 +117,7 @@ test("compact time disclosure preserves URL semantics and filter transitions", a
   await expect(page.locator(".time-windows")).toBeHidden();
   await page.goBack();
   await expect(page.locator("#time-heading")).toHaveText("All ages");
-  await expect(page.getByRole("slider", { name: "Older age bound" })).toBeVisible();
+  await expect(page.getByRole("slider", { name: "Older age bound" })).toBeHidden();
 });
 
 test("reduced motion removes tree and dossier animations and preserves visible focus", async ({ page }) => {

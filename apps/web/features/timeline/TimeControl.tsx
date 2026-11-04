@@ -13,12 +13,13 @@ const format = formatMa;
 export function TimeControl({ age: committed, configuration, focus, onFocus, onChange }: Props) {
   const instrument = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
+  const toggle = useRef<HTMLButtonElement>(null);
   const drag = useRef<Drag | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pending = useRef<AgeRange | null>(null);
   const ageKey = `${committed.older_ma}:${committed.younger_ma}`;
   const [draft, setDraft] = useState<{ base: string; age: AgeRange } | null>(null);
-  const [expanded, setExpanded] = useState(Boolean(focus || committed.older_ma !== null));
+  const [expanded, setExpanded] = useState(false);
   useEffect(() => {
     const element = instrument.current;
     const workspace = element?.closest<HTMLElement>(".explore-workspace");
@@ -52,6 +53,17 @@ export function TimeControl({ age: committed, configuration, focus, onFocus, onC
   const minimum = Math.min(focused.younger_ma, committed.younger_ma ?? focused.younger_ma);
   const span = maximum - minimum;
   const allAges = age.older_ma === null;
+  const quickIntervals = ["Pleistocene", "Miocene"].flatMap(name => {
+    const unit = configuration.units.find(unit => unit.name === name);
+    return unit ? [unit] : [];
+  });
+  const isSelected = (unit: TimeConfiguration["units"][number]) => age.older_ma === unit.older_ma && age.younger_ma === unit.younger_ma;
+  const quickSelection = allAges || quickIntervals.some(isSelected);
+  const closeDetails = () => {
+    drag.current = null;
+    finish();
+    setExpanded(false);
+  };
   const older = age.older_ma ?? maximum;
   const younger = age.younger_ma ?? minimum;
   const position = (value: number) => Math.max(0, Math.min(100, (maximum - value) / span * 100));
@@ -97,49 +109,61 @@ export function TimeControl({ age: committed, configuration, focus, onFocus, onC
     event.preventDefault();
     change(boundary, values[event.key], true);
   };
-  return <section ref={instrument} className="time-control" data-expanded={expanded} aria-labelledby="time-heading">
+  return <section ref={instrument} className="time-control" data-expanded={expanded} data-quick-selection={quickSelection} aria-labelledby="time-heading"
+    onKeyDown={event => {
+      if (event.key === "Escape" && expanded) {
+        event.stopPropagation();
+        closeDetails();
+        toggle.current?.focus();
+      }
+    }}>
     <div className="time-title">
-      <div><p className="eyebrow">Selected time</p><h2 id="time-heading">{allAges ? "All ages" : ageLabel(age)}</h2></div>
+      <div className="time-current"><p className="eyebrow">Selected time</p><h2 id="time-heading">{allAges ? "All ages" : ageLabel(age)}</h2></div>
+      <div className="time-quick-choices" role="group" aria-label="Quick time filters">
+        <button className="quiet-button" aria-pressed={allAges} onClick={() => { choose({ older_ma: null, younger_ma: null }); }}>All ages</button>
+        {quickIntervals.map(unit => <button key={unit.id} className="quiet-button" aria-pressed={isSelected(unit)} title={`${format(unit.older_ma)}–${format(unit.younger_ma)} Ma`} onClick={() => choose({ older_ma: unit.older_ma, younger_ma: unit.younger_ma }, unit.id)}>{unit.name}</button>)}
+      </div>
+      <button ref={toggle} className="time-expand" aria-expanded={expanded} aria-controls="time-details" onClick={() => { if (expanded) closeDetails(); else setExpanded(true); }}>{expanded ? "Less detail" : "Time details"}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="m2 4 4 4 4-4" fill="none" stroke="currentColor" /></svg></button>
+    </div>
+    <div id="time-details" className="time-details" hidden={!expanded} inert={!expanded}>
       <p className="time-explanation" title="A complete material envelope overlaps the selected closed range when its younger bound is no older than the selection's older bound, and its older bound is no younger than the selection's younger bound. Equality counts; missing bounds are excluded only when filtering.">{draft ? "Previewing range · map updates when you finish." : allAges ? "All current evidence, including unresolved ages." : "Material envelopes overlapping this range, including boundary equality. Unresolved numeric ages excluded."}</p>
-      <button className="quiet-button" aria-pressed={allAges} onClick={() => { choose({ older_ma: null, younger_ma: null }); }}>All ages</button>
-      <button className="time-expand" aria-expanded={expanded} aria-controls="time-depth time-subdivisions" onClick={() => setExpanded(value => !value)}>{expanded ? "Less detail" : "Time details"}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="m2 4 4 4 4-4" fill="none" stroke="currentColor" /></svg></button>
-    </div>
-    <nav id="time-depth" className="time-ancestry" hidden={!expanded} aria-label="Timescale depth"><button onClick={() => onFocus("ics:2026-06:Phanerozoic")}>Deep time</button>{ancestry.map(unit => <button key={unit.id} aria-current={unit.id === focused.id ? "location" : undefined} onClick={() => onFocus(unit.id)}>{unit.name} <small>{unit.rank}</small></button>)}</nav>
-    <div className="time-direction"><span>← Older</span><span>Millions of years before present</span><span>Present →</span></div>
-    <div className="time-instrument" data-all-ages={allAges}>
-      <div className="time-track" ref={track}>
-        <div className="time-strata" aria-hidden="true">
-          {children.map(unit => <span key={unit.id} className="time-stratum" style={{ left: `${position(unit.older_ma)}%`, width: `${(unit.older_ma - unit.younger_ma) / span * 100}%`, background: unit.color }} />)}
+      <nav id="time-depth" className="time-ancestry" aria-label="Timescale depth"><button onClick={() => onFocus("ics:2026-06:Phanerozoic")}>Deep time</button>{ancestry.map(unit => <button key={unit.id} aria-current={unit.id === focused.id ? "location" : undefined} onClick={() => onFocus(unit.id)}>{unit.name} <small>{unit.rank}</small></button>)}</nav>
+      <div className="time-direction"><span>← Older</span><span>Millions of years before present</span><span>Present →</span></div>
+      <div className="time-instrument" data-all-ages={allAges}>
+        <div className="time-track" ref={track}>
+          <div className="time-strata" aria-hidden="true">
+            {children.map(unit => <span key={unit.id} className="time-stratum" style={{ left: `${position(unit.older_ma)}%`, width: `${(unit.older_ma - unit.younger_ma) / span * 100}%`, background: unit.color }} />)}
+          </div>
+          <div key={ageKey} className="time-selection" aria-hidden="true" style={{ left: `${position(older)}%`, width: `${(Math.min(maximum, older) - Math.max(minimum, younger)) / span * 100}%` }} />
+          {(["older_ma", "younger_ma"] as const).map(boundary => {
+            const value = boundary === "older_ma" ? older : younger;
+            const x = position(value);
+            return <button key={boundary} type="button" role="slider"
+              className={`time-handle ${boundary === "older_ma" ? "time-handle-older" : "time-handle-younger"}`}
+              style={{ left: `${x}%` }} data-edge={x < 12 ? "start" : x > 88 ? "end" : "middle"}
+              aria-label={boundary === "older_ma" ? "Older age bound" : "Younger age bound"}
+              aria-orientation="horizontal" aria-valuenow={Math.max(minimum, Math.min(maximum, value))}
+              aria-valuemin={boundary === "older_ma" ? younger : minimum}
+              aria-valuemax={boundary === "older_ma" ? maximum : Math.min(maximum, Math.max(minimum, older))}
+              aria-valuetext={`${format(value)} million years before present${allAges ? "; all ages currently included" : ""}`}
+              aria-describedby="time-help"
+              onPointerDown={event => start(event, value)} onPointerMove={event => move(event, boundary)}
+              onPointerUp={event => { if (drag.current?.pointer === event.pointerId) { move(event, boundary); drag.current = null; finish(); event.currentTarget.releasePointerCapture(event.pointerId); } }}
+              onPointerCancel={() => { drag.current = null; finish(); }} onLostPointerCapture={() => { if (drag.current) { drag.current = null; finish(); } }}
+              onKeyDown={event => keyboard(event, boundary, value)} onBlur={() => { if (!drag.current) finish(); }}>
+              <span className="time-handle-label" aria-hidden="true">{format(value)} <small>Ma</small></span>
+              <span className="time-grip" aria-hidden="true" />
+            </button>;
+          })}
         </div>
-        <div key={ageKey} className="time-selection" aria-hidden="true" style={{ left: `${position(older)}%`, width: `${(Math.min(maximum, older) - Math.max(minimum, younger)) / span * 100}%` }} />
-        {(["older_ma", "younger_ma"] as const).map(boundary => {
-          const value = boundary === "older_ma" ? older : younger;
-          const x = position(value);
-          return <button key={boundary} type="button" role="slider"
-            className={`time-handle ${boundary === "older_ma" ? "time-handle-older" : "time-handle-younger"}`}
-            style={{ left: `${x}%` }} data-edge={x < 12 ? "start" : x > 88 ? "end" : "middle"}
-            aria-label={boundary === "older_ma" ? "Older age bound" : "Younger age bound"}
-            aria-orientation="horizontal" aria-valuenow={Math.max(minimum, Math.min(maximum, value))}
-            aria-valuemin={boundary === "older_ma" ? younger : minimum}
-            aria-valuemax={boundary === "older_ma" ? maximum : Math.min(maximum, Math.max(minimum, older))}
-            aria-valuetext={`${format(value)} million years before present${allAges ? "; all ages currently included" : ""}`}
-            aria-describedby="time-help"
-            onPointerDown={event => start(event, value)} onPointerMove={event => move(event, boundary)}
-            onPointerUp={event => { if (drag.current?.pointer === event.pointerId) { move(event, boundary); drag.current = null; finish(); event.currentTarget.releasePointerCapture(event.pointerId); } }}
-            onPointerCancel={() => { drag.current = null; finish(); }} onLostPointerCapture={() => { if (drag.current) { drag.current = null; finish(); } }}
-            onKeyDown={event => keyboard(event, boundary, value)} onBlur={() => { if (!drag.current) finish(); }}>
-            <span className="time-handle-label" aria-hidden="true">{format(value)} <small>Ma</small></span>
-            <span className="time-grip" aria-hidden="true" />
-          </button>;
-        })}
-      </div>
-      <div id="time-subdivisions" className="time-windows" hidden={!expanded} aria-label={`${focused.name} interval selections`}>
-        {[...children, ...presets].map(unit => <div key={unit.id} className="interval-choice" style={{ "--interval-color": unit.color } as React.CSSProperties}>
-          <button className="time-window" aria-pressed={age.older_ma === unit.older_ma && age.younger_ma === unit.younger_ma} onClick={() => choose({ older_ma: unit.older_ma, younger_ma: unit.younger_ma }, unit.id)}><strong>{unit.name}</strong><small>{format(unit.older_ma)}–{format(unit.younger_ma)} Ma</small></button>
-          {configuration.units.some(child => child.parent === unit.id) && <button className="interval-dive" aria-label={`Explore subdivisions of ${unit.name}`} onClick={() => onFocus(unit.id)}>↓</button>}
-        </div>)}
+        <div id="time-subdivisions" className="time-windows" aria-label={`${focused.name} interval selections`}>
+          {[...children, ...presets].map(unit => <div key={unit.id} className="interval-choice" style={{ "--interval-color": unit.color } as React.CSSProperties}>
+            <button className="time-window" aria-pressed={isSelected(unit)} onClick={() => choose({ older_ma: unit.older_ma, younger_ma: unit.younger_ma }, unit.id)}><strong>{unit.name}</strong><small>{format(unit.older_ma)}–{format(unit.younger_ma)} Ma</small></button>
+            {configuration.units.some(child => child.parent === unit.id) && <button className="interval-dive" aria-label={`Explore subdivisions of ${unit.name}`} onClick={() => onFocus(unit.id)}>↓</button>}
+          </div>)}
+        </div>
       </div>
     </div>
-    <div className="time-bottom"><p className="time-footnote"><a href={configuration.source_url} target="_blank" rel="noopener noreferrer" title={configuration.attribution}>ICS v{configuration.version.replace("-", "/")}</a> / CGMW · © ICS 2026 · <a href={configuration.license_url}>CC BY 4.0</a> · <span className="time-reference-note">PaleoGraph adaptation with two PDF-supported corrections; no endorsement. Reference calibration, not measured specimen ages.</span></p><p id="time-help" className="time-help">Drag boundaries. Arrows adjust the range; Shift ×10. Left is older. Page keys step 10%; Home/End reach limits.</p></div>
+    <div className="time-bottom"><p className="time-footnote"><a href={configuration.source_url} target="_blank" rel="noopener noreferrer" title={configuration.attribution}>ICS v{configuration.version.replace("-", "/")}</a> / CGMW · © ICS 2026 · <a href={configuration.license_url}>CC BY 4.0</a><span className="time-reference-note"> · PaleoGraph adaptation with two PDF-supported corrections; no endorsement. Reference calibration, not measured specimen ages.</span></p><p id="time-help" className="time-help">Drag boundaries. Arrows adjust the range; Shift ×10. Left is older. Page keys step 10%; Home/End reach limits.</p></div>
   </section>;
 }
