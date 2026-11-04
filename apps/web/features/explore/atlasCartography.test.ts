@@ -21,7 +21,12 @@ test("physical context uses real schema layers and does not fabricate relief", (
   const layers = new Set(style.layers.map((layer: {"source-layer"?: string}) => layer["source-layer"]));
   for (const layer of ["landcover", "water", "waterway", "landuse", "park", "boundary"]) assert.ok(layers.has(layer));
   assert.ok(!style.terrain && !style.sprite);
-  assert.ok(!style.layers.some((layer: {type: string}) => ["hillshade", "raster", "fill-extrusion"].includes(layer.type)));
+  assert.ok(!style.layers.some((layer: {type: string}) => ["hillshade", "raster"].includes(layer.type)));
+  for (const layer of style.layers.filter((layer: {type: string}) => layer.type === "fill-extrusion")) {
+    assert.equal(layer.source, "atlas");
+    assert.equal(layer["source-layer"], "building");
+    assert.equal(layer.id, "atlas-building-forms");
+  }
 });
 test("geographic detail and labels have distinct zoom-dependent hierarchy", () => {
   const layer = (id: string) => style.layers.find((value: {id: string}) => value.id === id);
@@ -41,4 +46,23 @@ test("mapped notation preserves exact positions and evidence counts at a shared 
   assert.equal(feature.properties?.locality_count,2);
   assert.equal(feature.properties?.unknown,false);
   assert.equal(feature.properties?.generalized,true);
+});
+
+test("optional building forms respect provider heights and hide_3d outlines", () => {
+  const layer = style.layers.find((layer: {id: string}) => layer.id === "atlas-building-forms");
+  assert.equal(layer["source-layer"], "building");
+  assert.equal(layer.source, "atlas");
+  assert.equal(layer.type, "fill-extrusion");
+  assert.equal(layer.layout.visibility, "none");
+  assert.ok(layer.minzoom >= 14);
+  const filter = spec.featureFilter(layer.filter, "layers[0].filter");
+  const accepts = (properties: Record<string, unknown>) => filter.filter({zoom: 16}, {type: 3, properties});
+  assert.equal(accepts({render_height: 30}), true);
+  assert.equal(accepts({render_height: 30, hide_3d: true}), false);
+  assert.equal(accepts({render_height: 0}), false);
+  assert.equal(accepts({}), false);
+  const height = spec.expression.createPropertyExpression(layer.paint["fill-extrusion-height"], "layers[0].paint.fill-extrusion-height", spec.latest["paint_fill-extrusion"]["fill-extrusion-height"]);
+  assert.equal(height.result, "success");
+  assert.equal(height.value.evaluate({zoom: 16}, {properties: {render_height: 30}}), 30);
+  assert.equal(height.value.evaluate({zoom: 14}, {properties: {render_height: 30}}), 0);
 });

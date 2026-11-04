@@ -88,4 +88,5 @@ jobs:
           version: "0.12.21"
           python-version: "3.12"
       - run: uv sync --project apps/api --locked
-      - run: uv run --project apps/api python scripts/test_browser.py
+      - name: Production browser checks, including delayed-map regressions
+        run: uv run --project apps/api python scripts/test_browser.py --reporter=line

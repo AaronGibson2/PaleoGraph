@@ -23,14 +23,17 @@ type Props = {
 
 function frameFlorida(map: Map) {
   const narrow = map.getContainer().clientWidth < 768;
-  map.fitBounds([[-87.7, 24.4], [-79.8, 31.05]], { padding: narrow ? {top:110,bottom:110,left:24,right:24} : {top:32,bottom:64,left:330,right:76}, duration: 0 });
+  map.fitBounds([[-87.7, 24.4], [-79.8, 31.05]], { padding: narrow ? {top:110,bottom:110,left:24,right:24} : {top:32,bottom:64,left:330,right:76}, pitch: 0, bearing: 0, duration: 0 });
 }
 
 export default function ExploreMap(props: Props) {
   const container = useRef<HTMLDivElement>(null);
   const instance = useRef<Map | null>(null);
+  const requestedCamera = useRef({ lat: props.view.lat, lng: props.view.lng, zoom: props.view.zoom });
   const previewPopup = useRef<Popup | null>(null);
   const latest = useRef(props);
+  const [ready, setReady] = useState(false);
+  const [perspective, setPerspective] = useState(false);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => { latest.current = props; }, [props]);
 
@@ -42,14 +45,19 @@ export default function ExploreMap(props: Props) {
     previewPopup.current = hover;
     try {
       const view = latest.current.view;
-      let frameOnLoad = !["lat", "lng", "zoom"].some(key => new URLSearchParams(window.location.search).has(key));
+      const frameInitially = !["lat", "lng", "zoom"].some(key => new URLSearchParams(window.location.search).has(key));
       map = new Map({
         container: container.current,
         style: styleUrl || { version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#dfe7e3" } }] },
         center: [view.lng, view.lat], zoom: view.zoom, minZoom: 1, maxZoom: 18,
-        attributionControl: { compact: true }, dragRotate: false, touchPitch: false,
+        attributionControl: { compact: true }, dragRotate: false, touchPitch: false, maxPitch: 55,
       });
+      // Set the initial camera before publishing changes. A delayed style response
+      // must never reframe a camera already shared or changed by the visitor.
+      if (frameInitially) frameFlorida(map);
       instance.current = map;
+      map.touchZoomRotate.disableRotation();
+      map.keyboard.disableRotation();
       map.addControl(new NavigationControl({ showCompass: false }), "top-right");
       map.addControl(new ScaleControl({ unit: "metric" }), "bottom-left");
       map.getCanvas().setAttribute("aria-label", "Occurrence map. Use arrow keys to pan and plus or minus to zoom. Use Mapped positions for keyboard-accessible previews and selection, or open the evidence catalog.");
@@ -62,10 +70,13 @@ export default function ExploreMap(props: Props) {
         );
       };
       map.on("moveend", publishView);
+      map.on("pitch", () => container.current?.setAttribute("data-map-pitch", map.getPitch().toFixed(1)));
+      map.on("pitchend", () => { if (!cancelled) setPerspective(map.getPitch() > 1); });
       map.on("style.load", () => {
         if (cancelled) return;
-        if (frameOnLoad) { frameOnLoad = false; frameFlorida(map); }
         addOccurrenceLayers(map);
+        setReady(true);
+        container.current?.setAttribute("data-map-pitch", map.getPitch().toFixed(1));
         container.current?.setAttribute("data-map-stage", "style");
         performance.mark("paleograph-atlas-style");
         updateOccurrences(map, latest.current.items, latest.current.view.selected);
@@ -154,6 +165,11 @@ export default function ExploreMap(props: Props) {
   useEffect(() => {
     const map = instance.current;
     if (!map) return;
+    const previous = requestedCamera.current;
+    // Only replay a changed React camera request. The initial defaults must not
+    // undo the Florida framing established when this map was constructed.
+    if (previous.lat === props.view.lat && previous.lng === props.view.lng && previous.zoom === props.view.zoom) return;
+    requestedCamera.current = { lat: props.view.lat, lng: props.view.lng, zoom: props.view.zoom };
     const center = map.getCenter().wrap();
     if (Math.abs(center.lng - props.view.lng) > 0.0001 || Math.abs(center.lat - props.view.lat) > 0.0001 || Math.abs(map.getZoom() - props.view.zoom) > 0.015) {
       map.jumpTo({ center: [props.view.lng, props.view.lat], zoom: props.view.zoom });
@@ -180,8 +196,25 @@ export default function ExploreMap(props: Props) {
     return () => cancelAnimationFrame(frame);
   }, [props.view.selected, props.items]);
 
+  useEffect(() => {
+    const map = instance.current;
+    if (ready && map?.getLayer("atlas-building-forms")) map.setLayoutProperty("atlas-building-forms", "visibility", perspective ? "visible" : "none");
+  }, [perspective, ready]);
+
+  const togglePerspective = () => {
+    const map = instance.current;
+    if (!map || !ready) return;
+    const enabled = !perspective;
+    map.easeTo({ pitch: enabled ? 50 : 0, duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 650 });
+    setPerspective(enabled);
+  };
+
   return <>
     <div className="map-canvas" ref={container} />
+    <button className="atlas-perspective" type="button" aria-label="Perspective map" aria-pressed={perspective} disabled={!ready} onClick={togglePerspective} title={perspective ? "Return to a flat, north-up map" : "Tilt the map · zoom in for present-day building forms"}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7Z M3 7l9 5 9-5 M12 12v10 M7.5 4.5l9 5" /></svg>
+      <span>3D</span>
+    </button>
     {(error || !styleUrl) && <div className="map-notice" role="status">
       {error ?? "No basemap configured. Occurrence points and the results list remain available."}
     </div>}

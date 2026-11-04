@@ -68,13 +68,13 @@ export function addOccurrenceLayers(map: MapLibreMap) {
   addNotation(map, "atlas-unknown", color("--map-point"), true);
   addNotation(map, "atlas-stack", color("--map-point"), true, true);
   map.addSource("occurrences", { type: "geojson", cluster: true, clusterMaxZoom: 10, clusterRadius: 42, clusterProperties: { record_count: ["+", ["get", "record_count"]] }, data: { type: "FeatureCollection", features: [] } });
-  map.addLayer({ id: "cluster-rims", type: "circle", source: "occurrences", filter: ["has", "point_count"], paint: { "circle-radius": ["step", ["get", "record_count"], 17, 100, 21, 10000, 25], "circle-color": "#f3ebd4", "circle-opacity": 0, "circle-stroke-color": "#e3d4af", "circle-stroke-width": 1, "circle-stroke-opacity": .75 } });
-  map.addLayer({ id: "place-clusters", type: "circle", source: "occurrences", filter: ["has", "point_count"], paint: { "circle-radius": ["step", ["get", "record_count"], 14, 100, 18, 10000, 22], "circle-color": "#143d35", "circle-stroke-color": "#f5ebd3", "circle-stroke-width": 1.5 } });
+  map.addLayer({ id: "cluster-rims", type: "circle", source: "occurrences", filter: ["has", "point_count"], paint: { "circle-pitch-scale": "viewport", "circle-radius": ["step", ["get", "record_count"], 17, 100, 21, 10000, 25], "circle-color": "#f3ebd4", "circle-opacity": 0, "circle-stroke-color": "#e3d4af", "circle-stroke-width": 1, "circle-stroke-opacity": .75 } });
+  map.addLayer({ id: "place-clusters", type: "circle", source: "occurrences", filter: ["has", "point_count"], paint: { "circle-pitch-scale": "viewport", "circle-radius": ["step", ["get", "record_count"], 14, 100, 18, 10000, 22], "circle-color": "#143d35", "circle-stroke-color": "#f5ebd3", "circle-stroke-width": 1.5 } });
   map.addLayer({ id: "place-counts", type: "symbol", source: "occurrences", filter: ["has", "point_count"], layout: { "text-field": ["to-string", ["get", "record_count"]], "text-font": ["Noto Sans Regular"], "text-size": 11, "text-allow-overlap": true }, paint: { "text-color": "#fff5dd" } });
   map.addLayer({
     id: "generalized-locations", type: "circle", source: "occurrences",
     filter: ["==", ["get", "generalized"], true],
-    paint: { "circle-radius": 15, "circle-color": color("--map-point"), "circle-opacity": 0.12, "circle-stroke-width": 1, "circle-stroke-color": color("--map-point"), "circle-stroke-opacity": 0.5 },
+    paint: { "circle-pitch-scale": "viewport", "circle-radius": 15, "circle-color": color("--map-point"), "circle-opacity": 0.12, "circle-stroke-width": 1, "circle-stroke-color": color("--map-point"), "circle-stroke-opacity": 0.5 },
   });
   map.addLayer({
     id: "occurrence-points", type: "symbol", source: "occurrences",
@@ -82,10 +82,10 @@ export function addOccurrenceLayers(map: MapLibreMap) {
     layout: { "icon-image": ["get", "glyph"], "icon-allow-overlap": true, "icon-ignore-placement": true, "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.8, 10, 1.15] },
   });
   map.addLayer({ id: "co-location-counts", type: "symbol", source: "occurrences", minzoom: 9, filter: ["all", ["!", ["has", "point_count"]], [">", ["get", "record_count"], 1]], layout: { "text-field": ["to-string", ["get", "record_count"]], "text-font": ["Noto Sans Regular"], "text-size": 10, "text-offset": [1.1, -.8], "text-anchor": "left", "text-allow-overlap": false, "text-padding": 3 }, paint: { "text-color": color("--map-point"), "text-halo-color": "#f4efdf", "text-halo-width": 2 } });
-  map.addLayer({ id: "focused-occurrence", type: "circle", source: "occurrences", filter: ["==", ["get", "id"], ""], paint: { "circle-radius": 17, "circle-color": "#fff5dd", "circle-opacity": .15, "circle-stroke-width": 2, "circle-stroke-color": "#84512c" } });
+  map.addLayer({ id: "focused-occurrence", type: "circle", source: "occurrences", filter: ["==", ["get", "id"], ""], paint: { "circle-pitch-scale": "viewport", "circle-radius": 17, "circle-color": "#fff5dd", "circle-opacity": .15, "circle-stroke-width": 2, "circle-stroke-color": "#84512c" } });
   map.addLayer({
     id: "selected-occurrence", type: "circle", source: "occurrences",
     filter: ["==", ["get", "id"], ""],
-    paint: { "circle-radius": 12, "circle-opacity": 0, "circle-stroke-color": color("--map-selected"), "circle-stroke-width": 3 },
+    paint: { "circle-pitch-scale": "viewport", "circle-radius": 12, "circle-opacity": 0, "circle-stroke-color": color("--map-selected"), "circle-stroke-width": 3 },
   });
 }

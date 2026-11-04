@@ -19,6 +19,13 @@ test("the production custom style loads against the declared vector schema and r
   expect(requests.length).toBeGreaterThan(0);
   const credits = page.locator(".maplibregl-ctrl-attrib");
   for (const name of ["OpenFreeMap","OpenMapTiles","OpenStreetMap contributors"]) await expect(credits.getByRole("link",{name,exact:false})).toHaveAttribute("href",/^https:/);
+  const canvas = await page.locator(".maplibregl-canvas").elementHandle();
+  const perspective = page.getByRole("button", {name:"Perspective map",exact:true});
+  await perspective.click();
+  await expect(page.locator(".map-canvas")).toHaveAttribute("data-map-pitch","50.0");
+  await perspective.click();
+  await expect(page.locator(".map-canvas")).toHaveAttribute("data-map-pitch","0.0");
+  expect(await canvas!.evaluate(element => element.isConnected)).toBe(true);
   expect(errors).toEqual([]);
 });
 

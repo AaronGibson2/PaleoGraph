@@ -1,10 +1,10 @@
 # PaleoGraph cartography
 
-The Atlas is present-day geographic context for source evidence, not a reconstruction of ancient Florida. Its **Botanical field atlas** combines warm mineral land, deep botanical water, quiet natural features and an editorial evidence system. No relief, terrain or bathymetry is implied by the paint.
+The Atlas is present-day geographic context for source evidence, not a reconstruction of ancient Florida. Its **Botanical field atlas** combines warm mineral land, deep botanical water, quiet natural features and an editorial evidence system. Soft layered shoreline strokes follow the supplied water geometry; they are decorative cartography, not depth contours. No relief, terrain or bathymetry is implied by the paint.
 
 ## Style and renderer
 
-`apps/web/public/styles/paleograph.json` is original, project-owned MapLibre style JSON. It expands PaleoGraph's previous 12-layer Limestone atlas into 26 geographic layers. It is not a copied commercial or provider presentation. Direct MapLibre GL JS loads it through `NEXT_PUBLIC_MAP_STYLE_URL`, defaulting to `/styles/paleograph.json`.
+`apps/web/public/styles/paleograph.json` is original, project-owned MapLibre style JSON. It expands PaleoGraph's previous 12-layer Limestone atlas into 29 geographic layers. It is not a copied commercial or provider presentation. Direct MapLibre GL JS loads it through `NEXT_PUBLIC_MAP_STYLE_URL`, defaulting to `/styles/paleograph.json`.
 
 The vector source remains [OpenFreeMap](https://openfreemap.org/quick_start/), using the [OpenMapTiles schema](https://openmaptiles.org/schema/). No account, API key, paid dependency, raster artwork, sprite or DEM was added. Deployment operators must comply with the provider's [current service terms](https://openfreemap.org/tos/). The style can be hosted separately or retargeted to compatible OpenMapTiles infrastructure.
 
@@ -13,12 +13,18 @@ The vector source remains [OpenFreeMap](https://openfreemap.org/quick_start/), u
 | Mineral background and water | Clear peninsula silhouette at statewide scale |
 | Wood, grass, wetland and sand | Restrained, real land-cover variation, increasing with zoom |
 | Settlement and protected land | Orientation without bright recreational colors |
-| Coast and waterways | Crisp water edges and finer regional drainage |
+| Coast and waterways | Soft layered coastal edging, a crisp shoreline and finer regional drainage |
 | Administrative boundaries | Subtle country/state lines; county-level detail from zoom 8 |
 | Roads and buildings | Major routes from zoom 7; local routes from 11; buildings from 14 |
 | Geographic labels | State/country hierarchy, cities, then towns, water, islands, natural areas and road names |
 
 Names prefer the source's English label and fall back to its supplied name. Verified provider glyph stacks are **Noto Sans Regular** and **Noto Sans Italic**; there are no locally bundled font assets. The UI retains PaleoGraph's existing scientific/editorial typography. Geographic labels yield to the evidence layer and do not invent names absent from the tiles.
+
+## Perspective view
+
+The compact **3D** control beneath zoom switches between a flat map and a north-up 50° perspective. It keeps the same map instance, source identities, selected range and geographic center/zoom. The tilt changes the visible ground envelope, so evidence queries follow the actual viewport. It is a local presentation choice; shared links restore a flat map at the shared center and zoom. **Return to Florida** resets the view to flat. Reduced motion makes the change immediate.
+
+From zoom 14, optional building forms appear beneath labels and evidence, reaching the provider's full render height at zoom 15.5. These are present-day OpenStreetMap building footprints. OpenMapTiles supplies [approximated heights](https://openmaptiles.org/docs/schema/#building), derived from heights and levels; this is not a surveyed city model. The layer respects `hide_3d`, draws only positive supplied `render_height` values, and defaults to hidden in flat view. It uses the existing vector source and adds no DEM, terrain, bathymetry or fossil geometry. The map legend explains the approximated heights.
 
 ## Evidence is a separate layer
 

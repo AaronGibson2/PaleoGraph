@@ -146,6 +146,8 @@ uv run --project apps/api python scripts/test_browser.py
 
 Database tests include repeatable upgrades, downgrade/upgrade, schema drift, and integration tests in a dedicated disposable Compose project. Browser tests build and launch the actual API and production frontend against a separate fixture database. These runners never target the ordinary database. Linux may need `playwright install --with-deps chromium`. See [contribution guidelines](CONTRIBUTING.md).
 
+Browser regressions deliberately delay basemap loading and resize the workspace to check that late initialization cannot rewrite an existing camera or exploration URL. Keep these timing cases deterministic rather than hiding failures with retries or longer sleeps. The CI browser job prints individual checks to make failures easier to identify; screenshots, traces and fixture-server logs stay in the runner workspace.
+
 ## Data sources and licensing
 
 Original PaleoGraph software is licensed under the [GNU Affero General Public License version 3](LICENSE), SPDX **AGPL-3.0-only**. Copyright (c) 2026 PaleoGraph contributors. This does **not** relicense scientific data, images, publications, or reference materials.
